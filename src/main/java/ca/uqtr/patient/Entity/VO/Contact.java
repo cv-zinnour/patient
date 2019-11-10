@@ -1,16 +1,36 @@
 package ca.uqtr.patient.Entity.VO;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import ca.uqtr.patient.Entity.Patient;
+import lombok.*;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
+import java.util.UUID;
 
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Embeddable
+@Entity
+@Table(name = "contact", schema = "public")
 public class Contact {
-
+    @Id
+    private UUID id;
+    @Version
+    @Column(name = "version", nullable = false)
+    private int version;
+    @Column(name = "phone")
     private Long phone;
-    private Email email;
+    @Column(name = "email")
+    private String email;
+    @Embedded
     private Address address;
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private Patient patient;
+
+    public Contact(Long phone, String email, Address address) {
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+    }
 }
