@@ -1,10 +1,13 @@
 databaseChangeLog:
   - changeSet:
-      id: tesgt1c
-      author: lacen
+      id: database creation
+      author: lahcene
       changes:
-        - dropTable:
-            cascadeConstraints: true
-            catalogName: cat
-            schemaName: public
-            tableName: person
+        - sqlFile:
+            dbms: postgresqL
+            encoding: UTF-8
+            endDelimiter: \nGO
+            path: migrations/v0001.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true
