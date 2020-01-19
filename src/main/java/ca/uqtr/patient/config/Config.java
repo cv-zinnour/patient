@@ -20,51 +20,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
 
 @Configuration
-@Controller
-@EnableSwagger2
 public class Config {
-
-    //------------------------------------------------ swagger2 config
-    @RequestMapping(value = "/docs", method = RequestMethod.GET)
-    public String docs(){
-//        return "forward:/swagger-ui.html";
-        return "redirect:/swagger-ui.html";
-    }
-
-    @Bean
-    public Docket swaggerApi(){
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("demo-api")
-                .apiInfo(swaggerApiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
-    }
-
-    private ApiInfo swaggerApiInfo() {
-        return new ApiInfoBuilder()
-                .title("Demo")
-                .description("Some nice REST services in a Spring Boot application")
-                .version("1.0.0")
-                .build();
-    }
-
-    @Bean
-    UiConfiguration uiConfig() {
-        return new UiConfiguration(
-                null,
-                "none",
-                "alpha",
-                "schema",
-                UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS,
-                false,
-                true,
-                60000L);
-    }
-
-
-    //---------------------------------------------------model mapper config
 
     @Bean
     public ModelMapper modelMapper() {
