@@ -43,7 +43,6 @@ public class PatientController {
     @GetMapping(value = "/all")
     @ResponseBody
     public Iterable<Patient> getPatients(){
-        System.out.println("++++++++++++++++++++++++++++++++ getPatients");
         return patientService.getPatients();
     }
 
