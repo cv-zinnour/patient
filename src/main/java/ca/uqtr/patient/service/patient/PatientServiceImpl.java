@@ -1,8 +1,12 @@
 package ca.uqtr.patient.service.patient;
 
 
+import ca.uqtr.patient.dto.ErrorDto;
+import ca.uqtr.patient.dto.MedicalFileDto;
 import ca.uqtr.patient.dto.PatientDto;
+import ca.uqtr.patient.entity.MedicalFile;
 import ca.uqtr.patient.entity.Patient;
+import ca.uqtr.patient.repository.medicalFile.MedicalFileRepository;
 import ca.uqtr.patient.repository.patient.PatientRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,39 +14,71 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PatientServiceImpl implements PatientService {
 
     private PatientRepository patientRepository;
+    private final MedicalFileRepository medicalFileRepository;
     private ModelMapper modelMapper;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository) {
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
+        this.medicalFileRepository = medicalFileRepository;
     }
 
     @Override
-    public Patient newPatient(PatientDto patient) {
-        return patientRepository.save(patient.patient2Dto(modelMapper));
+    public PatientDto addPatient(PatientDto patientDto) {
+        System.out.println(patientDto);
+        PatientDto pDto = new PatientDto();
+        try {
+            Patient patient = patientDto.dtoToObj(modelMapper);
+            Patient p = patientRepository.save(patient);
+
+            MedicalFile medicalFile = new MedicalFile();
+            medicalFile.setPatient(p.getId().toString());
+            medicalFileRepository.save(medicalFile);
+
+            pDto = modelMapper.map(p, PatientDto.class);
+        } catch (Exception e){
+            pDto.setError(new ErrorDto(1, "Mapping error (check data)."));
+            return pDto;
+        }
+        return pDto;
     }
 
     @Override
-    public Optional<Patient> getPatientById(PatientDto patient) {
-        return patientRepository.findById(patient.patient2Dto(modelMapper).getId());
+    public PatientDto getPatientById(PatientDto patientDto) {
+        System.out.println(patientDto.toString());
+        System.out.println(patientDto.dtoToObj(modelMapper).getId());
+        System.out.println(patientDto.dtoToObj(modelMapper).getFirstName());
+        PatientDto pDto = new PatientDto();
+        UUID patientId = patientDto.dtoToObj(modelMapper).getId();
+        Optional<Patient> patient = patientRepository.findById(patientId);
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId.toString());
+        MedicalFileDto medicalFileDto = modelMapper.map(medicalFile, MedicalFileDto.class);
+        pDto.setMedicalFile(medicalFileDto);
+        if (!patient.isPresent()){
+            pDto.setError(new ErrorDto(2, "Patient does not exist."));
+            return pDto;
+        }
+        pDto = modelMapper.map(patient.get(), PatientDto.class);
+        return pDto;
     }
 
     @Override
     public Patient getPatientByFirstNameAndLastName(PatientDto patient) {
         return patientRepository.getPatientByFirstNameAndLastName(
-                patient.patient2Dto(modelMapper).getFirstName(),
-                patient.patient2Dto(modelMapper).getLastName());
+                patient.dtoToObj(modelMapper).getFirstName(),
+                patient.dtoToObj(modelMapper).getLastName());
     }
 
     @Override
     public List<Patient> getPatientsByAge(PatientDto patient) {
-        return patientRepository.getPatientsByAge(patient.patient2Dto(modelMapper).getBirthday().toString());
+        return patientRepository.getPatientsByAge(patient.dtoToObj(modelMapper).getBirthday().toString());
     }
 
     @Override
@@ -52,12 +88,12 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient updatePatient(PatientDto patient) {
-        return patientRepository.save(patient.patient2Dto(modelMapper));
+        return patientRepository.save(patient.dtoToObj(modelMapper));
     }
 
     @Override
     public void deleteById(PatientDto patient) {
-        patientRepository.deleteById(patient.patient2Dto(modelMapper).getId());
+        patientRepository.deleteById(patient.dtoToObj(modelMapper).getId());
     }
 
 

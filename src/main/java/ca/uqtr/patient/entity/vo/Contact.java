@@ -1,4 +1,4 @@
-package ca.uqtr.patient.entity.VO;
+package ca.uqtr.patient.entity.vo;
 
 import ca.uqtr.patient.entity.Patient;
 import lombok.*;

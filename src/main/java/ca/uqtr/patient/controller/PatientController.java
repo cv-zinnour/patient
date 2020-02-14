@@ -1,22 +1,17 @@
 package ca.uqtr.patient.controller;
 
-import ca.uqtr.patient.dto.MedicalFileDto;
 import ca.uqtr.patient.dto.PatientDto;
-import ca.uqtr.patient.entity.MedicalFile;
 import ca.uqtr.patient.entity.Patient;
-import ca.uqtr.patient.service.medicalFile.MedicalFileService;
 import ca.uqtr.patient.service.patient.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/patient")
 public class PatientController {
 
     private PatientService patientService;
@@ -27,16 +22,14 @@ public class PatientController {
     }
 
     @PostMapping(value = "/create")
-    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity<Patient> newPatient(@RequestBody PatientDto patient){
-        return new ResponseEntity<>(patientService.newPatient(patient), HttpStatus.OK);
+    public ResponseEntity<PatientDto> addPatient(@RequestBody PatientDto patient){
+        return new ResponseEntity<>(patientService.addPatient(patient), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/patientById")
+    @PostMapping(value = "/id")
     @ResponseBody
-    public Optional<Patient> getPatient(@RequestBody PatientDto patient){
-
+    public PatientDto getPatient(@RequestBody PatientDto patient){
         return patientService.getPatientById(patient);
     }
 

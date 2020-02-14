@@ -1,4 +1,4 @@
-package ca.uqtr.patient.entity.VO;
+package ca.uqtr.patient.entity.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,8 +18,8 @@ public class Address {
     private Integer streetNumber;
     @Column(name = "city")
     private String city;
-    @Column(name = "zip_code")
-    private String zipCode;
+    @Column(name = "postal_code")
+    private String postalCode;
     @Column(name = "province")
     private String province;
 

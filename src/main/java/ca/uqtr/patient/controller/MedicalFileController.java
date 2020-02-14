@@ -3,9 +3,7 @@ package ca.uqtr.patient.controller;
 import ca.uqtr.patient.dto.MedicalFileDto;
 import ca.uqtr.patient.dto.PatientDto;
 import ca.uqtr.patient.entity.MedicalFile;
-import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.service.medicalFile.MedicalFileService;
-import ca.uqtr.patient.service.patient.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +48,5 @@ public class MedicalFileController {
     public void deleteMedicalFile(@RequestBody MedicalFileDto medicalFile){
         medicalFileService.deleteMedicalFileById(medicalFile);
     }
-
 
 }

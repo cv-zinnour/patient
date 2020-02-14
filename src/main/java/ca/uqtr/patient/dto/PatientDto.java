@@ -1,47 +1,61 @@
 package ca.uqtr.patient.dto;
 
-import ca.uqtr.patient.entity.Expert;
-import ca.uqtr.patient.entity.MedicalFile;
+import ca.uqtr.patient.dto.ErrorDto;
+import ca.uqtr.patient.dto.patient.ContactDto;
+import ca.uqtr.patient.dto.patient.FamilyDoctorDto;
+import ca.uqtr.patient.dto.patient.PharmacyDto;
+import ca.uqtr.patient.dto.patient.ProfessionalDto;
 import ca.uqtr.patient.entity.Patient;
-import ca.uqtr.patient.entity.VO.Contact;
-import ca.uqtr.patient.entity.VO.Profession;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
+import java.sql.Date;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientDto implements Serializable {
+public class PatientDto {
 
-    private static final long serialVersionUID = 1L;
-
-    private UUID id;
+    @Nullable
+    private String id;
+    @Nullable
+    private String fileNumber;
+    @Nullable
     private String firstName;
-    private String middleName;
+    @Nullable
     private String lastName;
+    @Nullable
     private Date birthday;
-    private Contact contact;
-    private MedicalFile medicalFile;
-    private List<Profession> profession = new ArrayList<>();
-    private List<Expert> expert = new ArrayList<>();
+    @Nullable
+    private String motherName;
+    @Nullable
+    private ContactDto contact;
+    @Nullable
+    private List<FamilyDoctorDto> familyDoctor = new ArrayList<>();
+    @Nullable
+    private List<PharmacyDto> pharmacy = new ArrayList<>();
+    @Nullable
+    private List<ProfessionalDto> professionals = new ArrayList<>();
+    @Nullable
     private Boolean isActive;
+    @Nullable
+    MedicalFileDto medicalFile;
+    @Nullable
+    private ErrorDto error;
 
-
-    public Patient patient2Dto(ModelMapper modelMapper) {
+    public Patient dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Patient.class);
     }
-    
+
+    public UUID getId() {
+        if (id != null)
+            return UUID.fromString(id);
+        else
+            return null;
+    }
 }
