@@ -48,7 +48,7 @@ public class PatientServiceImpl implements PatientService {
 
             pDto = modelMapper.map(p, PatientDto.class);
         } catch (Exception e){
-            pDto.setError(new ErrorDto(1, "Mapping error (check data). Message : "+e.getMessage()+" / StackTrace : "+ Arrays.toString(e.getStackTrace())));
+            pDto.setError(new ErrorDto(1, "Mapping error (check data). Message : "+e.getMessage()));
             return pDto;
         }
         return pDto;
