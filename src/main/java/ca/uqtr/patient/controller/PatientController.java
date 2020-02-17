@@ -29,6 +29,7 @@ public class PatientController {
     @PostMapping(value = "/create")
     @ResponseBody
     public ResponseEntity<PatientDto> addPatient(@RequestBody PatientDto patient){
+        System.out.println(patient.toString());
         return new ResponseEntity<>(patientService.addPatient(patient), HttpStatus.CREATED);
     }
 

@@ -22,16 +22,14 @@ import java.util.function.Consumer;
 public class PatientServiceImpl implements PatientService {
 
     private PatientRepository patientRepository;
-    private final ProfessionalRepository professionalRepository;
     private final MedicalFileRepository medicalFileRepository;
     private ModelMapper modelMapper;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository) {
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
         this.medicalFileRepository = medicalFileRepository;
-        this.professionalRepository = professionalRepository;
     }
 
     @Override
