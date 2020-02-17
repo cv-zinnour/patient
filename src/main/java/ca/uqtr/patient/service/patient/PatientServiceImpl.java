@@ -95,7 +95,7 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientDto.dtoToObj(modelMapper);
         Professional professional = patient.getProfessionals().iterator().next();
         System.out.println(professional.toString());
-        return patientRepository.getPatientsByProfessionalsI_Id(professional);
+        return patientRepository.getPatientsByProfessionals_Id(professional);
     }
 
     @Override
