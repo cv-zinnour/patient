@@ -21,8 +21,9 @@ public class ProfessionalServiceImpl implements ProfessionalService {
 
     @Override
     public void createProfessional(UserRequestDto userRequestDto) {
+        System.out.println(userRequestDto.toString());
         Professional professional = new Professional(
-                UUID.fromString(userRequestDto.getId()),
+                UUID.randomUUID(),
                 userRequestDto.getFirstName(),
                 userRequestDto.getLastName(),
                 true);
