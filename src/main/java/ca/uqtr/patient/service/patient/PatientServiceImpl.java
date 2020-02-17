@@ -6,6 +6,7 @@ import ca.uqtr.patient.dto.MedicalFileDto;
 import ca.uqtr.patient.dto.PatientDto;
 import ca.uqtr.patient.entity.MedicalFile;
 import ca.uqtr.patient.entity.Patient;
+import ca.uqtr.patient.entity.Professional;
 import ca.uqtr.patient.repository.medicalFile.MedicalFileRepository;
 import ca.uqtr.patient.repository.patient.PatientRepository;
 import org.modelmapper.ModelMapper;
@@ -42,9 +43,11 @@ public class PatientServiceImpl implements PatientService {
             medicalFile.setPatient(p.getId().toString());
             medicalFileRepository.save(medicalFile);
 
+            //Professional professional = patient.getProfessionals().iterator().next();
+
             pDto = modelMapper.map(p, PatientDto.class);
         } catch (Exception e){
-            pDto.setError(new ErrorDto(1, "Mapping error (check data)."));
+            pDto.setError(new ErrorDto(1, "Mapping error (check data). "+e));
             return pDto;
         }
         return pDto;
@@ -84,6 +87,14 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Iterable<Patient> getPatients() {
         return patientRepository.findAll();
+    }
+
+    @Override
+    public List<Patient> getPatientsByProfessional(PatientDto patientDto) {
+        Patient patient = patientDto.dtoToObj(modelMapper);
+        Professional professional = patient.getProfessionals().iterator().next();
+        System.out.println(professional.toString());
+        return patientRepository.getPatientsByProfessionalsI_Id(professional);
     }
 
     @Override

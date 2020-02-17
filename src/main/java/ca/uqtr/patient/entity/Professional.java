@@ -33,6 +33,8 @@ public class Professional implements Serializable {
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
+    @Column(name = "root", nullable = false)
+    private boolean root;
     //@ToString.Exclude
     @ManyToMany(mappedBy = "professionals")
     private Set<Patient> patients = new HashSet<>();

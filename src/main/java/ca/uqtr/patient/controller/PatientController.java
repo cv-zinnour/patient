@@ -39,6 +39,12 @@ public class PatientController {
         return patientService.getPatients();
     }
 
+    @GetMapping(value = "/all/professional")
+    @ResponseBody
+    public Iterable<Patient> getPatientsByProfessional(@RequestBody PatientDto patient){
+        return patientService.getPatientsByProfessional(patient);
+    }
+
     @PostMapping(value = "/patientByName")
     @ResponseBody
     public Patient getPatientByFirstNameAndLastName(@RequestBody PatientDto patient) {

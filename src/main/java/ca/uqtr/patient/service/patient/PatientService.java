@@ -10,6 +10,7 @@ public interface PatientService {
     PatientDto addPatient(PatientDto patientDto);
     PatientDto getPatientById(PatientDto patientDto);
     Iterable<Patient> getPatients();
+    List<Patient> getPatientsByProfessional(PatientDto patientDto);
     Patient getPatientByFirstNameAndLastName(PatientDto patient);
     List<Patient> getPatientsByAge(PatientDto patient);
     Patient updatePatient(PatientDto patient);
