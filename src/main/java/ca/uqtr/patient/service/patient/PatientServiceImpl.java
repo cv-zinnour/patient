@@ -7,47 +7,55 @@ import ca.uqtr.patient.dto.PatientDto;
 import ca.uqtr.patient.entity.MedicalFile;
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.entity.Professional;
+import ca.uqtr.patient.entity.vo.Contact;
+import ca.uqtr.patient.repository.ProfessionalRepository;
 import ca.uqtr.patient.repository.medicalFile.MedicalFileRepository;
 import ca.uqtr.patient.repository.patient.PatientRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Consumer;
 
 @Service
 public class PatientServiceImpl implements PatientService {
 
     private PatientRepository patientRepository;
+    private final ProfessionalRepository professionalRepository;
     private final MedicalFileRepository medicalFileRepository;
     private ModelMapper modelMapper;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository) {
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
         this.medicalFileRepository = medicalFileRepository;
+        this.professionalRepository = professionalRepository;
     }
 
     @Override
     public PatientDto addPatient(PatientDto patientDto) {
         System.out.println(patientDto);
         PatientDto pDto = new PatientDto();
-        try {
+
             Patient patient = patientDto.dtoToObj(modelMapper);
             patient.setContact(patient.getContact());
+        //patient.getProfessionals().forEach(patient::addProfessional);
+            //patient.addProfessional(patient.getProfessionals());
+            //professionalRepository.saveAll(patient.getProfessionals());
+        //patient.setProfessionals(patient.getProfessionals());
+        for (Professional p:patient.getProfessionals()) {
+            patient.addProfessional(p);
+        }
             Patient p = patientRepository.save(patient);
-
 
             MedicalFile medicalFile = new MedicalFile();
             medicalFile.setPatient(p.getId().toString());
-            medicalFileRepository.save(medicalFile);
+            //medicalFileRepository.save(medicalFile);
 
             //Professional professional = patient.getProfessionals().iterator().next();
-
+            try {
             pDto = modelMapper.map(p, PatientDto.class);
         } catch (Exception e){
             pDto.setError(new ErrorDto(1, "Mapping error (check data). Message : "+e.getMessage()));

@@ -1,6 +1,7 @@
 package ca.uqtr.patient.entity;
 
 import ca.uqtr.patient.entity.vo.Contact;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,7 +36,7 @@ public class Patient extends BaseEntity{
     private Date birthday;
     @Column(name = "mother_name")
     private String motherName;
-    @OneToOne(mappedBy="patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "patient")
     private Contact contact;
     @Type(type = "jsonb")
     @Column(name = "family_doctor", columnDefinition = "jsonb")
@@ -43,7 +44,7 @@ public class Patient extends BaseEntity{
     @Type(type = "jsonb")
     @Column(name = "pharmacy", columnDefinition = "jsonb")
     private String pharmacy;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(name = "patient_professional",
             joinColumns = {@JoinColumn(name = "patient_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "professional_id", referencedColumnName = "id")})
@@ -73,5 +74,28 @@ public class Patient extends BaseEntity{
                 lastName.toUpperCase().substring(0, 3) +
                 (day<10?("0"+day):(day))+ (month<10?("0"+month):(month)) + year +
                 UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+    }
+
+
+    public void setContact(Contact contact) {
+        if (contact == null) {
+            if (this.contact != null) {
+                this.contact.setPatient(null);
+            }
+        }
+        else {
+            contact.setPatient(this);
+        }
+        this.contact = contact;
+    }
+
+    public void addProfessional(Professional professional) {
+        professionals.add(professional);
+        professional.getPatients().add(this);
+    }
+
+    public void removeProfessional(Professional professional) {
+        professionals.remove(professional);
+        professional.getPatients().remove(this);
     }
 }
