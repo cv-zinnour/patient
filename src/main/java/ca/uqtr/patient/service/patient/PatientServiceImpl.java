@@ -38,7 +38,9 @@ public class PatientServiceImpl implements PatientService {
         PatientDto pDto = new PatientDto();
         try {
             Patient patient = patientDto.dtoToObj(modelMapper);
+            patient.setContact(patient.getContact());
             Patient p = patientRepository.save(patient);
+
 
             MedicalFile medicalFile = new MedicalFile();
             medicalFile.setPatient(p.getId().toString());
