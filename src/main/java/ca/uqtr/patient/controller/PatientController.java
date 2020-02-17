@@ -1,8 +1,11 @@
 package ca.uqtr.patient.controller;
 
 import ca.uqtr.patient.dto.PatientDto;
+import ca.uqtr.patient.dto.UserRequestDto;
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.service.patient.PatientService;
+import ca.uqtr.patient.service.professional.ProfessionalService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +18,24 @@ import java.util.List;
 public class PatientController {
 
     private PatientService patientService;
+    private ProfessionalService professionalService;
 
     @Autowired
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService, ProfessionalService professionalService) {
         this.patientService = patientService;
+        this.professionalService = professionalService;
     }
 
     @PostMapping(value = "/create")
     @ResponseBody
     public ResponseEntity<PatientDto> addPatient(@RequestBody PatientDto patient){
         return new ResponseEntity<>(patientService.addPatient(patient), HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/create/professional")
+    @ResponseBody
+    public void addProfessional(@RequestBody UserRequestDto userRequestDto){
+        professionalService.createProfessional(userRequestDto);
     }
 
     @PostMapping(value = "/id")

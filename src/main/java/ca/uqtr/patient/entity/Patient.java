@@ -44,11 +44,8 @@ public class Patient extends BaseEntity{
     @Type(type = "jsonb")
     @Column(name = "pharmacy", columnDefinition = "jsonb")
     private String pharmacy;
-    @ManyToMany(cascade=CascadeType.ALL)
-    @JoinTable(name = "patient_professional",
-            joinColumns = {@JoinColumn(name = "patient_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "professional_id", referencedColumnName = "id")})
-    private Set<Professional> professionals = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Professional professional;
     @Column(name = "is_active")
     private Boolean isActive;
 
@@ -88,7 +85,7 @@ public class Patient extends BaseEntity{
         }
         this.contact = contact;
     }
-
+/*
     public void addProfessional(Professional professional) {
         professionals.add(professional);
         professional.getPatients().add(this);
@@ -97,5 +94,5 @@ public class Patient extends BaseEntity{
     public void removeProfessional(Professional professional) {
         professionals.remove(professional);
         professional.getPatients().remove(this);
-    }
+    }*/
 }

@@ -45,9 +45,6 @@ public class PatientServiceImpl implements PatientService {
             //patient.addProfessional(patient.getProfessionals());
             //professionalRepository.saveAll(patient.getProfessionals());
         //patient.setProfessionals(patient.getProfessionals());
-        for (Professional p:patient.getProfessionals()) {
-            patient.addProfessional(p);
-        }
             Patient p = patientRepository.save(patient);
 
             MedicalFile medicalFile = new MedicalFile();
@@ -103,9 +100,9 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<Patient> getPatientsByProfessional(PatientDto patientDto) {
         Patient patient = patientDto.dtoToObj(modelMapper);
-        Professional professional = patient.getProfessionals().iterator().next();
+        Professional professional = patient.getProfessional();
         System.out.println(professional.toString());
-        return patientRepository.getPatientsByProfessionals_Id(professional);
+        return patientRepository.getPatientsByProfessional(professional);
     }
 
     @Override
@@ -117,7 +114,5 @@ public class PatientServiceImpl implements PatientService {
     public void deleteById(PatientDto patient) {
         patientRepository.deleteById(patient.dtoToObj(modelMapper).getId());
     }
-
-
 
 }

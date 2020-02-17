@@ -10,12 +10,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-
-@ToString(exclude = "patients")
+@Data
+//@ToString(exclude = "patients")
 @NoArgsConstructor
 @Entity
 @Table(name = "professional", schema = "public")
@@ -37,51 +35,15 @@ public class Professional implements Serializable {
     @Column(name = "root", nullable = false)
     private boolean root;
     //@ToString.Exclude
-    @ManyToMany(mappedBy = "professionals")
-    private Set<Patient> patients = new HashSet<>();
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Patient> patients = new ArrayList<>();
 
-    public Professional(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
+    public Professional(UUID id, String firstName, String lastName, boolean root) {
         this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public boolean isRoot() {
-        return root;
-    }
-
-    public void setRoot(boolean root) {
         this.root = root;
     }
 
-    public Set<Patient> getPatients() {
-        return patients;
-    }
 
-    public void setPatients(Set<Patient> patients) {
-        this.patients = patients;
-    }
 }
