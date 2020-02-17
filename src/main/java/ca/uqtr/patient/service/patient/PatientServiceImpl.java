@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,7 +48,7 @@ public class PatientServiceImpl implements PatientService {
 
             pDto = modelMapper.map(p, PatientDto.class);
         } catch (Exception e){
-            pDto.setError(new ErrorDto(1, "Mapping error (check data). "+e));
+            pDto.setError(new ErrorDto(1, "Mapping error (check data). Message : "+e.getMessage()+" / StackTrace : "+ Arrays.toString(e.getStackTrace())));
             return pDto;
         }
         return pDto;
