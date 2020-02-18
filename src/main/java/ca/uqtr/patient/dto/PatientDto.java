@@ -40,7 +40,7 @@ public class PatientDto {
     @Nullable
     private List<PharmacyDto> pharmacy = new ArrayList<>();
     @Nullable
-    private List<ProfessionalDto> professionals = new ArrayList<>();
+    private ProfessionalDto professional;
     @Nullable
     private Boolean isActive;
     @Nullable

@@ -36,7 +36,6 @@ public class PatientController {
     @PostMapping(value = "/create/professional")
     @ResponseBody
     public void addProfessional(@RequestBody UserRequestDto userRequestDto){
-        System.out.println(userRequestDto.toString());
         professionalService.createProfessional(userRequestDto);
     }
 

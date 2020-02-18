@@ -23,33 +23,34 @@ public class PatientServiceImpl implements PatientService {
 
     private PatientRepository patientRepository;
     private final MedicalFileRepository medicalFileRepository;
+    private final ProfessionalRepository professionalRepository;
     private ModelMapper modelMapper;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository) {
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
         this.medicalFileRepository = medicalFileRepository;
+        this.professionalRepository = professionalRepository;
     }
 
     @Override
     public PatientDto addPatient(PatientDto patientDto) {
-        System.out.println(patientDto);
+        System.out.println(patientDto.getProfessional());
         PatientDto pDto = new PatientDto();
 
             Patient patient = patientDto.dtoToObj(modelMapper);
             patient.setContact(patient.getContact());
-        //patient.getProfessionals().forEach(patient::addProfessional);
-            //patient.addProfessional(patient.getProfessionals());
-            //professionalRepository.saveAll(patient.getProfessionals());
-        //patient.setProfessionals(patient.getProfessionals());
+        System.out.println(patientDto.getProfessional().getId());
+        assert patientDto.getProfessional() != null;
+        Professional professional = professionalRepository.findById(UUID.fromString(patientDto.getProfessional().getId())).get();
+            patient.setProfessional(professional);
+            patient.setFileNumber();
             Patient p = patientRepository.save(patient);
 
             MedicalFile medicalFile = new MedicalFile();
             medicalFile.setPatient(p.getId().toString());
-            //medicalFileRepository.save(medicalFile);
-
-            //Professional professional = patient.getProfessionals().iterator().next();
+            medicalFileRepository.save(medicalFile);
             try {
             pDto = modelMapper.map(p, PatientDto.class);
         } catch (Exception e){

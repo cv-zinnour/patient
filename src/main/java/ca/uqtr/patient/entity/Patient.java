@@ -61,14 +61,14 @@ public class Patient extends BaseEntity{
         this.lastName = lastName;
     }
 
-    public void setFileNumber(String firstName, String lastName, Date birthday) {
+    public void setFileNumber() {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(birthday);
+        cal.setTime(getBirthday());
         int day = cal.get(Calendar.DAY_OF_MONTH) ;
         int month = (cal.get(Calendar.MONTH) + 1);
         int year = cal.get(Calendar.YEAR);
-        this.fileNumber = firstName.toUpperCase().substring(0, 3) +
-                lastName.toUpperCase().substring(0, 3) +
+        this.fileNumber = getFirstName().toUpperCase().substring(0, 3) +
+                getLastName().toUpperCase().substring(0, 3) +
                 (day<10?("0"+day):(day))+ (month<10?("0"+month):(month)) + year +
                 UUID.randomUUID().toString().substring(0, 4).toUpperCase();
     }
