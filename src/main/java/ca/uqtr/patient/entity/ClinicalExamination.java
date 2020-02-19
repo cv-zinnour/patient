@@ -4,14 +4,12 @@ import ca.uqtr.patient.entity.vo.clinicalexamination.Anthropometry;
 import ca.uqtr.patient.entity.vo.clinicalexamination.Smoking;
 import ca.uqtr.patient.entity.vo.clinicalexamination.cardiovascular.Cardiovascular;
 import ca.uqtr.patient.entity.vo.clinicalexamination.Pharmacotherapy;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Data

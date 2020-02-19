@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SocioDemographicVariablesDto {
 
-    private String age;
+    private int age;
     private String civilStatus;
-    private String familyIncome;
+    private int familyIncome;
     private String jobStatus;
     private String education;
     private LivingEnvironmentDto livingEnvironment;

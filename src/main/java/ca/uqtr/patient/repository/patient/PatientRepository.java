@@ -17,5 +17,9 @@ public interface PatientRepository extends CrudRepository<Patient, UUID> {
     @Query("SELECT p FROM Patient p WHERE p.birthday = :date")
     List<Patient> getPatientsByAge(@Param("date")String date);
 
-    List<Patient> getPatientsByProfessional(Professional professional);
+    List<Patient> findByProfessionals(Professional professional);
+//
+//
+//    @Query("select pt from Patient pt join Professional pr where pr.username = :username")
+//    List<Patient> findByProfessionalsUsername(@Param("username")String username);
 }

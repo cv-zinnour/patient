@@ -21,13 +21,12 @@ public class ProfessionalServiceImpl implements ProfessionalService {
 
     @Override
     public void createProfessional(UserRequestDto userRequestDto) {
-        System.out.println(userRequestDto.toString());
+        /*System.out.println(userRequestDto.toString());
         Professional professional = new Professional(
-                UUID.randomUUID(),
-                userRequestDto.getFirstName(),
+                userRequestDto.getu(),
                 userRequestDto.getLastName(),
                 true);
 
-        professionalRepository.save(professional);
+        professionalRepository.save(professional);*/
     }
 }

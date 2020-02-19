@@ -2,6 +2,7 @@ package ca.uqtr.patient.entity;
 
 import ca.uqtr.patient.entity.vo.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,14 +36,15 @@ public class MedicalFile extends BaseEntity {
     @Type(type = "jsonb")
     @Column(name = "socio_demographic_variables", columnDefinition = "jsonb")
     private String socioDemographicVariables;
-    @Type(type = "jsonb")
-    @Column(name = "antecedents", columnDefinition = "jsonb")
-    private String antecedents;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id")
-    private List<ClinicalExamination> clinicalExamination = new ArrayList<>();
     @Column(name = "creation_date")
     private Date creationDate ;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "medical_file_id")
+    private List<MedicalFileHistory> medicalFileHistory;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "medical_file_id")
+    private List<ClinicalExamination> clinicalExamination;
+
 
     public void setPatient(String patient) {
         AES256TextEncryptor encryptor = new AES256TextEncryptor();

@@ -4,19 +4,23 @@ package ca.uqtr.patient.service.patient;
 import ca.uqtr.patient.dto.ErrorDto;
 import ca.uqtr.patient.dto.MedicalFileDto;
 import ca.uqtr.patient.dto.PatientDto;
-import ca.uqtr.patient.entity.MedicalFile;
-import ca.uqtr.patient.entity.Patient;
-import ca.uqtr.patient.entity.Professional;
+import ca.uqtr.patient.dto.UserRequestDto;
+import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
+import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
+import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
+import ca.uqtr.patient.entity.*;
 import ca.uqtr.patient.entity.vo.Contact;
 import ca.uqtr.patient.repository.ProfessionalRepository;
 import ca.uqtr.patient.repository.medicalFile.MedicalFileRepository;
 import ca.uqtr.patient.repository.patient.PatientRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
-import java.util.function.Consumer;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -35,24 +39,26 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDto addPatient(PatientDto patientDto) {
-        System.out.println(patientDto.getProfessional());
+    public PatientDto addPatient(PatientDto patientDto, String professionalUsername) {
         PatientDto pDto = new PatientDto();
+        try {
+                Patient patient = patientDto.dtoToObj(modelMapper);
+                Professional professional = professionalRepository.getProfessionalByUsername(professionalUsername);
+                if (professional == null){
+                    professional = professionalRepository.save(new Professional(professionalUsername, true));
+                }
+                Set<Professional> professionals = patient.getProfessionals();
+                professionals.add(professional);
+                patient.setProfessionals(professionals);
+                patient.setFileNumber();
+                Patient patient_db = patientRepository.save(patient);
 
-            Patient patient = patientDto.dtoToObj(modelMapper);
-            patient.setContact(patient.getContact());
-        System.out.println(patientDto.getProfessional().getId());
-        assert patientDto.getProfessional() != null;
-        Professional professional = professionalRepository.findById(UUID.fromString(patientDto.getProfessional().getId())).get();
-            patient.setProfessional(professional);
-            patient.setFileNumber();
-            Patient p = patientRepository.save(patient);
+                MedicalFile medicalFile = new MedicalFile();
+                medicalFile.setPatient(patient_db.getId().toString());
+                medicalFile.setCreationDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+                medicalFileRepository.save(medicalFile);
 
-            MedicalFile medicalFile = new MedicalFile();
-            medicalFile.setPatient(p.getId().toString());
-            medicalFileRepository.save(medicalFile);
-            try {
-            pDto = modelMapper.map(p, PatientDto.class);
+                pDto = modelMapper.map(patient_db, PatientDto.class);
         } catch (Exception e){
             pDto.setError(new ErrorDto(1, "Mapping error (check data). Message : "+e.getMessage()));
             return pDto;
@@ -97,11 +103,65 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public List<Patient> getPatientsByProfessional(String username) {
+        return patientRepository.findByProfessionals(professionalRepository.getProfessionalByUsername(username));
+    }
+
+    @Override
+    public MedicalFileDto addSocioDemographicVariables(String patientId, String socioDemographicVariablesDto) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+        medicalFile.setSocioDemographicVariables(socioDemographicVariablesDto);
+        return  modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class);
+    }
+
+    @Override
+    public MedicalFileDto addAntecedents(String patientId, String antecedentsDto) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+        MedicalFileHistory medicalFileHistory = new MedicalFileHistory(new java.sql.Date(Calendar.getInstance().getTimeInMillis()), antecedentsDto);
+        List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
+        medicalFileHistories.add(medicalFileHistory);
+        medicalFile.setMedicalFileHistory(medicalFileHistories);
+        return  modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class);
+    }
+
+    @Override
+    public MedicalFileDto addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+        List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
+        clinicalExamination.add(clinicalExaminationDto.dtoToObj(modelMapper));
+        medicalFile.setClinicalExamination(clinicalExamination);
+        return  modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class);
+    }
+
+    @Override
+    public SocioDemographicVariablesDto getSocioDemographicVariables(PatientDto patient) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String socioDemographicVariables = medicalFileRepository.getMedicalFileByPatient(patient.getId().toString()).getSocioDemographicVariables();
+        if (socioDemographicVariables == null)
+            return new SocioDemographicVariablesDto();
+        System.out.println(socioDemographicVariables);
+        return mapper.readValue(
+                socioDemographicVariables,
+                SocioDemographicVariablesDto.class);
+    }
+
+    @Override
+    public List<MedicalFileDto> getAntecedents(PatientDto patient) {
+        return null;
+    }
+
+    @Override
+    public List<MedicalFileDto> getClinicalExamination(PatientDto patient) {
+        return null;
+    }
+
+    @Override
     public List<Patient> getPatientsByProfessional(PatientDto patientDto) {
-        Patient patient = patientDto.dtoToObj(modelMapper);
+        /*Patient patient = patientDto.dtoToObj(modelMapper);
         Professional professional = patient.getProfessional();
         System.out.println(professional.toString());
-        return patientRepository.getPatientsByProfessional(professional);
+        return patientRepository.getPatientsByProfessional(professional);*/
+        return null;
     }
 
     @Override

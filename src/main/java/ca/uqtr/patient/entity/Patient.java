@@ -2,6 +2,8 @@ package ca.uqtr.patient.entity;
 
 import ca.uqtr.patient.entity.vo.Contact;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,6 +38,7 @@ public class Patient extends BaseEntity{
     private Date birthday;
     @Column(name = "mother_name")
     private String motherName;
+    @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "patient")
     private Contact contact;
     @Type(type = "jsonb")
@@ -44,10 +47,14 @@ public class Patient extends BaseEntity{
     @Type(type = "jsonb")
     @Column(name = "pharmacy", columnDefinition = "jsonb")
     private String pharmacy;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Professional professional;
     @Column(name = "is_active")
     private Boolean isActive;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "patient_professional", joinColumns = {
+            @JoinColumn(name = "patient_id", referencedColumnName = "id")}, inverseJoinColumns = {
+            @JoinColumn(name = "professional_id", referencedColumnName = "id")})
+    private Set<Professional> professionals = new HashSet<>();
+
 
     public Patient(String firstName, String lastName, Date birthday, Boolean isActive) {
         this.firstName = firstName;
@@ -85,14 +92,5 @@ public class Patient extends BaseEntity{
         }
         this.contact = contact;
     }
-/*
-    public void addProfessional(Professional professional) {
-        professionals.add(professional);
-        professional.getPatients().add(this);
-    }
 
-    public void removeProfessional(Professional professional) {
-        professionals.remove(professional);
-        professional.getPatients().remove(this);
-    }*/
 }

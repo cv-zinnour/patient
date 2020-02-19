@@ -2,6 +2,7 @@ package ca.uqtr.patient.entity.vo;
 
 import ca.uqtr.patient.entity.BaseEntity;
 import ca.uqtr.patient.entity.Patient;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -32,6 +33,7 @@ public class Contact implements Serializable {
     private String email;
     @Embedded
     private Address address;
+    @JsonBackReference
     @MapsId
     @OneToOne
     @JoinColumn(name = "id")

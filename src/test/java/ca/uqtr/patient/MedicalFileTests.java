@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MedicalFileControllerTests {
+public class MedicalFileTests {
 
     @Autowired
     private MedicalFileController medicalFileController;

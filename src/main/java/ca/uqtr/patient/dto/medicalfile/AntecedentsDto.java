@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class AntecedentsDto {
 
     private String type;
-    private String year;
+    private int year;
 }
