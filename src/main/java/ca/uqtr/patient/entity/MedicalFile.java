@@ -38,11 +38,16 @@ public class MedicalFile extends BaseEntity {
     private String socioDemographicVariables;
     @Column(name = "creation_date")
     private Date creationDate ;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "medical_file_id")
     private List<MedicalFileHistory> medicalFileHistory;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "medical_file_id")
+    /*@OneToMany(
+            mappedBy = "medicalFile",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )*/
     private List<ClinicalExamination> clinicalExamination;
 
 

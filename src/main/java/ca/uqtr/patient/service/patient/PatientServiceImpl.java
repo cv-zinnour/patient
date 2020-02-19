@@ -116,7 +116,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public MedicalFileDto addAntecedents(String patientId, String antecedentsDto) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(patientId);
         MedicalFileHistory medicalFileHistory = new MedicalFileHistory(new java.sql.Date(Calendar.getInstance().getTimeInMillis()), antecedentsDto);
         List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
         medicalFileHistories.add(medicalFileHistory);
@@ -126,7 +126,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public MedicalFileDto addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_ClinicalExamination_FetchTypeEAGER(patientId);
+        System.out.println(medicalFile.toString());
         List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
         clinicalExamination.add(clinicalExaminationDto.dtoToObj(modelMapper));
         medicalFile.setClinicalExamination(clinicalExamination);
@@ -139,7 +140,6 @@ public class PatientServiceImpl implements PatientService {
         String socioDemographicVariables = medicalFileRepository.getMedicalFileByPatient(patient.getId().toString()).getSocioDemographicVariables();
         if (socioDemographicVariables == null)
             return new SocioDemographicVariablesDto();
-        System.out.println(socioDemographicVariables);
         return mapper.readValue(
                 socioDemographicVariables,
                 SocioDemographicVariablesDto.class);

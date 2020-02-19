@@ -29,5 +29,6 @@ public class ClinicalExamination extends BaseEntity{
     private Pharmacotherapy pharmacotherapy;
     @Column(name = "date")
     private Date date;
-
+    /*@ManyToOne(fetch = FetchType.LAZY)
+    private MedicalFile medicalFile;*/
 }
