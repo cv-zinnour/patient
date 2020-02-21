@@ -74,7 +74,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Response getPatientById(PatientDto patientDto) {
+    public Response getPatient(PatientDto patientDto) {
         try {
             System.out.println(patientDto.toString());
             System.out.println(patientDto.dtoToObj(modelMapper).getId());

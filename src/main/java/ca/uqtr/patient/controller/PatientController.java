@@ -42,7 +42,7 @@ public class PatientController {
     @ResponseBody
     public Response getPatient(@RequestBody Request request){
         PatientDto patient = mapper.convertValue(request.getObject(), PatientDto.class);
-        return patientService.getPatientById(patient);
+        return patientService.getPatient(patient);
     }
 
     @GetMapping(value = "/all")
@@ -71,10 +71,22 @@ public class PatientController {
         return patientService.addSocioDemographicVariables(patientId, socioDemographicVariables);
     }
 
+    @GetMapping(value = "/patient/antecedents")
+    @ResponseBody
+    public Response getPatientAntecedents(@RequestParam String patientId) {
+        return patientService.getPatientAntecedents(patientId);
+    }
+
     @PostMapping(value = "/patient/antecedents")
     @ResponseBody
     public Response addAntecedents(@RequestParam String patientId, @RequestBody String antecedents) throws JsonProcessingException {
         return patientService.addAntecedents(patientId, antecedents);
+    }
+
+    @GetMapping(value = "/patient/clinicalexamination")
+    @ResponseBody
+    public Response getPatientClinicalExamination(@RequestParam String patientId) throws JsonProcessingException {
+        return patientService.getPatientClinicalExaminationList(patientId);
     }
 
     @PostMapping(value = "/patient/clinicalexamination")
@@ -84,7 +96,6 @@ public class PatientController {
     }
 
     @PutMapping(value = "/update")
-    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Response updatePatient(@RequestBody PatientDto patient){
         return patientService.updatePatient(patient);
