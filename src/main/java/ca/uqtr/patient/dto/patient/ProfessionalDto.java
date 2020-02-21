@@ -12,8 +12,6 @@ import org.modelmapper.ModelMapper;
 @NoArgsConstructor
 public class ProfessionalDto {
     private String id;
-    private String firstName;
-    private String lastName;
     private boolean root;
 
     public Professional dtoToObj(ModelMapper modelMapper) {

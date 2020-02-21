@@ -22,13 +22,9 @@ public class Professional implements Serializable {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
-
     @Version
     @Column(name = "version", nullable = false)
     private int version;
-
-    @Column(name = "username", nullable = false)
-    private String username;
     @Column(name = "root", nullable = false)
     private boolean root;
     //@ToString.Exclude

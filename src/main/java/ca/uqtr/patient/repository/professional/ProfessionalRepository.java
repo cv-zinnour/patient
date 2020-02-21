@@ -12,6 +12,5 @@ import java.util.UUID;
 
 @Repository
 public interface ProfessionalRepository extends CrudRepository<Professional, UUID> {
- Professional getProfessionalByUsername(String username);
  Professional getProfessionalById(UUID id);
 }

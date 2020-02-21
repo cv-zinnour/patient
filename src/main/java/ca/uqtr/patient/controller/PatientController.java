@@ -32,10 +32,9 @@ public class PatientController {
 
     @PostMapping(value = "/create")
     @ResponseBody
-    public Response addPatient(@RequestBody String request, HttpServletRequest HttpRequest) throws IOException {
+    public Response addPatient(@RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        Request req = mapper.readValue(request, Request.class);
-        PatientDto patient = mapper.convertValue(req.getObject(), PatientDto.class);
+        PatientDto patient = mapper.convertValue(request.getObject(), PatientDto.class);
         return patientService.addPatient(patient , JwtTokenUtil.getId(token));
     }
 

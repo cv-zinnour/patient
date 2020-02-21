@@ -113,8 +113,8 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<Patient> getPatientsByProfessional(String username) {
-        return patientRepository.findByProfessionals(professionalRepository.getProfessionalByUsername(username));
+    public List<Patient> getPatientsByProfessional(String id) {
+        return patientRepository.findByProfessionals(professionalRepository.getProfessionalById(UUID.fromString(id)));
     }
 
     @Override
