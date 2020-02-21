@@ -68,13 +68,13 @@ public class PatientServiceImpl implements PatientService {
         } catch (Exception ex){
             LOGGER.log( Level.WARNING, ex.getMessage());
             return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error-null-id", null, Locale.US)),
-                            messageSource.getMessage("error-null-message", null, Locale.US)));
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
         }
     }
 
     @Override
-    public PatientDto getPatientById(PatientDto patientDto) {
+    public Response getPatientById(PatientDto patientDto) {
         try {
             System.out.println(patientDto.toString());
             System.out.println(patientDto.dtoToObj(modelMapper).getId());
@@ -85,13 +85,15 @@ public class PatientServiceImpl implements PatientService {
             MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId.toString());
             MedicalFileDto medicalFileDto = modelMapper.map(medicalFile, MedicalFileDto.class);
             pDto.setMedicalFile(medicalFileDto);
-            if (!patient.isPresent()) {
-                return null;
-            }
-            pDto = modelMapper.map(patient.get(), PatientDto.class);
-            return pDto;
+            return patient.map(value -> new Response(modelMapper.map(value, PatientDto.class), null)).orElseGet(() -> new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.exist.message", null, Locale.US))));
+
         } catch (Exception e){
-            return null;
+            LOGGER.log( Level.WARNING, e.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
         }
     }
 

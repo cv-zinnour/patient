@@ -17,7 +17,7 @@ import java.util.List;
 public interface PatientService {
 
     Response addPatient(PatientDto patientDto, String professionalUsername);
-    PatientDto getPatientById(PatientDto patientDto);
+    Response getPatientById(PatientDto patientDto);
     Iterable<Patient> getPatients();
     List<Patient> getPatientsByProfessional(PatientDto patientDto);
     Patient getPatientByFirstNameAndLastName(PatientDto patient);

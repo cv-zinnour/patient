@@ -38,19 +38,10 @@ public class PatientController {
         return patientService.addPatient(patient , JwtTokenUtil.getId(token));
     }
 
-/*
-    @PostMapping(value = "/create/professional")
-    @ResponseBody
-    public void addProfessional(@RequestBody UserRequestDto userRequestDto, HttpServletRequest request)  {
-        String token = request.getHeader("Authorization").replace("bearer ","");
-        JwtTokenUtil.getUsername(token);
-        professionalService.createProfessional(userRequestDto);
-    }
-*/
-
     @PostMapping(value = "/id")
     @ResponseBody
-    public PatientDto getPatient(@RequestBody PatientDto patient){
+    public Response getPatient(@RequestBody Request request){
+        PatientDto patient = mapper.convertValue(request.getObject(), PatientDto.class);
         return patientService.getPatientById(patient);
     }
 
