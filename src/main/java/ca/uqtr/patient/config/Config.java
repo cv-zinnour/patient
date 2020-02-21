@@ -4,6 +4,7 @@ package ca.uqtr.patient.config;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,4 +28,15 @@ public class Config {
         return new ModelMapper();
     }
 
+
+
+    @Bean
+    public ResourceBundleMessageSource messageResourceSource() {
+
+        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+        source.setBasenames("classpath:messages");
+        source.setUseCodeAsDefaultMessage(true);
+
+        return source;
+    }
 }

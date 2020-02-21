@@ -2,6 +2,7 @@ package ca.uqtr.patient;
 
 
 import ca.uqtr.patient.dto.PatientDto;
+import ca.uqtr.patient.dto.Request;
 import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
@@ -61,16 +62,18 @@ public class PatientTests {
 
     @Test
     public void addPatient() throws Exception {
-        Patient patient = new Patient("lahcene", "zinnour");
+        Patient patient = new Patient("sade9", "zinnour");
         String date = "2015-04-12";
         java.sql.Date birthday = java.sql.Date.valueOf(date);
         patient.setBirthday(birthday);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String patientDto = mapper.writeValueAsString(patient);
-        System.out.println(patientDto);
+
+        PatientDto patientDto = modelMapper.map(patient, PatientDto.class);
+        Request request = new Request(patientDto);
+        ObjectMapper om = new ObjectMapper();
+
         this.mockMvc.perform(post("/create").contentType(MediaType.APPLICATION_JSON)
-                .content(patientDto))
+                .content(om.writeValueAsString(request)))
                 .andExpect(status().isCreated());
     }
 

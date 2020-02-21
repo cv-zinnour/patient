@@ -4,18 +4,28 @@ package ca.uqtr.patient.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 //@ToString(exclude = "patients")
 @NoArgsConstructor
 @Entity
 @Table(name = "professional", schema = "public")
-public class Professional extends BaseEntity {
+public class Professional implements Serializable {
+
+    static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private int version;
 
     @Column(name = "username", nullable = false)
     private String username;
@@ -25,8 +35,8 @@ public class Professional extends BaseEntity {
     /*@ManyToMany(mappedBy = "professionals",fetch = FetchType.LAZY)
     private Set<Patient> patients = new HashSet<>();*/
 
-    public Professional(String username, boolean root) {
-        this.username = username;
+    public Professional(UUID id, boolean root) {
+        this.id = id;
         this.root = root;
     }
 

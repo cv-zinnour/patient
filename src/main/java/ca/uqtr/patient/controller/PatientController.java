@@ -1,8 +1,6 @@
 package ca.uqtr.patient.controller;
 
-import ca.uqtr.patient.dto.MedicalFileDto;
-import ca.uqtr.patient.dto.PatientDto;
-import ca.uqtr.patient.dto.UserRequestDto;
+import ca.uqtr.patient.dto.*;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.service.patient.PatientService;
@@ -12,11 +10,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,19 +21,22 @@ public class PatientController {
 
     private PatientService patientService;
     private ProfessionalService professionalService;
+    private ObjectMapper mapper;
 
     @Autowired
-    public PatientController(PatientService patientService, ProfessionalService professionalService) {
+    public PatientController(PatientService patientService, ProfessionalService professionalService, ObjectMapper mapper) {
         this.patientService = patientService;
         this.professionalService = professionalService;
+        this.mapper = mapper;
     }
 
     @PostMapping(value = "/create")
     @ResponseBody
-    public ResponseEntity<PatientDto> addPatient(@RequestBody PatientDto patient, HttpServletRequest request)  {
-        String token = request.getHeader("Authorization").replace("bearer ","");
-        System.out.println(patient.toString());
-        return new ResponseEntity<>(patientService.addPatient(patient, JwtTokenUtil.getUsername(token)), HttpStatus.CREATED);
+    public Response addPatient(@RequestBody String request, HttpServletRequest HttpRequest) throws IOException {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+        Request req = mapper.readValue(request, Request.class);
+        PatientDto patient = mapper.convertValue(req.getObject(), PatientDto.class);
+        return patientService.addPatient(patient , JwtTokenUtil.getId(token));
     }
 
 /*

@@ -1,51 +1,56 @@
 package ca.uqtr.patient.service.patient;
 
 
-import ca.uqtr.patient.dto.ErrorDto;
 import ca.uqtr.patient.dto.MedicalFileDto;
 import ca.uqtr.patient.dto.PatientDto;
-import ca.uqtr.patient.dto.UserRequestDto;
-import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
+import ca.uqtr.patient.dto.Response;
+import ca.uqtr.patient.dto.Error;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
 import ca.uqtr.patient.entity.*;
-import ca.uqtr.patient.entity.vo.Contact;
-import ca.uqtr.patient.repository.ProfessionalRepository;
+import ca.uqtr.patient.repository.professional.ProfessionalRepository;
 import ca.uqtr.patient.repository.medicalFile.MedicalFileRepository;
 import ca.uqtr.patient.repository.patient.PatientRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class PatientServiceImpl implements PatientService {
+    private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
 
     private PatientRepository patientRepository;
     private final MedicalFileRepository medicalFileRepository;
     private final ProfessionalRepository professionalRepository;
     private ModelMapper modelMapper;
+    private MessageSource messageSource;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository, MessageSource messageSource) {
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
         this.medicalFileRepository = medicalFileRepository;
         this.professionalRepository = professionalRepository;
+        this.messageSource = messageSource;
     }
 
     @Override
-    public PatientDto addPatient(PatientDto patientDto, String professionalUsername) {
-        PatientDto pDto = new PatientDto();
+    public Response addPatient(PatientDto patientDto, String id) {
         try {
+            System.out.println(patientDto);
+            System.out.println(id);
                 Patient patient = patientDto.dtoToObj(modelMapper);
-                Professional professional = professionalRepository.getProfessionalByUsername(professionalUsername);
+                Professional professional = professionalRepository.getProfessionalById(UUID.fromString(id));
                 if (professional == null){
-                    professional = professionalRepository.save(new Professional(professionalUsername, true));
+                    professional = professionalRepository.save(new Professional(UUID.fromString(id), true));
                 }
                 Set<Professional> professionals = patient.getProfessionals();
                 professionals.add(professional);
@@ -58,31 +63,36 @@ public class PatientServiceImpl implements PatientService {
                 medicalFile.setCreationDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
                 medicalFileRepository.save(medicalFile);
 
-                pDto = modelMapper.map(patient_db, PatientDto.class);
-        } catch (Exception e){
-            pDto.setError(new ErrorDto(1, "Mapping error (check data). Message : "+e.getMessage()));
-            return pDto;
+                return new Response(modelMapper.map(patient_db, PatientDto.class), null);
+
+        } catch (Exception ex){
+            LOGGER.log( Level.WARNING, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error-null-id", null, Locale.US)),
+                            messageSource.getMessage("error-null-message", null, Locale.US)));
         }
-        return pDto;
     }
 
     @Override
     public PatientDto getPatientById(PatientDto patientDto) {
-        System.out.println(patientDto.toString());
-        System.out.println(patientDto.dtoToObj(modelMapper).getId());
-        System.out.println(patientDto.dtoToObj(modelMapper).getFirstName());
-        PatientDto pDto = new PatientDto();
-        UUID patientId = patientDto.dtoToObj(modelMapper).getId();
-        Optional<Patient> patient = patientRepository.findById(patientId);
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId.toString());
-        MedicalFileDto medicalFileDto = modelMapper.map(medicalFile, MedicalFileDto.class);
-        pDto.setMedicalFile(medicalFileDto);
-        if (!patient.isPresent()){
-            pDto.setError(new ErrorDto(2, "Patient does not exist."));
+        try {
+            System.out.println(patientDto.toString());
+            System.out.println(patientDto.dtoToObj(modelMapper).getId());
+            System.out.println(patientDto.dtoToObj(modelMapper).getFirstName());
+            PatientDto pDto = new PatientDto();
+            UUID patientId = patientDto.dtoToObj(modelMapper).getId();
+            Optional<Patient> patient = patientRepository.findById(patientId);
+            MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId.toString());
+            MedicalFileDto medicalFileDto = modelMapper.map(medicalFile, MedicalFileDto.class);
+            pDto.setMedicalFile(medicalFileDto);
+            if (!patient.isPresent()) {
+                return null;
+            }
+            pDto = modelMapper.map(patient.get(), PatientDto.class);
             return pDto;
+        } catch (Exception e){
+            return null;
         }
-        pDto = modelMapper.map(patient.get(), PatientDto.class);
-        return pDto;
     }
 
     @Override

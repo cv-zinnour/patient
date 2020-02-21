@@ -1,8 +1,6 @@
 package ca.uqtr.patient.entity;
 
 import ca.uqtr.patient.entity.vo.Contact;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
@@ -54,7 +52,9 @@ public class Patient extends BaseEntity{
             @JoinColumn(name = "patient_id", referencedColumnName = "id")}, inverseJoinColumns = {
             @JoinColumn(name = "professional_id", referencedColumnName = "id")})
     private Set<Professional> professionals = new HashSet<>();
-
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "patient_id")
+    private List<Questionnaire> questionnaires;
 
     public Patient(String firstName, String lastName, Date birthday, Boolean isActive) {
         this.firstName = firstName;

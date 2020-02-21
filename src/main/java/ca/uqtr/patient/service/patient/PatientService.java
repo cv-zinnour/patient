@@ -2,6 +2,7 @@ package ca.uqtr.patient.service.patient;
 
 import ca.uqtr.patient.dto.MedicalFileDto;
 import ca.uqtr.patient.dto.PatientDto;
+import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public interface PatientService {
 
-    PatientDto addPatient(PatientDto patientDto, String professionalUsername);
+    Response addPatient(PatientDto patientDto, String professionalUsername);
     PatientDto getPatientById(PatientDto patientDto);
     Iterable<Patient> getPatients();
     List<Patient> getPatientsByProfessional(PatientDto patientDto);

@@ -1,13 +1,8 @@
 package ca.uqtr.patient.service.professional;
 
 import ca.uqtr.patient.dto.UserRequestDto;
-import ca.uqtr.patient.entity.Professional;
-import ca.uqtr.patient.repository.ProfessionalRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import ca.uqtr.patient.repository.professional.ProfessionalRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class ProfessionalServiceImpl implements ProfessionalService {

@@ -45,8 +45,6 @@ public class PatientDto {
     private Boolean isActive;
     @Nullable
     MedicalFileDto medicalFile;
-    @Nullable
-    private ErrorDto error;
 
     public Patient dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Patient.class);

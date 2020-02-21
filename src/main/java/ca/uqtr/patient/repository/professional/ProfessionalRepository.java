@@ -1,4 +1,4 @@
-package ca.uqtr.patient.repository;
+package ca.uqtr.patient.repository.professional;
 
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.entity.Professional;
@@ -13,4 +13,5 @@ import java.util.UUID;
 @Repository
 public interface ProfessionalRepository extends CrudRepository<Professional, UUID> {
  Professional getProfessionalByUsername(String username);
+ Professional getProfessionalById(UUID id);
 }
