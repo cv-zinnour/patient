@@ -18,18 +18,21 @@ public interface PatientService {
 
     Response addPatient(PatientDto patientDto, String professionalUsername);
     Response getPatientById(PatientDto patientDto);
-    Iterable<Patient> getPatients();
-    List<Patient> getPatientsByProfessional(PatientDto patientDto);
-    Patient getPatientByFirstNameAndLastName(PatientDto patient);
+    Response getPatients();
+    Response getPatientsByProfessional(String id);
+    Response getPatientSocioDemographicVariables(String patientId);
+    Response addSocioDemographicVariables(String patientId, String socioDemographicVariablesDto) throws JsonProcessingException;
+    Response getAntecedents(String patientId);
+    Response addAntecedents(String patientId, String antecedentsDto) throws JsonProcessingException;
+    Response getClinicalExaminationList(String patientId);
+    Response addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto);
+
     List<Patient> getPatientsByAge(PatientDto patient);
     Patient updatePatient(PatientDto patient);
     void deleteById(PatientDto patient);
-    List<Patient> getPatientsByProfessional(String username);
-    MedicalFileDto addSocioDemographicVariables(String patientId, String socioDemographicVariablesDto) throws JsonProcessingException;
-    MedicalFileDto addAntecedents(String patientId, String antecedentsDto) throws JsonProcessingException;
-    MedicalFileDto addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto);
 
     SocioDemographicVariablesDto getSocioDemographicVariables(PatientDto patient) throws IOException;
     List<MedicalFileDto> getAntecedents(PatientDto patient);
     List<MedicalFileDto> getClinicalExamination(PatientDto patient);
+
 }

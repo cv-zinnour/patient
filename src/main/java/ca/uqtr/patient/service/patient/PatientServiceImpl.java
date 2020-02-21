@@ -98,10 +98,74 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient getPatientByFirstNameAndLastName(PatientDto patient) {
-        return patientRepository.getPatientByFirstNameAndLastName(
-                patient.dtoToObj(modelMapper).getFirstName(),
-                patient.dtoToObj(modelMapper).getLastName());
+    public Response getPatients() {
+        return new Response(patientRepository.findAll(), null);
+    }
+
+    @Override
+    public Response getPatientsByProfessional(String id) {
+        return new Response(patientRepository.findByProfessionals(professionalRepository.getProfessionalById(UUID.fromString(id))), null);
+    }
+
+    @Override
+    public Response getPatientSocioDemographicVariables(String patientId) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+        String socio = medicalFile.getSocioDemographicVariables();
+        if (socio == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.socio.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.socio.exist.message", null, Locale.US)));
+        return new Response(socio, null);
+    }
+
+    @Override
+    public Response addSocioDemographicVariables(String patientId, String socioDemographicVariablesDto) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+        medicalFile.setSocioDemographicVariables(socioDemographicVariablesDto);
+        return new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
+    }
+
+    @Override
+    public Response getAntecedents(String patientId) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(patientId);
+        List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
+        if (medicalFileHistories == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.antecedents.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.antecedents.exist.message", null, Locale.US)));
+        return new Response(medicalFileHistories, null);
+    }
+
+    @Override
+    public Response addAntecedents(String patientId, String antecedentsDto) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(patientId);
+        MedicalFileHistory medicalFileHistory = new MedicalFileHistory(new java.sql.Date(Calendar.getInstance().getTimeInMillis()), antecedentsDto);
+        List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
+        medicalFileHistories.add(medicalFileHistory);
+        medicalFile.setMedicalFileHistory(medicalFileHistories);
+        return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
+    }
+
+    @Override
+    public Response getClinicalExaminationList(String patientId) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_ClinicalExamination_FetchTypeEAGER(patientId);
+        System.out.println(medicalFile.toString());
+        List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
+        if (clinicalExamination == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.ce.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.ce.exist.message", null, Locale.US)));
+        return new Response(clinicalExamination, null);
+    }
+
+    @Override
+    public Response addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_ClinicalExamination_FetchTypeEAGER(patientId);
+        System.out.println(medicalFile.toString());
+        List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
+        clinicalExamination.add(clinicalExaminationDto.dtoToObj(modelMapper));
+        medicalFile.setClinicalExamination(clinicalExamination);
+        return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
     }
 
     @Override
@@ -109,42 +173,6 @@ public class PatientServiceImpl implements PatientService {
         return patientRepository.getPatientsByAge(patient.dtoToObj(modelMapper).getBirthday().toString());
     }
 
-    @Override
-    public Iterable<Patient> getPatients() {
-        return patientRepository.findAll();
-    }
-
-    @Override
-    public List<Patient> getPatientsByProfessional(String id) {
-        return patientRepository.findByProfessionals(professionalRepository.getProfessionalById(UUID.fromString(id)));
-    }
-
-    @Override
-    public MedicalFileDto addSocioDemographicVariables(String patientId, String socioDemographicVariablesDto) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
-        medicalFile.setSocioDemographicVariables(socioDemographicVariablesDto);
-        return  modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class);
-    }
-
-    @Override
-    public MedicalFileDto addAntecedents(String patientId, String antecedentsDto) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(patientId);
-        MedicalFileHistory medicalFileHistory = new MedicalFileHistory(new java.sql.Date(Calendar.getInstance().getTimeInMillis()), antecedentsDto);
-        List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
-        medicalFileHistories.add(medicalFileHistory);
-        medicalFile.setMedicalFileHistory(medicalFileHistories);
-        return  modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class);
-    }
-
-    @Override
-    public MedicalFileDto addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_ClinicalExamination_FetchTypeEAGER(patientId);
-        System.out.println(medicalFile.toString());
-        List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
-        clinicalExamination.add(clinicalExaminationDto.dtoToObj(modelMapper));
-        medicalFile.setClinicalExamination(clinicalExamination);
-        return  modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class);
-    }
 
     @Override
     public SocioDemographicVariablesDto getSocioDemographicVariables(PatientDto patient) throws IOException {
@@ -164,15 +192,6 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<MedicalFileDto> getClinicalExamination(PatientDto patient) {
-        return null;
-    }
-
-    @Override
-    public List<Patient> getPatientsByProfessional(PatientDto patientDto) {
-        /*Patient patient = patientDto.dtoToObj(modelMapper);
-        Professional professional = patient.getProfessional();
-        System.out.println(professional.toString());
-        return patientRepository.getPatientsByProfessional(professional);*/
         return null;
     }
 

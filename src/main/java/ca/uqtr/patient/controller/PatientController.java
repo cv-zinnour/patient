@@ -47,38 +47,39 @@ public class PatientController {
 
     @GetMapping(value = "/all")
     @ResponseBody
-    public Iterable<Patient> getPatients(){
+    public Response getPatients(){
         return patientService.getPatients();
     }
 
     @GetMapping(value = "/patients/professional")
     @ResponseBody
-    public Iterable<Patient> getPatientsByProfessional(HttpServletRequest request)  {
+    public Response getPatientsByProfessional(HttpServletRequest request)  {
         String token = request.getHeader("Authorization").replace("bearer ","");
-        return patientService.getPatientsByProfessional(JwtTokenUtil.getUsername(token));
+        return patientService.getPatientsByProfessional(JwtTokenUtil.getId(token));
     }
 
-    @PostMapping(value = "/patient/name")
+    @GetMapping(value = "/patient/socio")
     @ResponseBody
-    public Patient getPatientByFirstNameAndLastName(@RequestBody PatientDto patient) {
-        return patientService.getPatientByFirstNameAndLastName(patient);
+    public Response getPatientSocioDemographicVariables(@RequestParam String patientId) throws JsonProcessingException {
+        return patientService.getPatientSocioDemographicVariables(patientId);
     }
 
     @PostMapping(value = "/patient/socio")
     @ResponseBody
-    public MedicalFileDto addSocioDemographicVariables(@RequestParam String patientId, @RequestBody String socioDemographicVariables) throws JsonProcessingException {
+    public Response addSocioDemographicVariables(@RequestParam String patientId, @RequestBody Request request) throws JsonProcessingException {
+        String socioDemographicVariables = mapper.convertValue(request.getObject(), String.class);
         return patientService.addSocioDemographicVariables(patientId, socioDemographicVariables);
     }
 
     @PostMapping(value = "/patient/antecedents")
     @ResponseBody
-    public MedicalFileDto addAntecedents(@RequestParam String patientId, @RequestBody String antecedents) throws JsonProcessingException {
+    public Response addAntecedents(@RequestParam String patientId, @RequestBody String antecedents) throws JsonProcessingException {
         return patientService.addAntecedents(patientId, antecedents);
     }
 
     @PostMapping(value = "/patient/clinicalexamination")
     @ResponseBody
-    public MedicalFileDto addClinicalExamination(@RequestParam String patientId, @RequestBody ClinicalExaminationDto clinicalExaminationDto) {
+    public Response addClinicalExamination(@RequestParam String patientId, @RequestBody ClinicalExaminationDto clinicalExaminationDto) {
         return patientService.addClinicalExamination(patientId, clinicalExaminationDto);
     }
 
