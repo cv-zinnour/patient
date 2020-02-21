@@ -115,6 +115,7 @@ public class PatientServiceImpl implements PatientService {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.socio.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.socio.exist.message", null, Locale.US)));
+        //return new Response(modelMapper.map(socio, SocioDemographicVariablesDto.class), null);
         return new Response(socio, null);
     }
 
@@ -126,7 +127,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Response getAntecedents(String patientId) {
+    public Response getPatientAntecedents(String patientId) {
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(patientId);
         List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
         if (medicalFileHistories == null)
@@ -147,7 +148,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Response getClinicalExaminationList(String patientId) {
+    public Response getPatientClinicalExaminationList(String patientId) {
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_ClinicalExamination_FetchTypeEAGER(patientId);
         System.out.println(medicalFile.toString());
         List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
@@ -168,41 +169,20 @@ public class PatientServiceImpl implements PatientService {
         return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
     }
 
-    @Override
-    public List<Patient> getPatientsByAge(PatientDto patient) {
-        return patientRepository.getPatientsByAge(patient.dtoToObj(modelMapper).getBirthday().toString());
-    }
-
 
     @Override
-    public SocioDemographicVariablesDto getSocioDemographicVariables(PatientDto patient) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String socioDemographicVariables = medicalFileRepository.getMedicalFileByPatient(patient.getId().toString()).getSocioDemographicVariables();
-        if (socioDemographicVariables == null)
-            return new SocioDemographicVariablesDto();
-        return mapper.readValue(
-                socioDemographicVariables,
-                SocioDemographicVariablesDto.class);
+    public Response updatePatient(PatientDto patientDto) {
+        try {
+            Patient patient = patientDto.dtoToObj(modelMapper);
+            patientRepository.save(patient);
+            return new Response(modelMapper.map(modelMapper.map(patient, PatientDto.class), PatientDto.class), null);
+        } catch (Exception ex){
+            LOGGER.log( Level.WARNING, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
     }
 
-    @Override
-    public List<MedicalFileDto> getAntecedents(PatientDto patient) {
-        return null;
-    }
-
-    @Override
-    public List<MedicalFileDto> getClinicalExamination(PatientDto patient) {
-        return null;
-    }
-
-    @Override
-    public Patient updatePatient(PatientDto patient) {
-        return patientRepository.save(patient.dtoToObj(modelMapper));
-    }
-
-    @Override
-    public void deleteById(PatientDto patient) {
-        patientRepository.deleteById(patient.dtoToObj(modelMapper).getId());
-    }
 
 }

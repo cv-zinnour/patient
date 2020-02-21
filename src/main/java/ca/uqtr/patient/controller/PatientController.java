@@ -83,24 +83,11 @@ public class PatientController {
         return patientService.addClinicalExamination(patientId, clinicalExaminationDto);
     }
 
-    @PostMapping(value = "/patient/age")
-    @ResponseBody
-    public List<Patient> getPatientsByAge(@RequestBody PatientDto patient) {
-        return patientService.getPatientsByAge(patient);
-    }
-
     @PutMapping(value = "/update")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Patient updatePatient(@RequestBody PatientDto patient){
+    public Response updatePatient(@RequestBody PatientDto patient){
         return patientService.updatePatient(patient);
-    }
-
-    @DeleteMapping(value = "/delete")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public void deletePatient(@RequestBody PatientDto patient){
-        patientService.deleteById(patient);
     }
 
 }

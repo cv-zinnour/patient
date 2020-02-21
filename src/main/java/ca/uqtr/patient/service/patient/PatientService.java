@@ -22,17 +22,11 @@ public interface PatientService {
     Response getPatientsByProfessional(String id);
     Response getPatientSocioDemographicVariables(String patientId);
     Response addSocioDemographicVariables(String patientId, String socioDemographicVariablesDto) throws JsonProcessingException;
-    Response getAntecedents(String patientId);
+    Response getPatientAntecedents(String patientId);
     Response addAntecedents(String patientId, String antecedentsDto) throws JsonProcessingException;
-    Response getClinicalExaminationList(String patientId);
+    Response getPatientClinicalExaminationList(String patientId);
     Response addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto);
+    Response updatePatient(PatientDto patient);
 
-    List<Patient> getPatientsByAge(PatientDto patient);
-    Patient updatePatient(PatientDto patient);
-    void deleteById(PatientDto patient);
-
-    SocioDemographicVariablesDto getSocioDemographicVariables(PatientDto patient) throws IOException;
-    List<MedicalFileDto> getAntecedents(PatientDto patient);
-    List<MedicalFileDto> getClinicalExamination(PatientDto patient);
 
 }
