@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LivingEnvironmentDto {
     private String zone;
-    private Boolean type;
+    private String type;
     private Boolean services;
 }

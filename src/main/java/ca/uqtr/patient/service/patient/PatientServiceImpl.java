@@ -43,14 +43,14 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Response addPatient(PatientDto patientDto, String id) {
+    public Response addPatient(PatientDto patientDto, String professionalId) {
         try {
             System.out.println(patientDto);
-            System.out.println(id);
+            System.out.println(professionalId);
                 Patient patient = patientDto.dtoToObj(modelMapper);
-                Professional professional = professionalRepository.getProfessionalById(UUID.fromString(id));
+                Professional professional = professionalRepository.getProfessionalById(UUID.fromString(professionalId));
                 if (professional == null){
-                    professional = professionalRepository.save(new Professional(UUID.fromString(id), true));
+                    professional = professionalRepository.save(new Professional(UUID.fromString(professionalId), true));
                 }
                 Set<Professional> professionals = patient.getProfessionals();
                 professionals.add(professional);
@@ -67,6 +67,7 @@ public class PatientServiceImpl implements PatientService {
 
         } catch (Exception ex){
             LOGGER.log( Level.WARNING, ex.getMessage());
+            System.out.println(ex);
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -168,7 +169,6 @@ public class PatientServiceImpl implements PatientService {
         medicalFile.setClinicalExamination(clinicalExamination);
         return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
     }
-
 
     @Override
     public Response updatePatient(PatientDto patientDto) {

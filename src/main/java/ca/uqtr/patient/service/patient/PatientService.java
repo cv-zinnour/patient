@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface PatientService {
 
-    Response addPatient(PatientDto patientDto, String professionalUsername);
+    Response addPatient(PatientDto patientDto, String professionalId);
     Response getPatient(PatientDto patientDto);
     Response getPatients();
     Response getPatientsByProfessional(String id);
