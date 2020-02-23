@@ -84,7 +84,7 @@ public class PatientController {
     public Response addAntecedents(@RequestParam String patientId, @RequestBody Request request) throws JsonProcessingException {
         System.out.println(request.getObject());
 
-        return patientService.addAntecedents(patientId, request.getObject().toString());
+        return patientService.addAntecedents(patientId, mapper.writeValueAsString(request.getObject()));
     }
 
     @GetMapping(value = "/clinicalexamination")
