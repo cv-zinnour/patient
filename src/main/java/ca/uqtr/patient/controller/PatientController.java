@@ -82,6 +82,7 @@ public class PatientController {
     @PostMapping(value = "/antecedents")
     @ResponseBody
     public Response addAntecedents(@RequestParam String patientId, @RequestBody Request request) throws JsonProcessingException {
+        System.out.println(request.getObject());
         AntecedentsDto antecedents = mapper.convertValue(request.getObject(), AntecedentsDto.class);
         System.out.println(antecedents);
         return patientService.addAntecedents(patientId, mapper.writeValueAsString(antecedents));
