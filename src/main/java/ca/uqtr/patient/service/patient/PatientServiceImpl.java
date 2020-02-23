@@ -112,7 +112,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Response getPatientSocioDemographicVariables(String patientId) {
+    public Response getPatientSocioDemographicVariables(String patientId) throws IOException {
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
         String socio = medicalFile.getSocioDemographicVariables();
         if (socio == null)
@@ -120,7 +120,10 @@ public class PatientServiceImpl implements PatientService {
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.socio.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.socio.exist.message", null, Locale.US)));
         //return new Response(modelMapper.map(socio, SocioDemographicVariablesDto.class), null);
-        return new Response(modelMapper.map(socio, SocioDemographicVariablesDto.class), null);
+        ObjectMapper mapper = new ObjectMapper();
+        SocioDemographicVariablesDto socioDemographicVariablesDto = mapper.readValue(socio, SocioDemographicVariablesDto.class);
+        System.out.println(socioDemographicVariablesDto.toString());
+        return new Response(socioDemographicVariablesDto, null);
     }
 
     @Override
