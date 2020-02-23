@@ -1,6 +1,7 @@
 package ca.uqtr.patient.controller;
 
 import ca.uqtr.patient.dto.*;
+import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
 import ca.uqtr.patient.entity.Patient;
@@ -68,10 +69,7 @@ public class PatientController {
     @PostMapping(value = "/socio")
     @ResponseBody
     public Response addSocioDemographicVariables(@RequestParam String patientId, @RequestBody Request request) throws JsonProcessingException {
-        System.out.println(request.getObject().toString());
         SocioDemographicVariablesDto socioDemographicVariables = mapper.convertValue(request.getObject(), SocioDemographicVariablesDto.class);
-        System.out.println(mapper.writeValueAsString(socioDemographicVariables));
-
         return patientService.addSocioDemographicVariables(patientId, mapper.writeValueAsString(socioDemographicVariables));
     }
 
@@ -83,8 +81,10 @@ public class PatientController {
 
     @PostMapping(value = "/antecedents")
     @ResponseBody
-    public Response addAntecedents(@RequestParam String patientId, @RequestBody String antecedents) throws JsonProcessingException {
-        return patientService.addAntecedents(patientId, antecedents);
+    public Response addAntecedents(@RequestParam String patientId, @RequestBody Request request) throws JsonProcessingException {
+        AntecedentsDto antecedents = mapper.convertValue(request.getObject(), AntecedentsDto.class);
+        System.out.println(antecedents);
+        return patientService.addAntecedents(patientId, mapper.writeValueAsString(antecedents));
     }
 
     @GetMapping(value = "/clinicalexamination")

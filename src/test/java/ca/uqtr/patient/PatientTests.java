@@ -7,9 +7,7 @@ import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.SmokingDto;
-import ca.uqtr.patient.entity.MedicalFile;
 import ca.uqtr.patient.entity.Patient;
-import ca.uqtr.patient.repository.medicalFile.MedicalFileRepository;
 import ca.uqtr.patient.service.patient.PatientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
@@ -19,7 +17,6 @@ import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,7 +28,6 @@ import javax.servlet.ServletContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringRunner.class)
@@ -116,7 +112,7 @@ public class PatientTests {
 
         PatientDto patientId = (PatientDto) patientService.getPatients().getObject();
         AntecedentsDto antecedentsDto = new AntecedentsDto();
-        antecedentsDto.setType("test");
+        antecedentsDto.setAntecedent("test");
         antecedentsDto.setYear(2015);
 
         String s = mapper.writeValueAsString(antecedentsDto);
