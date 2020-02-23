@@ -67,8 +67,10 @@ public class PatientController {
     @PostMapping(value = "/socio")
     @ResponseBody
     public Response addSocioDemographicVariables(@RequestParam String patientId, @RequestBody Request request) throws JsonProcessingException {
-        System.out.println(request.toString());
+        System.out.println(request.getObject().toString());
         String socioDemographicVariables = mapper.convertValue(request.getObject(), String.class);
+        System.out.println(socioDemographicVariables);
+
         return patientService.addSocioDemographicVariables(patientId, socioDemographicVariables);
     }
 
