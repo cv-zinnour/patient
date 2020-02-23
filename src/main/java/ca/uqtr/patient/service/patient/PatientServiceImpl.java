@@ -111,6 +111,7 @@ public class PatientServiceImpl implements PatientService {
         return new Response(patientRepository.findByProfessionals(professionalRepository.getProfessionalById(UUID.fromString(id))), null);
     }
 
+
     @Override
     public Response getPatientSocioDemographicVariables(String patientId) throws IOException {
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);

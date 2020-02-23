@@ -62,7 +62,7 @@ public class PatientController {
 
     @GetMapping(value = "/socio")
     @ResponseBody
-    public Response getPatientSocioDemographicVariables(@RequestParam String patientId) throws JsonProcessingException {
+    public Response getPatientSocioDemographicVariables(@RequestParam String patientId) throws IOException {
         return patientService.getPatientSocioDemographicVariables(patientId);
     }
 
