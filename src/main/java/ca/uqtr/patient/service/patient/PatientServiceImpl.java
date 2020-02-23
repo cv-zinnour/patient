@@ -120,7 +120,7 @@ public class PatientServiceImpl implements PatientService {
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.socio.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.socio.exist.message", null, Locale.US)));
         //return new Response(modelMapper.map(socio, SocioDemographicVariablesDto.class), null);
-        return new Response(socio, null);
+        return new Response(modelMapper.map(socio, SocioDemographicVariablesDto.class), null);
     }
 
     @Override
