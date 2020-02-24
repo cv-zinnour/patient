@@ -19,4 +19,7 @@ public interface MedicalFileRepository extends CrudRepository<MedicalFile, UUID>
     @Query("select mf from MedicalFile mf left join fetch mf.medicalFileHistory where mf.patient = :id")
     MedicalFile getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(String id);
 
+
+    @Query("select mf from MedicalFile mf left join fetch mf.lipidProfiles where mf.patient = :id")
+    MedicalFile  getMedicalFileWith_LipidProfile_FetchTypeEAGER(String id);
 }

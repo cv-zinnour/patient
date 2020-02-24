@@ -1,5 +1,6 @@
 package ca.uqtr.patient.service.patient;
 
+import ca.uqtr.patient.dto.LipidProfileDto;
 import ca.uqtr.patient.dto.MedicalFileDto;
 import ca.uqtr.patient.dto.PatientDto;
 import ca.uqtr.patient.dto.Response;
@@ -28,5 +29,6 @@ public interface PatientService {
     Response addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto);
     Response updatePatient(PatientDto patient);
 
-
+    Response getPatientLipidProfile(String patientId);
+    Response addLipidProfile(String patientId, LipidProfileDto lipidProfileDto);
 }

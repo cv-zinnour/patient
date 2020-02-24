@@ -49,6 +49,9 @@ public class MedicalFile extends BaseEntity {
             orphanRemoval = true
     )*/
     private List<ClinicalExamination> clinicalExamination;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "medical_file_id")
+    private List<LipidProfile> lipidProfiles;
 
 
     public void setPatient(String patient) {

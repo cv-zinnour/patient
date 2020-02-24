@@ -1,9 +1,7 @@
 package ca.uqtr.patient.service.patient;
 
 
-import ca.uqtr.patient.dto.MedicalFileDto;
-import ca.uqtr.patient.dto.PatientDto;
-import ca.uqtr.patient.dto.Response;
+import ca.uqtr.patient.dto.*;
 import ca.uqtr.patient.dto.Error;
 import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
@@ -190,5 +188,26 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
+    @Override
+    public Response getPatientLipidProfile(String patientId) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientId);
+        System.out.println(medicalFile.toString());
+        List<LipidProfile> lipidProfiles = medicalFile.getLipidProfiles();
+        if (lipidProfiles == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.ce.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.ce.exist.message", null, Locale.US)));
+        return new Response(lipidProfiles, null);
+    }
+
+    @Override
+    public Response addLipidProfile(String patientId, LipidProfileDto lipidProfileDto) {
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientId);
+        System.out.println(medicalFile.toString());
+        List<LipidProfile> lipidProfiles = medicalFile.getLipidProfiles();
+        lipidProfiles.add(lipidProfileDto.dtoToObj(modelMapper));
+        medicalFile.setLipidProfiles(lipidProfiles);
+        return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
+    }
 
 }

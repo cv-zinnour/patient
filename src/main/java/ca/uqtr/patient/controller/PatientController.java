@@ -89,7 +89,7 @@ public class PatientController {
 
     @GetMapping(value = "/clinicalexamination")
     @ResponseBody
-    public Response getPatientClinicalExamination(@RequestParam String patientId) throws JsonProcessingException {
+    public Response getPatientClinicalExamination(@RequestParam String patientId) {
         return patientService.getPatientClinicalExaminationList(patientId);
     }
 
@@ -103,6 +103,18 @@ public class PatientController {
     @ResponseBody
     public Response updatePatient(@RequestBody PatientDto patient){
         return patientService.updatePatient(patient);
+    }
+
+    @GetMapping(value = "/lipidprofile")
+    @ResponseBody
+    public Response getLipidProfile(@RequestParam String patientId) {
+        return patientService.getPatientLipidProfile(patientId);
+    }
+
+    @PostMapping(value = "/lipidprofile")
+    @ResponseBody
+    public Response addLipidProfile(@RequestParam String patientId, @RequestBody LipidProfileDto lipidProfileDto) {
+        return patientService.addLipidProfile(patientId, lipidProfileDto);
     }
 
 }
