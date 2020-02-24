@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BloodPressureDto {
 
-    private int blood_pressure_rightHand;
-    private int blood_pressure_left_hand;
+    private int bloodPressureRightHand;
+    private int bloodPressureLeftHand;
 }
