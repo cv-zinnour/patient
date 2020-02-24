@@ -123,7 +123,6 @@ public class PatientServiceImpl implements PatientService {
         //return new Response(modelMapper.map(socio, SocioDemographicVariablesDto.class), null);
         ObjectMapper mapper = new ObjectMapper();
         SocioDemographicVariablesDto socioDemographicVariablesDto = mapper.readValue(socio, SocioDemographicVariablesDto.class);
-        System.out.println(socioDemographicVariablesDto.toString());
         return new Response(socioDemographicVariablesDto, null);
     }
 
