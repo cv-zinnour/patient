@@ -95,7 +95,8 @@ public class PatientController {
 
     @PostMapping(value = "/clinicalexamination")
     @ResponseBody
-    public Response addClinicalExamination(@RequestParam String patientId, @RequestBody ClinicalExaminationDto clinicalExaminationDto) {
+    public Response addClinicalExamination(@RequestParam String patientId, @RequestBody Request request) {
+        ClinicalExaminationDto clinicalExaminationDto = mapper.convertValue(request.getObject(), ClinicalExaminationDto.class);
         return patientService.addClinicalExamination(patientId, clinicalExaminationDto);
     }
 
