@@ -102,7 +102,8 @@ public class PatientController {
 
     @PutMapping(value = "/update")
     @ResponseBody
-    public Response updatePatient(@RequestBody PatientDto patient){
+    public Response updatePatient(@RequestBody Request request){
+        PatientDto patient = mapper.convertValue(request.getObject(), PatientDto.class);
         return patientService.updatePatient(patient);
     }
 

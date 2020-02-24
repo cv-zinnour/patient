@@ -15,5 +15,5 @@ public class PharmacotherapyDto {
     private List<String> cardiovascular = new ArrayList<>();
     private List<String> dyslipidemia = new ArrayList<>();
     private List<String> diabetes = new ArrayList<>();
-    private List<String> others = new ArrayList<>();
+    private List<String> other = new ArrayList<>();
 }
