@@ -97,10 +97,7 @@ public class PatientServiceImpl implements PatientService {
             medicalFileDto.setLipidProfiles(lipidProfileDtoList);
             patientDto.setMedicalFile(medicalFileDto);
             System.out.println(patientDto.toString());
-            return patient.map(value -> new Response(modelMapper.map(value, PatientDto.class), null)).orElseGet(() -> new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
-                            messageSource.getMessage("error.patient.exist.message", null, Locale.US))));
-
+            return new Response(patientDto, null);
         } catch (Exception e){
             LOGGER.log( Level.WARNING, e.getMessage());
             return new Response(null,
