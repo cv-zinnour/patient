@@ -3,23 +3,21 @@ package ca.uqtr.patient.service.patient;
 
 import ca.uqtr.patient.dto.*;
 import ca.uqtr.patient.dto.Error;
-import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
 import ca.uqtr.patient.entity.*;
 import ca.uqtr.patient.repository.professional.ProfessionalRepository;
 import ca.uqtr.patient.repository.medicalFile.MedicalFileRepository;
 import ca.uqtr.patient.repository.patient.PatientRepository;
+import ca.uqtr.patient.service.questionnaire.QuestionnaireService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,14 +31,16 @@ public class PatientServiceImpl implements PatientService {
     private final ProfessionalRepository professionalRepository;
     private ModelMapper modelMapper;
     private MessageSource messageSource;
+    private QuestionnaireService questionnaireService;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository, MessageSource messageSource) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository, MessageSource messageSource, QuestionnaireService questionnaireService) {
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
         this.medicalFileRepository = medicalFileRepository;
         this.professionalRepository = professionalRepository;
         this.messageSource = messageSource;
+        this.questionnaireService = questionnaireService;
     }
 
     @Override
@@ -63,6 +63,7 @@ public class PatientServiceImpl implements PatientService {
                 medicalFile.setPatient(patient_db.getId().toString());
                 medicalFile.setCreationDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
                 medicalFileRepository.save(medicalFile);
+                //questionnaireService.
 
                 return new Response(modelMapper.map(patient_db, PatientDto.class), null);
 
