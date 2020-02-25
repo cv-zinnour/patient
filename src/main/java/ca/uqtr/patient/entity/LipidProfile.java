@@ -15,15 +15,15 @@ import javax.persistence.Table;
 @Table(name = "lipid_profile", schema = "public")
 public class LipidProfile extends BaseEntity{
     @Column(name = "ldl")
-    private String ldl;
+    private double ldl;
     @Column(name = "hdl")
-    private String hdl;
+    private double hdl;
     @Column(name = "nohdl")
-    private String nohdl;
+    private double nohdl;
     @Column(name = "triglyceride")
-    private String triglyceride;
+    private double triglyceride;
     @Column(name = "hba1c")
-    private String hba1c;
+    private double hba1c;
 
 
 }
