@@ -82,9 +82,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Response getPatient(String patientId) {
         try {
-            PatientDto patientDto = new PatientDto();
-            patientDto.setId(patientId);
-            Optional<Patient> patient = patientRepository.findById(UUID.fromString(patientId));
+            PatientDto patientDto = modelMapper.map(patientRepository.findById(UUID.fromString(patientId)).get(), PatientDto.class);
             MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
             System.out.println(medicalFile.toString());
             Type medicalFileHistoryType = new TypeToken<List<MedicalFileHistoryDto>>() {}.getType();
