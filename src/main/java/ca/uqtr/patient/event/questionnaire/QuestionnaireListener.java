@@ -47,13 +47,13 @@ public class QuestionnaireListener implements
         int rdv = event.getRdv();
         String token = UUID.randomUUID().toString();
         patientService.createQuestionnaireToken(patient.getId().toString(), token);
-        assert patient.getContact() != null;
         String recipientAddress = patient.getContact().getEmail();
         String subject;
         if (rdv == 1)
             subject = "POD iSante - Informations personal, BREQ and JPAQ questionnaires!";
         else
             subject = "POD iSante - BREQ and JPAQ questionnaires and recommendations!";
+        System.out.println(subject);
         Email from = new Email("app158992707@heroku.com");
         Email to = new Email(recipientAddress);
         /*@Value("${mail.uri}")*/

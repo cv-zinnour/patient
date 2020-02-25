@@ -213,7 +213,7 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
         if (patient != null){
             patient.setQuestionnaireToken(token);
-            patient.setQuestionnaireTokenExpirationDate(new java.sql.Timestamp (Calendar.getInstance().getTime().getTime()));
+            patient.setQuestionnaireTokenExpirationDate(new java.sql.Date (Calendar.getInstance().getTime().getTime()));
             patientRepository.save(patient);
         }
 
