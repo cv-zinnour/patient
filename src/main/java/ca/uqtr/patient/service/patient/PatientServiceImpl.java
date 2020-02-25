@@ -63,9 +63,10 @@ public class PatientServiceImpl implements PatientService {
                 medicalFile.setPatient(patient_db.getId().toString());
                 medicalFile.setCreationDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
                 medicalFileRepository.save(medicalFile);
-                //questionnaireService.
+                PatientDto patientDto1 = modelMapper.map(patient_db, PatientDto.class);
+                questionnaireService.sendQuestionnaire(patientDto1);
 
-                return new Response(modelMapper.map(patient_db, PatientDto.class), null);
+                return new Response(patientDto1, null);
 
         } catch (Exception ex){
             LOGGER.log( Level.WARNING, ex.getMessage());
