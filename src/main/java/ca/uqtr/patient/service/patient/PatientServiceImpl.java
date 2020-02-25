@@ -78,14 +78,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Response getPatient(PatientDto patientDto) {
+    public Response getPatient(String patientId) {
         try {
-            System.out.println(patientDto.toString());
-            System.out.println(patientDto.dtoToObj(modelMapper).getId());
-            System.out.println(patientDto.dtoToObj(modelMapper).getFirstName());
             PatientDto pDto = new PatientDto();
-            UUID patientId = patientDto.dtoToObj(modelMapper).getId();
-            Optional<Patient> patient = patientRepository.findById(patientId);
+            pDto.setId(patientId);
+            Optional<Patient> patient = patientRepository.findById(UUID.fromString(patientId));
             MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId.toString());
             MedicalFileDto medicalFileDto = modelMapper.map(medicalFile, MedicalFileDto.class);
             pDto.setMedicalFile(medicalFileDto);

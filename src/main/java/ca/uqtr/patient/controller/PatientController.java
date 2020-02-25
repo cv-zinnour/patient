@@ -40,11 +40,10 @@ public class PatientController {
         return patientService.addPatient(patient , JwtTokenUtil.getId(token));
     }
 
-    @PostMapping(value = "/id")
+    @GetMapping(value = "/id")
     @ResponseBody
-    public Response getPatient(@RequestBody Request request){
-        PatientDto patient = mapper.convertValue(request.getObject(), PatientDto.class);
-        return patientService.getPatient(patient);
+    public Response getPatient(@RequestParam String patientId){
+        return patientService.getPatient(patientId);
     }
 
     @GetMapping(value = "/all")

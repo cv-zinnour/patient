@@ -18,7 +18,7 @@ import java.util.List;
 public interface PatientService {
 
     Response addPatient(PatientDto patientDto, String professionalId);
-    Response getPatient(PatientDto patientDto);
+    Response getPatient(String patientId);
     Response getPatients();
     Response getPatientsByProfessional(String id);
     Response getPatientSocioDemographicVariables(String patientId) throws IOException;
