@@ -1,22 +1,18 @@
 package ca.uqtr.patient.controller;
 
 import ca.uqtr.patient.dto.*;
-import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
-import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.service.patient.PatientService;
 import ca.uqtr.patient.service.professional.ProfessionalService;
 import ca.uqtr.patient.utils.JwtTokenUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 public class PatientController {

@@ -13,11 +13,13 @@ import ca.uqtr.patient.service.questionnaire.QuestionnaireService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,8 +87,14 @@ public class PatientServiceImpl implements PatientService {
             Optional<Patient> patient = patientRepository.findById(UUID.fromString(patientId));
             MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
             System.out.println(medicalFile.toString());
+            Type medicalFileHistoryType = new TypeToken<List<MedicalFileHistoryDto>>() {}.getType();
+            List<MedicalFileHistoryDto> medicalFileHistoryDtoList = modelMapper.map(medicalFile.getMedicalFileHistory(), medicalFileHistoryType);
+            Type lipidProfileType = new TypeToken<List<LipidProfileDto>>() {}.getType();
+            List<LipidProfileDto> lipidProfileDtoList = modelMapper.map(medicalFile.getLipidProfiles(), lipidProfileType);
+
             MedicalFileDto medicalFileDto = modelMapper.map(medicalFile, MedicalFileDto.class);
-            patientDto.setMedicalFile(medicalFileDto);
+            medicalFileDto.setMedicalFileHistory(medicalFileHistoryDtoList);
+            medicalFileDto.setLipidProfiles(lipidProfileDtoList);
             patientDto.setMedicalFile(medicalFileDto);
             System.out.println(patientDto.toString());
             return patient.map(value -> new Response(modelMapper.map(value, PatientDto.class), null)).orElseGet(() -> new Response(null,

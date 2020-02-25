@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 public class LipidProfileDto {
@@ -20,4 +22,10 @@ public class LipidProfileDto {
         return modelMapper.map(this, LipidProfile.class);
     }
 
+    public UUID getId() {
+        if (id != null)
+            return UUID.fromString(id);
+        else
+            return null;
+    }
 }

@@ -3,7 +3,6 @@ package ca.uqtr.patient;
 
 import ca.uqtr.patient.dto.PatientDto;
 import ca.uqtr.patient.dto.Request;
-import ca.uqtr.patient.dto.medicalfile.AntecedentsDto;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.SmokingDto;
@@ -106,20 +105,6 @@ public class PatientTests {
 
     }
 
-    @Test
-    public void addAntecedents() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-
-        PatientDto patientId = (PatientDto) patientService.getPatients().getObject();
-        AntecedentsDto antecedentsDto = new AntecedentsDto();
-        antecedentsDto.setAntecedent("test");
-        antecedentsDto.setYear(2015);
-
-        String s = mapper.writeValueAsString(antecedentsDto);
-        System.out.println(s);
-        patientService.addAntecedents(patientId.getId().toString(), s);
-
-    }
 
     @Test
     public void getSocioDemographicVariables() throws Exception {
