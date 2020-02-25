@@ -10,11 +10,11 @@ import org.modelmapper.ModelMapper;
 @NoArgsConstructor
 public class LipidProfileDto {
     private String id;
-    private String ldl;
-    private String hdl;
-    private String nohdl;
-    private String triglyceride;
-    private String hba1c;
+    private double ldl;
+    private double hdl;
+    private double nohdl;
+    private double triglyceride;
+    private double hba1c;
 
     public LipidProfile dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, LipidProfile.class);
