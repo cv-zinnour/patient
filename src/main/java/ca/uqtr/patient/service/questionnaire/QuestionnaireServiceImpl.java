@@ -49,10 +49,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         return questionnaires;
     }
 
-    //GPAQ
     @Override
     public void sendQuestionnaire(PatientDto patientDto) {
-        eventPublisher.publishEvent(new OnQuestionnaireSendEvent(patientDto));
+        eventPublisher.publishEvent(new OnQuestionnaireSendEvent(patientDto, 1));
     }
 
 

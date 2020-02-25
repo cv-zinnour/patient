@@ -108,7 +108,6 @@ public class PatientServiceImpl implements PatientService {
         return new Response(patientRepository.findByProfessionals(professionalRepository.getProfessionalById(UUID.fromString(id))), null);
     }
 
-
     @Override
     public Response getPatientSocioDemographicVariables(String patientId) throws IOException {
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
@@ -207,6 +206,17 @@ public class PatientServiceImpl implements PatientService {
         lipidProfiles.add(lipidProfileDto.dtoToObj(modelMapper));
         medicalFile.setLipidProfiles(lipidProfiles);
         return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
+    }
+
+    @Override
+    public void createQuestionnaireToken(String patientId, String token) {
+        Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
+        if (patient != null){
+            patient.setQuestionnaireToken(token);
+            patient.setQuestionnaireTokenExpirationDate(new java.sql.Timestamp (Calendar.getInstance().getTime().getTime()));
+            patientRepository.save(patient);
+        }
+
     }
 
 }

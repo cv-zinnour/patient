@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.lang.Nullable;
 
+import javax.persistence.Column;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Data
@@ -43,6 +45,8 @@ public class PatientDto {
     private ProfessionalDto professional;
     @Nullable
     private Boolean isActive;
+    private String questionnaireToken ;
+    private Date questionnaireTokenExpirationDate ;
     @Nullable
     MedicalFileDto medicalFile;
 

@@ -31,4 +31,7 @@ public interface PatientService {
 
     Response getPatientLipidProfile(String patientId);
     Response addLipidProfile(String patientId, LipidProfileDto lipidProfileDto);
+
+    void createQuestionnaireToken(String patientId, String token);
+
 }

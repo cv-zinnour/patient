@@ -12,6 +12,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Data
@@ -47,6 +48,11 @@ public class Patient extends BaseEntity{
     private String pharmacy;
     @Column(name = "is_active")
     private Boolean isActive;
+    @Column(name = "questionnaire_token")
+    private String questionnaireToken ;
+    @Column(name = "questionnaire_token_expiration_date")
+    private Timestamp questionnaireTokenExpirationDate ;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "patient_professional", joinColumns = {
             @JoinColumn(name = "patient_id", referencedColumnName = "id")}, inverseJoinColumns = {

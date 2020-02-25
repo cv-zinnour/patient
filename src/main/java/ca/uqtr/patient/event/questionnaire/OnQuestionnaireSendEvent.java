@@ -9,10 +9,12 @@ import org.springframework.context.ApplicationEvent;
 @Setter
 public class OnQuestionnaireSendEvent extends ApplicationEvent {
     private PatientDto patient;
+    private int rdv;
 
-    public OnQuestionnaireSendEvent(PatientDto patient) {
+    public OnQuestionnaireSendEvent(PatientDto patient, int rdv) {
         super(patient);
         this.patient = patient;
+        this.rdv = rdv;
     }
 
 }

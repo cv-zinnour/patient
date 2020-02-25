@@ -28,9 +28,5 @@ public class Questionnaire extends BaseEntity {
     @Type(type = "jsonb")
     @Column(name = "value", columnDefinition = "jsonb")
     private String value;
-    @Column(name = "token")
-    private String token ;
-    @Column(name = "token_expiration_date")
-    private Timestamp tokenExpirationDate ;
 
 }
