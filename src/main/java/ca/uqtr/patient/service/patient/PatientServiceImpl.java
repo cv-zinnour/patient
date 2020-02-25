@@ -83,9 +83,11 @@ public class PatientServiceImpl implements PatientService {
             PatientDto pDto = new PatientDto();
             pDto.setId(patientId);
             Optional<Patient> patient = patientRepository.findById(UUID.fromString(patientId));
-            MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId.toString());
+            MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+            System.out.println(medicalFile.toString());
             MedicalFileDto medicalFileDto = modelMapper.map(medicalFile, MedicalFileDto.class);
             pDto.setMedicalFile(medicalFileDto);
+            System.out.println(pDto.toString());
             return patient.map(value -> new Response(modelMapper.map(value, PatientDto.class), null)).orElseGet(() -> new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.exist.message", null, Locale.US))));
