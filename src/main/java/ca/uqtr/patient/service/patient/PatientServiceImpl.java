@@ -50,25 +50,29 @@ public class PatientServiceImpl implements PatientService {
         try {
             System.out.println(patientDto);
             System.out.println(professionalId);
-                Patient patient = patientDto.dtoToObj(modelMapper);
-                Professional professional = professionalRepository.getProfessionalById(UUID.fromString(professionalId));
-                if (professional == null){
-                    professional = professionalRepository.save(new Professional(UUID.fromString(professionalId), true));
-                }
-                Set<Professional> professionals = patient.getProfessionals();
-                professionals.add(professional);
-                patient.setProfessionals(professionals);
-                patient.setFileNumber();
-                Patient patient_db = patientRepository.save(patient);
+            if (patientRepository.getPatientByContact_Email(patientDto.getContact().getEmail()) != null)
+                return new Response(null,
+                        new Error(Integer.parseInt(messageSource.getMessage("error.patient.email.id", null, Locale.US)),
+                                messageSource.getMessage("error.patient.email.message", null, Locale.US)));
+            Patient patient = patientDto.dtoToObj(modelMapper);
+            Professional professional = professionalRepository.getProfessionalById(UUID.fromString(professionalId));
+            if (professional == null){
+                professional = professionalRepository.save(new Professional(UUID.fromString(professionalId), true));
+            }
+            Set<Professional> professionals = patient.getProfessionals();
+            professionals.add(professional);
+            patient.setProfessionals(professionals);
+            patient.setFileNumber();
+            Patient patient_db = patientRepository.save(patient);
 
-                MedicalFile medicalFile = new MedicalFile();
-                medicalFile.setPatient(patient_db.getId().toString());
-                medicalFile.setCreationDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-                medicalFileRepository.save(medicalFile);
-                PatientDto patientDto1 = modelMapper.map(patient_db, PatientDto.class);
-                questionnaireService.sendQuestionnaire(patientDto1);
+            MedicalFile medicalFile = new MedicalFile();
+            medicalFile.setPatient(patient_db.getId().toString());
+            medicalFile.setCreationDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+            medicalFileRepository.save(medicalFile);
+            PatientDto patientDto1 = modelMapper.map(patient_db, PatientDto.class);
+            questionnaireService.sendQuestionnaire(patientDto1);
 
-                return new Response(patientDto1, null);
+            return new Response(patientDto1, null);
 
         } catch (Exception ex){
             LOGGER.log( Level.WARNING, ex.getMessage());
@@ -236,8 +240,8 @@ public class PatientServiceImpl implements PatientService {
             PatientDto patientDto = modelMapper.map(patientRepository.getPatientByContact_Email(patient.getContact().getEmail()), PatientDto.class);
             if (patientDto == null){
                 return new Response(null,
-                        new Error(Integer.parseInt(messageSource.getMessage("error.email.id", null, Locale.US)),
-                                messageSource.getMessage("error.email.message", null, Locale.US)));
+                        new Error(Integer.parseInt(messageSource.getMessage("error.patient.login.email.id", null, Locale.US)),
+                                messageSource.getMessage("error.patient.login.email.message", null, Locale.US)));
             }
             if (!patientDto.getLoginCode().equals(patient.getLoginCode())){
                 return new Response(null,
