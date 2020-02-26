@@ -4,6 +4,7 @@ import ca.uqtr.patient.dto.LipidProfileDto;
 import ca.uqtr.patient.dto.PatientDto;
 import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
+import ca.uqtr.patient.entity.Patient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;
@@ -26,5 +27,7 @@ public interface PatientService {
     Response addLipidProfile(String patientId, LipidProfileDto lipidProfileDto);
 
     void createQuestionnaireToken(String patientId, String token);
+
+    Patient getPatientByQuestionnaireToken(String token);
 
 }

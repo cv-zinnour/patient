@@ -18,6 +18,8 @@ public interface PatientRepository extends CrudRepository<Patient, UUID> {
     List<Patient> getPatientsByAge(@Param("date")String date);
 
     List<Patient> findByProfessionals(Professional professional);
+
+    Patient getPatientByQuestionnaireToken(String token);
 //
 //
 //    @Query("select pt from Patient pt join Professional pr where pr.username = :username")

@@ -222,7 +222,11 @@ public class PatientServiceImpl implements PatientService {
             patient.setQuestionnaireTokenExpirationDate(new java.sql.Date (Calendar.getInstance().getTime().getTime()));
             patientRepository.save(patient);
         }
+    }
 
+    @Override
+    public Patient getPatientByQuestionnaireToken(String token) {
+        return patientRepository.getPatientByQuestionnaireToken(token);
     }
 
 }
