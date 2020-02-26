@@ -49,6 +49,7 @@ public class PatientDto {
     private Date questionnaireTokenExpirationDate ;
     @Nullable
     MedicalFileDto medicalFile;
+    private String loginCode;
 
     public Patient dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Patient.class);

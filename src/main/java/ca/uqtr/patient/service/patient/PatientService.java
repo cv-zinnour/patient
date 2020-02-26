@@ -30,4 +30,5 @@ public interface PatientService {
 
     Patient getPatientByQuestionnaireToken(String token);
 
+    Response patientLogin(PatientDto patient);
 }

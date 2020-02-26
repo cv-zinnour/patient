@@ -52,6 +52,8 @@ public class Patient extends BaseEntity{
     private String questionnaireToken ;
     @Column(name = "questionnaire_token_expiration_date")
     private Date questionnaireTokenExpirationDate ;
+    @Column(name = "login_code")
+    private String loginCode;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "patient_professional", joinColumns = {

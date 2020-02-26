@@ -114,4 +114,12 @@ public class PatientController {
         return patientService.addLipidProfile(patientId, lipidProfileDto);
     }
 
+
+    @PostMapping(value = "/login")
+    @ResponseBody
+    public Response patientLogin(@RequestBody Request request) {
+        PatientDto patient = mapper.convertValue(request.getObject(), PatientDto.class);
+        return patientService.patientLogin(patient);
+    }
+
 }

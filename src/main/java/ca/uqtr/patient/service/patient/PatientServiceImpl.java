@@ -229,4 +229,28 @@ public class PatientServiceImpl implements PatientService {
         return patientRepository.getPatientByQuestionnaireToken(token);
     }
 
+    @Override
+    public Response patientLogin(PatientDto patient) {
+        try {
+            PatientDto patientDto = modelMapper.map(patientRepository.getPatientByContact_Email(patient.getContact().getEmail()), PatientDto.class);
+            if (patientDto == null){
+                return new Response(null,
+                        new Error(Integer.parseInt(messageSource.getMessage("error.email.id", null, Locale.US)),
+                                messageSource.getMessage("error.email.message", null, Locale.US)));
+            }
+            if (!patientDto.getLoginCode().equals(patient.getLoginCode())){
+                return new Response(null,
+                        new Error(Integer.parseInt(messageSource.getMessage("error.login_code.id", null, Locale.US)),
+                                messageSource.getMessage("error.login_code.message", null, Locale.US)));
+            }
+            return new Response(patientDto, null);
+        } catch (Exception e){
+            LOGGER.log( Level.WARNING, e.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package ca.uqtr.patient.controller;
 
 import ca.uqtr.patient.dto.Error;
+import ca.uqtr.patient.dto.LipidProfileDto;
 import ca.uqtr.patient.dto.PatientDto;
 import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.entity.Patient;
@@ -43,5 +44,7 @@ public class QuestionnaireController {
         }
         return new Response(modelMapper.map(modelMapper.map(patient, PatientDto.class), PatientDto.class), null);
     }
+
+
 
 }
