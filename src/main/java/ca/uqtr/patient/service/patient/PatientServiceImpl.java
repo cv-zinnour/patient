@@ -220,6 +220,7 @@ public class PatientServiceImpl implements PatientService {
         if (patient != null){
             patient.setQuestionnaireToken(token);
             patient.setQuestionnaireTokenExpirationDate(new java.sql.Date (Calendar.getInstance().getTime().getTime()));
+            patient.setLoginCode();
             patientRepository.save(patient);
         }
     }

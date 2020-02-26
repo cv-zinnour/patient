@@ -101,4 +101,8 @@ public class Patient extends BaseEntity{
         this.contact = contact;
     }
 
+    public void setLoginCode() {
+        this.fileNumber = UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+    }
+
 }
