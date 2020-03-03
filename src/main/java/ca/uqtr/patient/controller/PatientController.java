@@ -55,11 +55,11 @@ public class PatientController {
         return patientService.getPatientsByProfessional(JwtTokenUtil.getId(token));
     }
 
-    @GetMapping(value = "/socio")
+    /*@GetMapping(value = "/socio")
     @ResponseBody
     public Response getPatientSocioDemographicVariables(@RequestParam String patientId) throws IOException {
         return patientService.getPatientSocioDemographicVariables(patientId);
-    }
+    }*/
 
     @PostMapping(value = "/socio")
     @ResponseBody

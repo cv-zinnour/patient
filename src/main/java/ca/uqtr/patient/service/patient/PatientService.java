@@ -15,7 +15,7 @@ public interface PatientService {
     Response getPatient(String patientId);
     Response getPatients();
     Response getPatientsByProfessional(String id);
-    Response getPatientSocioDemographicVariables(String patientId) throws IOException;
+    //Response getPatientSocioDemographicVariables(String patientId) throws IOException;
     Response addSocioDemographicVariables(String patientId, String socioDemographicVariablesDto) throws JsonProcessingException;
     Response getPatientAntecedents(String patientId);
     Response addAntecedents(String patientId, String antecedentsDto) throws JsonProcessingException;

@@ -54,6 +54,9 @@ public class Patient extends BaseEntity{
     private Date questionnaireTokenExpirationDate ;
     @Column(name = "login_code")
     private String loginCode;
+    @Type(type = "jsonb")
+    @Column(name = "socio_demographic_variables", columnDefinition = "jsonb")
+    private String socioDemographicVariables;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "patient_professional", joinColumns = {

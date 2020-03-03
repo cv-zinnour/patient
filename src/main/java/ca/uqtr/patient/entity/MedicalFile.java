@@ -33,9 +33,6 @@ public class MedicalFile extends BaseEntity {
 
     @Column(name = "patient")
     private String patient;
-    @Type(type = "jsonb")
-    @Column(name = "socio_demographic_variables", columnDefinition = "jsonb")
-    private String socioDemographicVariables;
     @Column(name = "creation_date")
     private Date creationDate ;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

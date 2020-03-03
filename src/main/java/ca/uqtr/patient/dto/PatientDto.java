@@ -1,6 +1,7 @@
 package ca.uqtr.patient.dto;
 
 import ca.uqtr.patient.dto.ErrorDto;
+import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.patient.ContactDto;
 import ca.uqtr.patient.dto.patient.FamilyDoctorDto;
 import ca.uqtr.patient.dto.patient.PharmacyDto;
@@ -50,6 +51,7 @@ public class PatientDto {
     @Nullable
     MedicalFileDto medicalFile;
     private String loginCode;
+    private SocioDemographicVariablesDto socioDemographicVariables;
 
     public Patient dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Patient.class);

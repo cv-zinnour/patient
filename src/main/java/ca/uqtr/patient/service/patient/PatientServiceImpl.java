@@ -118,7 +118,7 @@ public class PatientServiceImpl implements PatientService {
         return new Response(patientRepository.findByProfessionals(professionalRepository.getProfessionalById(UUID.fromString(id))), null);
     }
 
-    @Override
+    /*@Override
     public Response getPatientSocioDemographicVariables(String patientId) throws IOException {
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
         String socio = medicalFile.getSocioDemographicVariables();
@@ -130,13 +130,13 @@ public class PatientServiceImpl implements PatientService {
         ObjectMapper mapper = new ObjectMapper();
         SocioDemographicVariablesDto socioDemographicVariablesDto = mapper.readValue(socio, SocioDemographicVariablesDto.class);
         return new Response(socioDemographicVariablesDto, null);
-    }
+    }*/
 
     @Override
     public Response addSocioDemographicVariables(String patientId, String socioDemographicVariablesDto) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
-        medicalFile.setSocioDemographicVariables(socioDemographicVariablesDto);
-        return new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
+        Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
+        patient.setSocioDemographicVariables(socioDemographicVariablesDto);
+        return new Response(modelMapper.map(patientRepository.save(patient), PatientDto.class), null);
     }
 
     @Override

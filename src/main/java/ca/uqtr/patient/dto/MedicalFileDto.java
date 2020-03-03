@@ -20,7 +20,6 @@ public class MedicalFileDto {
 
     private String id;
     private String patient;
-    private SocioDemographicVariablesDto socioDemographicVariables;
     private List<MedicalFileHistoryDto> medicalFileHistory = new ArrayList<>();
     private List<ClinicalExaminationDto> clinicalExamination = new ArrayList<>();
     private String creationDate ;
