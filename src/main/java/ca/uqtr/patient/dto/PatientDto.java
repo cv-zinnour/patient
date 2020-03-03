@@ -7,6 +7,7 @@ import ca.uqtr.patient.dto.patient.FamilyDoctorDto;
 import ca.uqtr.patient.dto.patient.PharmacyDto;
 import ca.uqtr.patient.dto.patient.ProfessionalDto;
 import ca.uqtr.patient.entity.Patient;
+import ca.uqtr.patient.entity.Questionnaire;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,6 +53,8 @@ public class PatientDto {
     MedicalFileDto medicalFile;
     private String loginCode;
     private SocioDemographicVariablesDto socioDemographicVariables;
+    private List<Questionnaire> questionnaires = new ArrayList<>();
+
 
     public Patient dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Patient.class);
