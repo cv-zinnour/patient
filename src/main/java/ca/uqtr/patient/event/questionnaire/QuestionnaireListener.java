@@ -39,7 +39,6 @@ public class QuestionnaireListener implements
         else
             this.confirmQuestionnaireSendGrid(event);
         /*this.confirmRegistrationSendGrid(event);*/
-
     }
 
     private void confirmQuestionnaireSendGrid(OnQuestionnaireSendEvent event) throws IOException {
@@ -50,9 +49,9 @@ public class QuestionnaireListener implements
         String recipientAddress = patient.getContact().getEmail();
         String subject;
         if (rdv == 1)
-            subject = "POD iSante - Informations personal, BREQ and JPAQ questionnaires!";
+            subject = "POD iSante - Informations personal and BREQ questionnaire!";
         else
-            subject = "POD iSante - BREQ and JPAQ questionnaires and recommendations!";
+            subject = "POD iSante - JPAQ questionnaire and recommendations!";
         System.out.println(subject);
         Email from = new Email("app158992707@heroku.com");
         Email to = new Email(recipientAddress);
@@ -61,7 +60,7 @@ public class QuestionnaireListener implements
         String URI_HEROKU = "http://localhost:4200/patient/questionnaire?token=";
         String confirmationUrl
                 = URI_HEROKU + token;
-        String message = "To fill your questionnaire click here : ";
+        String message = "PIN : "+patient.getQuestionnaireToken()+". To fill your questionnaire click here : ";
         Content content = new Content("text/plain", message+confirmationUrl);
         Mail mail = new Mail(from, subject, to, content);
 
@@ -80,15 +79,20 @@ public class QuestionnaireListener implements
 
     private void confirmQuestionnaireSendGmail(OnQuestionnaireSendEvent event) {
         PatientDto patient = event.getPatient();
+        int rdv = event.getRdv();
         String token = UUID.randomUUID().toString();
         patientService.createQuestionnaireToken(patient.getId().toString(), token);
         assert patient.getContact() != null;
         String recipientAddress = patient.getContact().getEmail();
-        String subject = "POD iSante - Questionnaire";
+        String subject;
+        if (rdv == 1)
+            subject = "POD iSante - Informations personal and BREQ questionnaire!";
+        else
+            subject = "POD iSante - JPAQ questionnaire and recommendations!";
         String URI_GMAIL = "http://localhost:8762/api/v1/patient-service/questionnaire?token=";
         String confirmationUrl
                 = URI_GMAIL + token;
-        String message = "To fill your questionnaire click here : ";
+        String message = "PIN : "+patient.getQuestionnaireToken()+". To fill your questionnaire click here : ";
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
