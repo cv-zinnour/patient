@@ -98,7 +98,8 @@ public class PatientServiceImpl implements PatientService {
             medicalFileDto.setMedicalFileHistory(medicalFileHistoryDtoList);
             medicalFileDto.setLipidProfiles(lipidProfileDtoList);
             patientDto.setMedicalFile(medicalFileDto);
-            System.out.println(patientDto.toString());
+            if (patientRepository.isPatientDidAnswerBREQ(UUID.fromString(patientId)) != null)
+                patientDto.setHasBREQ(true);
             return new Response(patientDto, null);
         } catch (Exception e){
             LOGGER.log( Level.WARNING, e.getMessage());

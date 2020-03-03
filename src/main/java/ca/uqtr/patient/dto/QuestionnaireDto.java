@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.Column;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
@@ -18,9 +19,7 @@ public class QuestionnaireDto {
     private String patientId;
     private String type;
     private String value;
-    private String token ;
-    private String tokenExpirationDate ;
-    private ErrorDto error;
+    private Date date;
 
     public Questionnaire dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Questionnaire.class);

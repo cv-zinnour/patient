@@ -53,7 +53,8 @@ public class PatientDto {
     MedicalFileDto medicalFile;
     private String loginCode;
     private SocioDemographicVariablesDto socioDemographicVariables;
-    private List<Questionnaire> questionnaires = new ArrayList<>();
+    //private List<Questionnaire> questionnaires = new ArrayList<>();
+    private boolean hasBREQ;
 
 
     public Patient dtoToObj(ModelMapper modelMapper) {

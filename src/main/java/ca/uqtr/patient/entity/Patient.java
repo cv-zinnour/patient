@@ -63,8 +63,12 @@ public class Patient extends BaseEntity{
             @JoinColumn(name = "patient_id", referencedColumnName = "id")}, inverseJoinColumns = {
             @JoinColumn(name = "professional_id", referencedColumnName = "id")})
     private Set<Professional> professionals = new HashSet<>();
+/*
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "patient_id")
+*/
+    @JsonManagedReference
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Questionnaire> questionnaires;
 
     public Patient(String firstName, String lastName, Date birthday, Boolean isActive) {

@@ -22,6 +22,10 @@ public interface PatientRepository extends CrudRepository<Patient, UUID> {
     Patient getPatientByQuestionnaireToken(String token);
 
     Patient getPatientByContact_Email(String email);
+
+    @Query("from Patient p left join fetch  p.questionnaires q where q.patient = :patientId AND q.type = 'BREQ'")
+    Patient isPatientDidAnswerBREQ(UUID patientId);
+
 //
 //
 //    @Query("select pt from Patient pt join Professional pr where pr.username = :username")
