@@ -109,12 +109,12 @@ public class PatientTests {
     @Test
     public void getSocioDemographicVariables() throws Exception {
 
-        PatientDto patientId = (PatientDto) patientService.getPatients().getObject();
+        /*PatientDto patientId = (PatientDto) patientService.getPatients().getObject();
         PatientDto patientDto = new PatientDto();
         patientDto.setId(patientId.getId().toString());
         String socio = (String) patientService.getPatientSocioDemographicVariables(patientDto.getId().toString()).getObject();
         SocioDemographicVariablesDto socioDemographicVariablesDto = modelMapper.map(socio, SocioDemographicVariablesDto.class);
-        System.out.println(socioDemographicVariablesDto);
+        System.out.println(socioDemographicVariablesDto);*/
     }
 
 }

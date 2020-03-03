@@ -1,43 +1,65 @@
 package ca.uqtr.patient.service.questionnaire;
 
+import ca.uqtr.patient.dto.Error;
 import ca.uqtr.patient.dto.PatientDto;
 import ca.uqtr.patient.dto.QuestionnaireDto;
+import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.entity.Questionnaire;
 import ca.uqtr.patient.event.questionnaire.OnQuestionnaireSendEvent;
 import ca.uqtr.patient.repository.patient.PatientRepository;
 import ca.uqtr.patient.repository.questionnaire.QuestionnaireRepository;
+import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class QuestionnaireServiceImpl implements QuestionnaireService {
+    private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
 
     private final QuestionnaireRepository questionnaireRepository;
     private final PatientRepository patientRepository;
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private MessageSource messageSource;
 
-    public QuestionnaireServiceImpl(QuestionnaireRepository questionnaireRepository, PatientRepository patientRepository, ModelMapper modelMapper, ApplicationEventPublisher eventPublisher) {
+    public QuestionnaireServiceImpl(QuestionnaireRepository questionnaireRepository, PatientRepository patientRepository, ModelMapper modelMapper, ApplicationEventPublisher eventPublisher, MessageSource messageSource) {
         this.questionnaireRepository = questionnaireRepository;
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
         this.eventPublisher = eventPublisher;
+        this.messageSource = messageSource;
     }
 
     @Override
-    public QuestionnaireDto addQuestionnaire(String patientId, QuestionnaireDto questionnaireDto) {
-        Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
-        Questionnaire questionnaire = questionnaireDto.dtoToObj(modelMapper);
-        List<Questionnaire> questionnaires = patient.getQuestionnaires();
-        questionnaires.add(questionnaire);
-        patientRepository.save(patient);
-        return questionnaireDto;
+    public Response addQuestionnaire(QuestionnaireDto questionnaireDto) {
+        Patient patient = patientRepository.getPatientById(UUID.fromString(questionnaireDto.getPatientId()));
+        if (patient == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
+
+        try {
+            Questionnaire questionnaire = questionnaireDto.dtoToObj(modelMapper);
+            List<Questionnaire> questionnaires = patient.getQuestionnaires();
+            questionnaires.add(questionnaire);
+            patientRepository.save(patient);
+            return new Response(questionnaireDto, null);
+        } catch (Exception e){
+            LOGGER.log( Level.WARNING, e.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.questionnaire.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.questionnaire.message", null, Locale.US)));
+        }
+
     }
 
     @Override

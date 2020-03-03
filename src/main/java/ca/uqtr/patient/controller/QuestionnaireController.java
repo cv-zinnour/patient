@@ -1,16 +1,17 @@
 package ca.uqtr.patient.controller;
 
+import ca.uqtr.patient.dto.*;
 import ca.uqtr.patient.dto.Error;
-import ca.uqtr.patient.dto.LipidProfileDto;
-import ca.uqtr.patient.dto.PatientDto;
-import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.service.patient.PatientService;
 import ca.uqtr.patient.service.questionnaire.QuestionnaireService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Locale;
 
 @RestController
@@ -20,12 +21,14 @@ public class QuestionnaireController {
     private final QuestionnaireService questionnaireService;
     private MessageSource messageSource;
     private ModelMapper modelMapper;
+    private ObjectMapper mapper;
 
-    public QuestionnaireController(PatientService patientService, QuestionnaireService questionnaireService, MessageSource messageSource, ModelMapper modelMapper) {
+    public QuestionnaireController(PatientService patientService, QuestionnaireService questionnaireService, MessageSource messageSource, ModelMapper modelMapper, ObjectMapper mapper) {
         this.patientService = patientService;
         this.questionnaireService = questionnaireService;
         this.messageSource = messageSource;
         this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @PostMapping(value = "/questionnaire/invite")
@@ -45,6 +48,12 @@ public class QuestionnaireController {
         return new Response(modelMapper.map(modelMapper.map(patient, PatientDto.class), PatientDto.class), null);
     }
 
-
+    @PostMapping(value = "/questionnaire")
+    @ResponseBody
+    public Response addPatient(@RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+        QuestionnaireDto questionnaireDto = mapper.convertValue(request.getObject(), QuestionnaireDto.class);
+        return questionnaireService.addQuestionnaire(questionnaireDto);
+    }
 
 }

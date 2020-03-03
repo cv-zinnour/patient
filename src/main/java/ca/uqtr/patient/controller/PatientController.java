@@ -18,13 +18,11 @@ import java.io.IOException;
 public class PatientController {
 
     private PatientService patientService;
-    private ProfessionalService professionalService;
     private ObjectMapper mapper;
 
     @Autowired
-    public PatientController(PatientService patientService, ProfessionalService professionalService, ObjectMapper mapper) {
+    public PatientController(PatientService patientService, ObjectMapper mapper) {
         this.patientService = patientService;
-        this.professionalService = professionalService;
         this.mapper = mapper;
     }
 
