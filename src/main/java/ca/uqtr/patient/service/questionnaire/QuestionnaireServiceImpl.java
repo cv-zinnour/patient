@@ -1,9 +1,7 @@
 package ca.uqtr.patient.service.questionnaire;
 
+import ca.uqtr.patient.dto.*;
 import ca.uqtr.patient.dto.Error;
-import ca.uqtr.patient.dto.PatientDto;
-import ca.uqtr.patient.dto.QuestionnaireDto;
-import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.entity.Questionnaire;
 import ca.uqtr.patient.event.questionnaire.OnQuestionnaireSendEvent;
@@ -11,10 +9,12 @@ import ca.uqtr.patient.repository.patient.PatientRepository;
 import ca.uqtr.patient.repository.questionnaire.QuestionnaireRepository;
 import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -62,20 +62,32 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
     }
 
-    @Override
-    public List<Questionnaire> getQuestionnaires(String patientId) {
-        Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
-        List<Questionnaire> questionnaires = patient.getQuestionnaires();
-       // if (questionnaires == null || questionnaires.isEmpty())
-
-        return questionnaires;
-    }
 
     @Override
     public void sendQuestionnaire(PatientDto patientDto) {
         eventPublisher.publishEvent(new OnQuestionnaireSendEvent(patientDto, 1));
     }
 
+    @Override
+    public Response getQuestionnairesByPatient(String patientId) {
+        Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
+        if (patient == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
+        try {
+            List<Questionnaire> questionnaires = patient.getQuestionnaires();
+            Type questionnaireType = new TypeToken<List<QuestionnaireDto>>() {}.getType();
+            List<QuestionnaireDto> questionnaireDtoList = modelMapper.map(questionnaires, questionnaireType);
+
+            return new Response(questionnaireDtoList, null);
+        } catch (Exception e){
+            LOGGER.log( Level.WARNING, e.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.questionnaire.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.questionnaire.message", null, Locale.US)));
+        }
+    }
 
 
 }

@@ -11,7 +11,7 @@ public interface QuestionnaireService {
 
 
     Response addQuestionnaire(QuestionnaireDto questionnaireDto);
-    List<Questionnaire> getQuestionnaires(String patientId);
     void sendQuestionnaire(PatientDto patientDto);
 
+    Response getQuestionnairesByPatient(String patientId);
 }

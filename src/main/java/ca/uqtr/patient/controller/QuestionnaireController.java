@@ -50,10 +50,15 @@ public class QuestionnaireController {
 
     @PostMapping(value = "/questionnaire")
     @ResponseBody
-    public Response addPatient(@RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+    public Response addPatient(@RequestBody Request request)  {
         QuestionnaireDto questionnaireDto = mapper.convertValue(request.getObject(), QuestionnaireDto.class);
         return questionnaireService.addQuestionnaire(questionnaireDto);
+    }
+
+    @GetMapping(value = "/questionnaire/all")
+    @ResponseBody
+    public Response getQuestionnairesByPatient(@RequestParam String patientId)  {
+        return questionnaireService.getQuestionnairesByPatient(patientId);
     }
 
 }
