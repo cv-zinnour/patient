@@ -95,12 +95,14 @@ public class PatientServiceImpl implements PatientService {
             }
             System.out.println("+++++++ "+patientDto.toString());
             MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+            System.out.println("------ "+medicalFile.toString());
             Type medicalFileHistoryType = new TypeToken<List<MedicalFileHistoryDto>>() {}.getType();
             List<MedicalFileHistoryDto> medicalFileHistoryDtoList = modelMapper.map(medicalFile.getMedicalFileHistory(), medicalFileHistoryType);
             Type lipidProfileType = new TypeToken<List<LipidProfileDto>>() {}.getType();
             List<LipidProfileDto> lipidProfileDtoList = modelMapper.map(medicalFile.getLipidProfiles(), lipidProfileType);
 
             MedicalFileDto medicalFileDto = modelMapper.map(medicalFile, MedicalFileDto.class);
+            System.out.println("++++++++ "+medicalFileDto.toString());
             medicalFileDto.setMedicalFileHistory(medicalFileHistoryDtoList);
             medicalFileDto.setLipidProfiles(lipidProfileDtoList);
             patientDto.setMedicalFile(medicalFileDto);
