@@ -86,9 +86,13 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Response getPatient(String patientId) {
         try {
-            PatientDto patientDto = modelMapper.map(patientRepository.findById(UUID.fromString(patientId)).get(), PatientDto.class);
+            PatientDto patientDto = modelMapper.map(patientRepository.getPatientById(UUID.fromString(patientId)), PatientDto.class);
+            if (patientDto == null){
+                return new Response(null,
+                        new Error(Integer.parseInt(messageSource.getMessage("error.patient.login.email.id", null, Locale.US)),
+                                messageSource.getMessage("error.patient.login.email.message", null, Locale.US)));
+            }
             MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
-            System.out.println(medicalFile.toString());
             Type medicalFileHistoryType = new TypeToken<List<MedicalFileHistoryDto>>() {}.getType();
             List<MedicalFileHistoryDto> medicalFileHistoryDtoList = modelMapper.map(medicalFile.getMedicalFileHistory(), medicalFileHistoryType);
             Type lipidProfileType = new TypeToken<List<LipidProfileDto>>() {}.getType();
@@ -168,8 +172,8 @@ public class PatientServiceImpl implements PatientService {
         List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
         if (clinicalExamination == null)
             return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.ce.exist.id", null, Locale.US)),
-                            messageSource.getMessage("error.patient.ce.exist.message", null, Locale.US)));
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.antecedents.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.antecedents.exist.message", null, Locale.US)));
         return new Response(clinicalExamination, null);
     }
 
