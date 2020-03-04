@@ -86,12 +86,14 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Response getPatient(String patientId) {
         try {
+            System.out.println("+++++++ "+patientId);
             PatientDto patientDto = modelMapper.map(patientRepository.getPatientById(UUID.fromString(patientId)), PatientDto.class);
             if (patientDto == null){
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.patient.login.email.id", null, Locale.US)),
                                 messageSource.getMessage("error.patient.login.email.message", null, Locale.US)));
             }
+            System.out.println("+++++++ "+patientDto.toString());
             MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
             Type medicalFileHistoryType = new TypeToken<List<MedicalFileHistoryDto>>() {}.getType();
             List<MedicalFileHistoryDto> medicalFileHistoryDtoList = modelMapper.map(medicalFile.getMedicalFileHistory(), medicalFileHistoryType);
@@ -107,6 +109,7 @@ public class PatientServiceImpl implements PatientService {
             return new Response(patientDto, null);
         } catch (Exception e){
             LOGGER.log( Level.WARNING, e.getMessage());
+            LOGGER.log( Level.WARNING, e.getStackTrace().toString());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
