@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,10 @@ public interface PatientRepository extends CrudRepository<Patient, UUID> {
 
     @Query("select p from Patient p left join fetch  p.questionnaires q where q.patient.id = :patientId AND q.type = 'BREQ'")
     Patient isPatientDidAnswerBREQ(UUID patientId);
+
+    @Query("select p from Patient p left join fetch  p.appointments a where a.appointmentDate <= :date")
+    List<Patient> patientsWithAppointmentAfterADay(Date date);
+
 
 //
 //
