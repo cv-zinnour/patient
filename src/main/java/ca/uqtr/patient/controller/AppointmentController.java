@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
 
 @RestController
 public class AppointmentController {
@@ -24,8 +25,11 @@ public class AppointmentController {
 
     @PostMapping(value = "/appointment")
     @ResponseBody
-    public Response addAppointment(@RequestBody Request request){
+    public Response addAppointment(@RequestBody Request request, HttpServletRequest httpRequest){
+        String token = httpRequest.getHeader("Authorization").replace("bearer ","");
         AppointmentDto appointmentDto = mapper.convertValue(request.getObject(), AppointmentDto.class);
+        appointmentDto.setProfessionalId(JwtTokenUtil.getId(token));
+        appointmentDto.setCreationDate(new java.sql.Date (Calendar.getInstance().getTime().getTime()));
         return appointmentService.addAppointment(appointmentDto);
     }
 
