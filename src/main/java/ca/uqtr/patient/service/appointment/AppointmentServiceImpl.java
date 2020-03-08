@@ -42,8 +42,8 @@ public class AppointmentServiceImpl implements AppointmentService{
         Optional<Patient> patient = patientRepository.findById(appointmentDto.getPatientId());
         if (!patient.isPresent())
             return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.user.id", null, Locale.US)),
-                            messageSource.getMessage("error.user.message", null, Locale.US)));
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
         try{
             Type appointmentDtoList = new TypeToken<List<AppointmentDto>>() {}.getType();
             List<Appointment> appointments = patient.get().getAppointments();
@@ -64,8 +64,8 @@ public class AppointmentServiceImpl implements AppointmentService{
         Optional<Patient> patient = patientRepository.findById(UUID.fromString(patientId));
         if (!patient.isPresent())
             return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.user.id", null, Locale.US)),
-                            messageSource.getMessage("error.user.message", null, Locale.US)));
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
         try{
             Type appointmentDtoList = new TypeToken<List<AppointmentDto>>() {}.getType();
             List<Appointment> appointments = patient.get().getAppointments();
