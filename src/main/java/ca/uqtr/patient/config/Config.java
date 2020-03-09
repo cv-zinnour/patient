@@ -29,14 +29,4 @@ public class Config {
         return new ModelMapper();
     }
 
-
-    @Bean
-    public ResourceBundleMessageSource messageResourceSource() {
-
-        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-        source.setBasenames("classpath:messages");
-        source.setUseCodeAsDefaultMessage(true);
-
-        return source;
-    }
 }
