@@ -35,9 +35,8 @@ public class AppointmentController {
 
     @GetMapping(value = "/appointment/all")
     @ResponseBody
-    public Response getAppointments(HttpServletRequest HttpRequest){
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        return appointmentService.getAppointments(JwtTokenUtil.getId(token));
+    public Response getAppointments(@RequestParam String patientId){
+        return appointmentService.getAppointments(patientId);
     }
 
     @PutMapping(value = "/appointment")
