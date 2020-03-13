@@ -43,13 +43,13 @@ public class AppointmentController {
     @ResponseBody
     public Response updateAppointment(@RequestBody Request request){
         AppointmentDto appointmentDto = mapper.convertValue(request.getObject(), AppointmentDto.class);
-        return appointmentService.addAppointment(appointmentDto);
+        return appointmentService.updateAppointment(appointmentDto);
     }
 
     @DeleteMapping(value = "/appointment")
     @ResponseBody
     public Response deleteAppointment(@RequestBody Request request){
         AppointmentDto appointmentDto = mapper.convertValue(request.getObject(), AppointmentDto.class);
-        return appointmentService.addAppointment(appointmentDto);
+        return appointmentService.deleteAppointment(appointmentDto);
     }
 }
