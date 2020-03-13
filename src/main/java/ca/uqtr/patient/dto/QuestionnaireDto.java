@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionnaireDto {
+    private String id;
     private String patientId;
     private String type;
     private String value;

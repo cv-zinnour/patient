@@ -50,7 +50,7 @@ public class QuestionnaireController {
 
     @PostMapping(value = "/questionnaire")
     @ResponseBody
-    public Response addPatient(@RequestBody Request request)  {
+    public Response addQuestionnaire(@RequestBody Request request)  {
         QuestionnaireDto questionnaireDto = mapper.convertValue(request.getObject(), QuestionnaireDto.class);
         return questionnaireService.addQuestionnaire(questionnaireDto);
     }
