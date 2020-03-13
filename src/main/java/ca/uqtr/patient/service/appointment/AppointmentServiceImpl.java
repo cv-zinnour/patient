@@ -86,8 +86,8 @@ public class AppointmentServiceImpl implements AppointmentService{
                     new Error(Integer.parseInt(messageSource.getMessage("error.appointment.id", null, Locale.US)),
                             messageSource.getMessage("error.appointment.message", null, Locale.US)));
         try{
-            appointmentDto.setId(appointment.get().getId().toString());
-            return new Response(modelMapper.map(appointmentRepository.save(appointmentDto.dtoToObj(modelMapper)), AppointmentDto.class), null);
+            appointment.get().setAppointmentDate(appointment.get().getAppointmentDate());
+            return new Response(modelMapper.map(appointmentRepository.save(appointment.get()), AppointmentDto.class), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
