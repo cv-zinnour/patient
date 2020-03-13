@@ -61,7 +61,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         }
 
     }
-    
+
     @Override
     public void sendQuestionnaire(PatientDto patientDto) {
         eventPublisher.publishEvent(new OnQuestionnaireSendEvent(patientDto, 1));

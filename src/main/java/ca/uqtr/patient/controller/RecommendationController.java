@@ -27,7 +27,7 @@ public class RecommendationController {
         return recommendationService.addRecommendation(recommendationDto);
     }
 
-    @PostMapping(value = "/recommendation")
+    @GetMapping(value = "/recommendation")
     @ResponseBody
     public Response getRecommendationsByPatient(@RequestParam String patientId)  {
         return recommendationService.getRecommendationsByPatient(patientId);
