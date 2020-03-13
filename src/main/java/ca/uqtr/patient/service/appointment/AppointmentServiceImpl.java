@@ -80,15 +80,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 
     @Override
     public Response updateAppointment(AppointmentDto appointmentDto){
-        System.out.println(appointmentDto.toString());
         Optional<Appointment> appointment = appointmentRepository.findById(appointmentDto.getId());
-        System.out.println(appointment.toString());
         if (!appointment.isPresent())
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.appointment.id", null, Locale.US)),
                             messageSource.getMessage("error.appointment.message", null, Locale.US)));
         try{
-            appointment.get().setAppointmentDate(appointment.get().getAppointmentDate());
+            appointment.get().setAppointmentDate(appointmentDto.getAppointmentDate());
             return new Response(modelMapper.map(appointmentRepository.save(appointment.get()), AppointmentDto.class), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());

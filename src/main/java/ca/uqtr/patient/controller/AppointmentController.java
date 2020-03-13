@@ -41,8 +41,10 @@ public class AppointmentController {
 
     @PutMapping(value = "/appointment")
     @ResponseBody
-    public Response updateAppointment(@RequestBody Request request){
+    public Response updateAppointment(@RequestBody Request request, HttpServletRequest httpRequest){
+        String token = httpRequest.getHeader("Authorization").replace("bearer ","");
         AppointmentDto appointmentDto = mapper.convertValue(request.getObject(), AppointmentDto.class);
+        appointmentDto.setProfessionalId(JwtTokenUtil.getId(token));
         return appointmentService.updateAppointment(appointmentDto);
     }
 
