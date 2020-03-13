@@ -80,7 +80,9 @@ public class AppointmentServiceImpl implements AppointmentService{
 
     @Override
     public Response updateAppointment(AppointmentDto appointmentDto){
+        System.out.println(appointmentDto.toString());
         Optional<Appointment> appointment = appointmentRepository.findById(appointmentDto.getId());
+        System.out.println(appointment.toString());
         if (!appointment.isPresent())
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.appointment.id", null, Locale.US)),
