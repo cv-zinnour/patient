@@ -31,6 +31,7 @@ public interface PatientRepository extends CrudRepository<Patient, UUID> {
     List<Patient> patientsWithAppointmentAfterADay(Date date);
 
 
+
 //
 //
 //    @Query("select pt from Patient pt join Professional pr where pr.username = :username")

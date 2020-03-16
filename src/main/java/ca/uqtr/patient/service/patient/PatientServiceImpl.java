@@ -254,6 +254,8 @@ public class PatientServiceImpl implements PatientService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.login_code.id", null, Locale.US)),
                                 messageSource.getMessage("error.login_code.message", null, Locale.US)));
             }
+            if(patientRepository.isPatientDidAnswerBREQ(patientDto.getId()) != null)
+                patientDto.setHasBREQ(true);
             return new Response(patientDto, null);
         } catch (Exception e){
             LOGGER.log( Level.WARNING, e.getMessage());
