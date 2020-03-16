@@ -15,6 +15,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -49,6 +50,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
         try {
             Questionnaire questionnaire = questionnaireDto.dtoToObj(modelMapper);
+            questionnaire.setDate(new java.sql.Date (Calendar.getInstance().getTime().getTime()));
             List<Questionnaire> questionnaires = patient.getQuestionnaires();
             questionnaires.add(questionnaire);
             patientRepository.save(patient);
@@ -59,7 +61,6 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.questionnaire.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.questionnaire.message", null, Locale.US)));
         }
-
     }
 
     @Override
