@@ -51,9 +51,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         try {
             Questionnaire questionnaire = questionnaireDto.dtoToObj(modelMapper);
             questionnaire.setDate(new java.sql.Date (Calendar.getInstance().getTime().getTime()));
-            List<Questionnaire> questionnaires = patient.getQuestionnaires();
-            questionnaires.add(questionnaire);
-            patientRepository.save(patient);
+            questionnaire.setPatient(patient);
+            questionnaireRepository.save(questionnaire);
             return new Response(questionnaireDto, null);
         } catch (Exception e){
             LOGGER.log( Level.WARNING, e.getMessage());
