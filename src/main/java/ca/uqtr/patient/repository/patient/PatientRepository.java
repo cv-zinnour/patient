@@ -24,7 +24,7 @@ public interface PatientRepository extends CrudRepository<Patient, UUID> {
 
     Patient getPatientByContact_Email(String email);
 
-    @Query("select p from Patient p left join fetch  p.questionnaires q where q.patient.id = :patientId AND q.type = 'BREQ'")
+    @Query("select p from Patient p left join fetch  p.questionnaires q where p.id = :patientId AND q.type = 'BREQ'")
     Patient isPatientDidAnswerBREQ(UUID patientId);
 
     @Query("select p from Patient p left join fetch  p.appointments a where a.appointmentDate <= :date")
