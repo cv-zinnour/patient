@@ -21,8 +21,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RecommendationDto {
     private int id;
-    private String patientId;
-    private String professionalId;
+    private String patient;
+    private String professional;
     private String recommendation;
     private String response;
 
@@ -32,16 +32,16 @@ public class RecommendationDto {
     }
 
 
-    public UUID getPatientId() {
-        if (patientId != null)
-            return UUID.fromString(patientId);
+    public UUID getPatient() {
+        if (patient != null)
+            return UUID.fromString(patient);
         else
             return null;
     }
 
-    public UUID getProfessionalId() {
-        if (professionalId != null)
-            return UUID.fromString(professionalId);
+    public UUID getProfessional() {
+        if (professional != null)
+            return UUID.fromString(professional);
         else
             return null;
     }

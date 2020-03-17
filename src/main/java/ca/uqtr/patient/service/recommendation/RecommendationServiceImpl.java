@@ -39,7 +39,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public Response addRecommendation(RecommendationDto recommendationDto) {
-        Patient patient = patientRepository.getPatientById(recommendationDto.getPatientId());
+        Patient patient = patientRepository.getPatientById(recommendationDto.getPatient());
         if (patient == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
