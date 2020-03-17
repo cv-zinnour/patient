@@ -29,6 +29,7 @@ public class RecommendationController {
         String token = httpRequest.getHeader("Authorization").replace("bearer ","");
         RecommendationDto recommendationDto = modelMapper.map(request.getObject(), RecommendationDto.class);
         recommendationDto.setProfessional(JwtTokenUtil.getId(token));
+        System.out.println("----------  "+recommendationDto.toString());
         return recommendationService.addRecommendation(recommendationDto);
     }
 

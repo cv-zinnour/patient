@@ -6,15 +6,13 @@ import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.entity.Recommendation;
 import ca.uqtr.patient.repository.patient.PatientRepository;
+import ca.uqtr.patient.repository.professional.ProfessionalRepository;
 import ca.uqtr.patient.repository.recommendation.RecommendationRepository;
 import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -26,12 +24,14 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     private PatientRepository patientRepository;
     private RecommendationRepository recommendationRepository;
+    private ProfessionalRepository professionalRepository;
     private MessageSource messageSource;
     private final ModelMapper modelMapper;
 
-    public RecommendationServiceImpl(PatientRepository patientRepository, RecommendationRepository recommendationRepository, MessageSource messageSource, ModelMapper modelMapper) {
+    public RecommendationServiceImpl(PatientRepository patientRepository, RecommendationRepository recommendationRepository, ProfessionalRepository professionalRepository, MessageSource messageSource, ModelMapper modelMapper) {
         this.patientRepository = patientRepository;
         this.recommendationRepository = recommendationRepository;
+        this.professionalRepository = professionalRepository;
         this.messageSource = messageSource;
         this.modelMapper = modelMapper;
     }
@@ -47,6 +47,8 @@ public class RecommendationServiceImpl implements RecommendationService {
 
         try {
             Recommendation recommendation = recommendationDto.dtoToObj(modelMapper);
+            recommendation.setPatient(patient);
+            recommendation.setProfessional(professionalRepository.findById(recommendationDto.getProfessional()).get());
             recommendationRepository.save(recommendation);
             return new Response(recommendationDto, null);
         } catch (Exception e){
