@@ -1,13 +1,12 @@
 package ca.uqtr.patient.service.recommendation;
 
 import ca.uqtr.patient.dto.Error;
-import ca.uqtr.patient.dto.QuestionnaireDto;
 import ca.uqtr.patient.dto.RecommendationDto;
 import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.entity.Patient;
-import ca.uqtr.patient.entity.Questionnaire;
 import ca.uqtr.patient.entity.Recommendation;
 import ca.uqtr.patient.repository.patient.PatientRepository;
+import ca.uqtr.patient.repository.recommendation.RecommendationRepository;
 import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -26,11 +25,13 @@ public class RecommendationServiceImpl implements RecommendationService {
     private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
 
     private PatientRepository patientRepository;
+    private RecommendationRepository recommendationRepository;
     private MessageSource messageSource;
     private final ModelMapper modelMapper;
 
-    public RecommendationServiceImpl(PatientRepository patientRepository, MessageSource messageSource, ModelMapper modelMapper) {
+    public RecommendationServiceImpl(PatientRepository patientRepository, RecommendationRepository recommendationRepository, MessageSource messageSource, ModelMapper modelMapper) {
         this.patientRepository = patientRepository;
+        this.recommendationRepository = recommendationRepository;
         this.messageSource = messageSource;
         this.modelMapper = modelMapper;
     }
@@ -38,7 +39,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public Response addRecommendation(RecommendationDto recommendationDto) {
-        Patient patient = patientRepository.getPatientById(UUID.fromString(recommendationDto.getPatientId()));
+        Patient patient = patientRepository.getPatientById(recommendationDto.getPatientId());
         if (patient == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
@@ -46,9 +47,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
         try {
             Recommendation recommendation = recommendationDto.dtoToObj(modelMapper);
-            List<Recommendation> recommendations = patient.getRecommendations();
-            recommendations.add(recommendation);
-            patientRepository.save(patient);
+            recommendationRepository.save(recommendation);
             return new Response(recommendationDto, null);
         } catch (Exception e){
             LOGGER.log( Level.WARNING, e.getMessage());
@@ -59,18 +58,18 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     @Override
-    public Response getRecommendationsByPatient(String patientId){
+    public Response getRecommendationByPatient(String patientId){
         Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
         if (patient == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
         try {
-            List<Recommendation> recommendations = patient.getRecommendations();
+            /*List<Recommendation> recommendations = patient.getRecommendations();
             Type recommendationType = new TypeToken<List<RecommendationDto>>() {}.getType();
-            List<RecommendationDto> recommendationDtoList = modelMapper.map(recommendations, recommendationType);
-
-            return new Response(recommendationDtoList, null);
+            List<RecommendationDto> recommendationDtoList = modelMapper.map(recommendations, recommendationType);*/
+            Recommendation recommendation = recommendationRepository.getRecommendationByPatientAndResponseIsNotNull(patient);
+            return new Response(modelMapper.map(recommendation, RecommendationDto.class), null);
         } catch (Exception e){
             LOGGER.log( Level.WARNING, e.getMessage());
             return new Response(null,

@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -21,11 +22,28 @@ import javax.persistence.Version;
 public class RecommendationDto {
     private int id;
     private String patientId;
+    private String professionalId;
     private String recommendation;
+    private String response;
 
 
     public Recommendation dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Recommendation.class);
+    }
+
+
+    public UUID getPatientId() {
+        if (patientId != null)
+            return UUID.fromString(patientId);
+        else
+            return null;
+    }
+
+    public UUID getProfessionalId() {
+        if (professionalId != null)
+            return UUID.fromString(professionalId);
+        else
+            return null;
     }
 
 }

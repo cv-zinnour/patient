@@ -1,6 +1,7 @@
 package ca.uqtr.patient.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,9 @@ public class Professional implements Serializable {
     //@ToString.Exclude
     /*@ManyToMany(mappedBy = "professionals",fetch = FetchType.LAZY)
     private Set<Patient> patients = new HashSet<>();*/
+    @JsonManagedReference
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Recommendation> recommendations;
 
     public Professional(UUID id, boolean root) {
         this.id = id;

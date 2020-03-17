@@ -4,9 +4,12 @@ import ca.uqtr.patient.dto.RecommendationDto;
 import ca.uqtr.patient.dto.Request;
 import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.service.recommendation.RecommendationService;
+import ca.uqtr.patient.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -22,15 +25,17 @@ public class RecommendationController {
 
     @PostMapping(value = "/recommendation")
     @ResponseBody
-    public Response addRecommendation(@RequestBody Request request)  {
+    public Response addRecommendation(@RequestBody Request request, HttpServletRequest httpRequest){
+        String token = httpRequest.getHeader("Authorization").replace("bearer ","");
         RecommendationDto recommendationDto = modelMapper.map(request.getObject(), RecommendationDto.class);
+        recommendationDto.setProfessionalId(JwtTokenUtil.getId(token));
         return recommendationService.addRecommendation(recommendationDto);
     }
 
     @GetMapping(value = "/recommendation")
     @ResponseBody
-    public Response getRecommendationsByPatient(@RequestParam String patientId)  {
-        return recommendationService.getRecommendationsByPatient(patientId);
+    public Response getRecommendationByPatient(@RequestParam String patientId)  {
+        return recommendationService.getRecommendationByPatient(patientId);
     }
 
 }

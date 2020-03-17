@@ -74,10 +74,10 @@ public class Patient extends BaseEntity{
     @JsonManagedReference
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> appointments;
-
     @JsonManagedReference
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recommendation> recommendations;
+
 
     public Patient(String firstName, String lastName, Date birthday, Boolean isActive) {
         this.firstName = firstName;

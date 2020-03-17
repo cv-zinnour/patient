@@ -34,6 +34,12 @@ public class Recommendation implements Serializable {
     @Type(type = "jsonb")
     @Column(name = "recommendation", columnDefinition = "jsonb")
     private String recommendation;
+    @Type(type = "jsonb")
+    @Column(name = "response", columnDefinition = "jsonb")
+    private String response;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Professional professional;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Patient patient;

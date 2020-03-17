@@ -6,5 +6,5 @@ import ca.uqtr.patient.dto.Response;
 public interface RecommendationService {
     Response addRecommendation(RecommendationDto recommendationDto);
 
-    Response getRecommendationsByPatient(String patientId);
+    Response getRecommendationByPatient(String patientId);
 }
