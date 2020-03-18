@@ -119,4 +119,10 @@ public class PatientController {
         return patientService.patientLogin(patient);
     }
 
+    @GetMapping(value = "/fitbit/profile")
+    @ResponseBody
+    public ProfileDto getPatientInfos(@PathVariable String medicalFileId){
+        return patientService.getPatientInfos(medicalFileId);
+    }
+
 }

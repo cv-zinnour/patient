@@ -2,6 +2,7 @@ package ca.uqtr.patient.service.patient;
 
 import ca.uqtr.patient.dto.LipidProfileDto;
 import ca.uqtr.patient.dto.PatientDto;
+import ca.uqtr.patient.dto.ProfileDto;
 import ca.uqtr.patient.dto.Response;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
 import ca.uqtr.patient.entity.Patient;
@@ -31,4 +32,6 @@ public interface PatientService {
     Patient getPatientByQuestionnaireToken(String token);
 
     Response patientLogin(PatientDto patient);
+
+    ProfileDto getPatientInfos(String medicalFileId);
 }
