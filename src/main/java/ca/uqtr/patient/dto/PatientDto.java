@@ -52,7 +52,7 @@ public class PatientDto {
     @Nullable
     MedicalFileDto medicalFile;
     private String loginCode;
-    private String socioDemographicVariables;
+    private SocioDemographicVariablesDto socioDemographicVariables;
     //private List<Questionnaire> questionnaires = new ArrayList<>();
     private boolean hasBREQ;
 
