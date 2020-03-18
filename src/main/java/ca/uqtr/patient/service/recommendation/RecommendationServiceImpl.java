@@ -36,7 +36,6 @@ public class RecommendationServiceImpl implements RecommendationService {
         this.modelMapper = modelMapper;
     }
 
-
     @Override
     public Response addRecommendation(RecommendationDto recommendationDto) {
         Patient patient = patientRepository.getPatientById(recommendationDto.getPatient());
@@ -44,7 +43,6 @@ public class RecommendationServiceImpl implements RecommendationService {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
-
         try {
             Recommendation recommendation = recommendationDto.dtoToObj(modelMapper);
             recommendation.setPatient(patient);

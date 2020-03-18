@@ -23,6 +23,8 @@ public class QuestionnaireListener implements
     private String mailService;
     private final JavaMailSender mailSender;
     private PatientService patientService;
+    @Value("${patient-service.questionnaire.url}")
+    private String QUESTIONNAIRE_URL;
 
     @Autowired
     public QuestionnaireListener(JavaMailSender mailSender, PatientService patientService) {
@@ -58,7 +60,7 @@ public class QuestionnaireListener implements
         //String URI_HEROKU = "https://epod-zuul.herokuapp.com/api/v1/auth-service/update/password?token=";
         String URI_HEROKU = "http://localhost:4200/patient/questionnaire?token=";
         String confirmationUrl
-                = URI_HEROKU + token;
+                = QUESTIONNAIRE_URL + token;
         String message = "PIN : "+patient.getQuestionnaireToken()+". To fill your questionnaire click here : ";
         Content content = new Content("text/plain", message+confirmationUrl);
         Mail mail = new Mail(from, subject, to, content);
@@ -90,7 +92,7 @@ public class QuestionnaireListener implements
             subject = "POD iSante - JPAQ questionnaire and recommendations!";
         String URI_GMAIL = "http://localhost:8762/api/v1/patient-service/questionnaire?token=";
         String confirmationUrl
-                = URI_GMAIL + token;
+                = QUESTIONNAIRE_URL + token;
         String message = "PIN : "+patient.getQuestionnaireToken()+". To fill your questionnaire click here : ";
 
         SimpleMailMessage email = new SimpleMailMessage();
