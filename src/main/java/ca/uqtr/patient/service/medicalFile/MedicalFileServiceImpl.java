@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static javax.xml.crypto.dsig.DigestMethod.SHA3_256;
+import javax.xml.crypto.dsig.DigestMethod;
+
+import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA3_256;
+
 
 @Service
 public class MedicalFileServiceImpl implements MedicalFileService {
@@ -19,6 +22,7 @@ public class MedicalFileServiceImpl implements MedicalFileService {
     private ModelMapper modelMapper;
     @Value("${sha3-256.salt}")
     private String SALT;
+    public static final String SHA3_256 = "SHA3-256";
 
     @Autowired
     public MedicalFileServiceImpl(MedicalFileRepository medicalFileRepository, ModelMapper modelMapper) {
@@ -28,13 +32,13 @@ public class MedicalFileServiceImpl implements MedicalFileService {
 
     @Override
     public MedicalFile getMedicalFileByPatient(PatientDto patient) {
-        return medicalFileRepository.getMedicalFileByPatient(new DigestUtils(DigestUtils.getSha3_256Digest()).digestAsHex(patient.getId().toString().concat(SALT)));
+        return medicalFileRepository.getMedicalFileByPatient(new DigestUtils(SHA3_256).digestAsHex(patient.getId().toString().concat(SALT)));
     }
 
     @Override
     public MedicalFile newMedicalFile(MedicalFileDto medicalFile) {
         String patientId = medicalFile.getPatient();
-        String patientIdSHA = new DigestUtils(DigestUtils.getSha3_256Digest()).digestAsHex(patientId.concat(SALT));
+        String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
         medicalFile.setPatient(patientIdSHA);
         return medicalFileRepository.save(medicalFile.dtoToObj(modelMapper));
     }

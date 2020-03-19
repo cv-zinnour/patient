@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static javax.xml.crypto.dsig.DigestMethod.SHA3_256;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -44,6 +43,7 @@ public class PatientServiceImpl implements PatientService {
     private Birthday_genderRepository birthday_genderRepository;
     @Value("${sha3-256.salt}")
     private String SALT;
+    public static final String SHA3_256 = "SHA3-256";
 
     @Autowired
     public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository, MessageSource messageSource, QuestionnaireService questionnaireService, Height_weightRepository height_weightRepository, Birthday_genderRepository birthday_genderRepository) {
@@ -78,7 +78,7 @@ public class PatientServiceImpl implements PatientService {
             Patient patient_db = patientRepository.save(patient);
 
             MedicalFile medicalFile = new MedicalFile();
-            String patientIdSHA = new DigestUtils(DigestUtils.getSha3_256Digest()).digestAsHex(patient_db.getId().toString().concat(SALT));
+            String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patient_db.getId().toString().concat(SALT));
             medicalFile.setPatient(patientIdSHA);
             medicalFile.setCreationDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             medicalFileRepository.save(medicalFile);
