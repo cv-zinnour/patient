@@ -105,7 +105,8 @@ public class PatientServiceImpl implements PatientService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.patient.login.email.id", null, Locale.US)),
                                 messageSource.getMessage("error.patient.login.email.message", null, Locale.US)));
             }
-            MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientId);
+            String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
+            MedicalFile medicalFile = medicalFileRepository.getMedicalFileByPatient(patientIdSHA);
             Type medicalFileHistoryType = new TypeToken<List<MedicalFileHistoryDto>>() {}.getType();
             List<MedicalFileHistoryDto> medicalFileHistoryDtoList = modelMapper.map(medicalFile.getMedicalFileHistory(), medicalFileHistoryType);
             Type lipidProfileType = new TypeToken<List<LipidProfileDto>>() {}.getType();
