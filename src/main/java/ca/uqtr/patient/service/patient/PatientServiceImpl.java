@@ -78,7 +78,7 @@ public class PatientServiceImpl implements PatientService {
             Patient patient_db = patientRepository.save(patient);
 
             MedicalFile medicalFile = new MedicalFile();
-            String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patient_db.getId().toString().concat(SALT));
+            String patientIdSHA = new DigestUtils(DigestUtils.getSha3_256Digest()).digestAsHex(patient_db.getId().toString().concat(SALT));
             medicalFile.setPatient(patientIdSHA);
             medicalFile.setCreationDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             medicalFileRepository.save(medicalFile);

@@ -28,13 +28,13 @@ public class MedicalFileServiceImpl implements MedicalFileService {
 
     @Override
     public MedicalFile getMedicalFileByPatient(PatientDto patient) {
-        return medicalFileRepository.getMedicalFileByPatient(new DigestUtils(SHA3_256).digestAsHex(patient.getId().toString().concat(SALT)));
+        return medicalFileRepository.getMedicalFileByPatient(new DigestUtils(DigestUtils.getSha3_256Digest()).digestAsHex(patient.getId().toString().concat(SALT)));
     }
 
     @Override
     public MedicalFile newMedicalFile(MedicalFileDto medicalFile) {
         String patientId = medicalFile.getPatient();
-        String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
+        String patientIdSHA = new DigestUtils(DigestUtils.getSha3_256Digest()).digestAsHex(patientId.concat(SALT));
         medicalFile.setPatient(patientIdSHA);
         return medicalFileRepository.save(medicalFile.dtoToObj(modelMapper));
     }
