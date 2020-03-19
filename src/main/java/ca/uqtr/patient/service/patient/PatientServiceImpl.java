@@ -78,7 +78,8 @@ public class PatientServiceImpl implements PatientService {
             Patient patient_db = patientRepository.save(patient);
 
             MedicalFile medicalFile = new MedicalFile();
-            medicalFile.setPatient(patient_db.getId().toString());
+            String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patient_db.getId().toString().concat(SALT));
+            medicalFile.setPatient(patientIdSHA);
             medicalFile.setCreationDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             medicalFileRepository.save(medicalFile);
             PatientDto patientDto1 = modelMapper.map(patient_db, PatientDto.class);
