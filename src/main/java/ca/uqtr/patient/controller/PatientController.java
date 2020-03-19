@@ -121,8 +121,8 @@ public class PatientController {
 
     @GetMapping(value = "/fitbit/profile")
     @ResponseBody
-    public ProfileDto getPatientInfos(@PathVariable String medicalFileId){
-        return patientService.getPatientInfos(medicalFileId);
+    public ProfileDto getPatientInfos(@PathVariable String patientId){
+        return patientService.getPatientInfos(patientId);
     }
 
 }

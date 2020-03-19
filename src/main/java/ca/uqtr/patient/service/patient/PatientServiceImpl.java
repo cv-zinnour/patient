@@ -5,22 +5,30 @@ import ca.uqtr.patient.dto.*;
 import ca.uqtr.patient.dto.Error;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
 import ca.uqtr.patient.entity.*;
-import ca.uqtr.patient.repository.patient.ProfileRepository;
+import ca.uqtr.patient.entity.view.Birthday_gender;
+import ca.uqtr.patient.entity.view.Height_weight;
 import ca.uqtr.patient.repository.professional.ProfessionalRepository;
 import ca.uqtr.patient.repository.medicalFile.MedicalFileRepository;
 import ca.uqtr.patient.repository.patient.PatientRepository;
+import ca.uqtr.patient.repository.view.Birthday_genderRepository;
+import ca.uqtr.patient.repository.view.Height_weightRepository;
 import ca.uqtr.patient.service.questionnaire.QuestionnaireService;
 import javassist.bytecode.stackmap.TypeData;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static javax.xml.crypto.dsig.DigestMethod.SHA3_256;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -29,20 +37,24 @@ public class PatientServiceImpl implements PatientService {
     private PatientRepository patientRepository;
     private MedicalFileRepository medicalFileRepository;
     private ProfessionalRepository professionalRepository;
-    private ProfileRepository profileRepository;
     private ModelMapper modelMapper;
     private MessageSource messageSource;
     private QuestionnaireService questionnaireService;
+    private Height_weightRepository height_weightRepository;
+    private Birthday_genderRepository birthday_genderRepository;
+    @Value("${sha3-256.salt}")
+    private String SALT;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository, ProfileRepository profileRepository, MessageSource messageSource, QuestionnaireService questionnaireService) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository, MessageSource messageSource, QuestionnaireService questionnaireService, Height_weightRepository height_weightRepository, Birthday_genderRepository birthday_genderRepository) {
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
         this.medicalFileRepository = medicalFileRepository;
         this.professionalRepository = professionalRepository;
-        this.profileRepository = profileRepository;
         this.messageSource = messageSource;
         this.questionnaireService = questionnaireService;
+        this.height_weightRepository = height_weightRepository;
+        this.birthday_genderRepository = birthday_genderRepository;
     }
 
     @Override
@@ -265,9 +277,23 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
+    @Transactional
     @Override
-    public ProfileDto getPatientInfos(String medicalFileId) {
-        return modelMapper.map(profileRepository.findById(UUID.fromString(medicalFileId)).get(), ProfileDto.class);
+    public ProfileDto getPatientInfos(String patientId) {
+        Optional<Birthday_gender> birthday_gender = birthday_genderRepository.findById(UUID.fromString(patientId));
+        Height_weight height_weight = height_weightRepository.getByPatientId(new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT)));
+        ProfileDto profileDto = new ProfileDto();
+        if (height_weight == null){
+            profileDto.setHeight(null);
+            profileDto.setWeight(null);
+            return profileDto;
+        }
+        profileDto.setBirthday(birthday_gender.map(Birthday_gender::getBirthday).orElse(null));
+        profileDto.setGender(birthday_gender.map(Birthday_gender::getGender).orElse(null));
+        profileDto.setHeight(height_weight.getHeight());
+        profileDto.setWeight(height_weight.getWeight());
+
+        return profileDto;
     }
 
 

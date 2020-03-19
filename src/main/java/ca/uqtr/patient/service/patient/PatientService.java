@@ -33,5 +33,5 @@ public interface PatientService {
 
     Response patientLogin(PatientDto patient);
 
-    ProfileDto getPatientInfos(String medicalFileId);
+    ProfileDto getPatientInfos(String patientId);
 }

@@ -135,3 +135,18 @@ create table if not exists allergy
     constraint allergy_medical_file_id_fk
         foreign key (patient_id) references medical_file
 );
+
+CREATE VIEW birthday_gender AS
+select p.id as id,
+       cast (p.birthday as varchar) as birthday,
+       cast (p.socio_demographic_variables->>'gender' as varchar) as gender
+from patient p;
+
+
+CREATE VIEW height_weight AS
+select mf.id as id,
+       mf.patient as patient_id,
+       cast (ce.anthropometry_height as varchar) as height,
+       cast (ce.anthropometry_weight as varchar) as weight
+from medical_file mf
+         left join clinical_examination ce on ce.medical_file_id = mf.id ;
