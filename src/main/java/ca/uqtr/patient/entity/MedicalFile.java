@@ -7,6 +7,7 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.annotations.*;
 import org.jasypt.util.text.AES256TextEncryptor;
 
@@ -52,10 +53,7 @@ public class MedicalFile extends BaseEntity {
 
 
     public void setPatient(String patient) {
-        AES256TextEncryptor encryptor = new AES256TextEncryptor();
-        encryptor.setPassword("pod-uqtr");
-        //this.patient = encryptor.encrypt(patient);
-        this.patient = patient;
+        this.patient = new DigestUtils("SHA3-256").digestAsHex(patient.concat("uqtris2020"));
     }
 
 
