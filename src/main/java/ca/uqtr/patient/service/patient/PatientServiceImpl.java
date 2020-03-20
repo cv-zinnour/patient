@@ -300,7 +300,7 @@ public class PatientServiceImpl implements PatientService {
         profileDto.setGender(birthday_gender.map(Birthday_gender::getGender).orElse(null));
         profileDto.setHeight(height_weight.getHeight());
         profileDto.setWeight(height_weight.getWeight());
-
+        System.out.println("------ profile dto= "+ profileDto.toString());
         return profileDto;
     }
 
