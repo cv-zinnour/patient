@@ -161,7 +161,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Response getPatientAntecedents(String patientId) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(patientId);
+        String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(patientIdSHA);
         List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
         if (medicalFileHistories == null)
             return new Response(null,
@@ -172,7 +173,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Response addAntecedents(String patientId, String antecedentsDto) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(patientId);
+        String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_MedicalFileHistory_FetchTypeEAGER(patientIdSHA);
         MedicalFileHistory medicalFileHistory = new MedicalFileHistory(new java.sql.Date(Calendar.getInstance().getTimeInMillis()), antecedentsDto);
         List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
         medicalFileHistories.add(medicalFileHistory);
@@ -182,6 +184,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Response getPatientClinicalExaminationList(String patientId) {
+        String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_ClinicalExamination_FetchTypeEAGER(patientId);
         System.out.println(medicalFile.toString());
         List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
@@ -194,6 +197,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Response addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto) {
+        String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_ClinicalExamination_FetchTypeEAGER(patientId);
         System.out.println(medicalFile.toString());
         List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
