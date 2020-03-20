@@ -285,7 +285,6 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
-    @Transactional
     @Override
     public ProfileDto getPatientInfos(String patientId) {
         Optional<Birthday_gender> birthday_gender = birthday_genderRepository.findById(UUID.fromString(patientId));

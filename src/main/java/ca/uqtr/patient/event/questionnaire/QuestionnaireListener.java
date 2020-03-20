@@ -61,7 +61,7 @@ public class QuestionnaireListener implements
         String URI_HEROKU = "http://localhost:4200/patient/questionnaire?token=";
         String confirmationUrl
                 = QUESTIONNAIRE_URL + token;
-        String message = "PIN : "+patient.getQuestionnaireToken()+". To fill your questionnaire click here : ";
+        String message = "PIN : "+patient.getLoginCode()+". To fill your questionnaire click here : ";
         Content content = new Content("text/plain", message+confirmationUrl);
         Mail mail = new Mail(from, subject, to, content);
 
