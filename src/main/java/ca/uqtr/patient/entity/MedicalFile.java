@@ -52,9 +52,5 @@ public class MedicalFile extends BaseEntity {
     private List<LipidProfile> lipidProfiles;
 
 
-    public void setPatient(String patient) {
-        this.patient = new DigestUtils("SHA3-256").digestAsHex(patient.concat("uqtris2020"));
-    }
-
 
 }
