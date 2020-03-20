@@ -75,6 +75,7 @@ public class PatientServiceImpl implements PatientService {
             professionals.add(professional);
             patient.setProfessionals(professionals);
             patient.setFileNumber();
+            patient.setLoginCode();
             Patient patient_db = patientRepository.save(patient);
 
             MedicalFile medicalFile = new MedicalFile();
