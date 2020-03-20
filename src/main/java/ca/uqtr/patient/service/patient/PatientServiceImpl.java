@@ -222,7 +222,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Response getPatientLipidProfile(String patientId) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientId);
+        String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientIdSHA);
         System.out.println(medicalFile.toString());
         List<LipidProfile> lipidProfiles = medicalFile.getLipidProfiles();
         if (lipidProfiles == null)
@@ -234,7 +235,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Response addLipidProfile(String patientId, LipidProfileDto lipidProfileDto) {
-        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientId);
+        String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
+        MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientIdSHA);
         System.out.println(medicalFile.toString());
         List<LipidProfile> lipidProfiles = medicalFile.getLipidProfiles();
         lipidProfiles.add(lipidProfileDto.dtoToObj(modelMapper));
