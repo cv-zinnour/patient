@@ -40,6 +40,8 @@ public class PatientDto {
     @Nullable
     private ContactDto contact;
     @Nullable
+    private String genre;
+    @Nullable
     private List<FamilyDoctorDto> familyDoctor = new ArrayList<>();
     @Nullable
     private List<PharmacyDto> pharmacy = new ArrayList<>();

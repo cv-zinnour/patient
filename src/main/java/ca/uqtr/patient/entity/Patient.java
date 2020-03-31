@@ -37,6 +37,8 @@ public class Patient extends BaseEntity{
     private Date birthday;
     @Column(name = "mother_name")
     private String motherName;
+    @Column(name = "genre")
+    private String genre;
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "patient")
     private Contact contact;
