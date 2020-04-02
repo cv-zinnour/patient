@@ -238,8 +238,9 @@ public class PatientServiceImpl implements PatientService {
     public Response addLipidProfile(String patientId, LipidProfileDto lipidProfileDto) {
         String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientIdSHA);
-        System.out.println(medicalFile.toString());
+        System.out.println(lipidProfileDto.toString());
         List<LipidProfile> lipidProfiles = medicalFile.getLipidProfiles();
+        System.out.println("------2   "+lipidProfileDto.dtoToObj(modelMapper).toString());
         lipidProfiles.add(lipidProfileDto.dtoToObj(modelMapper));
         medicalFile.setLipidProfiles(lipidProfiles);
         return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
