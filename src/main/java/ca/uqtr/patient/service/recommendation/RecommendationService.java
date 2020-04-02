@@ -7,4 +7,6 @@ public interface RecommendationService {
     Response addRecommendation(RecommendationDto recommendationDto);
 
     Response getRecommendationByPatient(String patientId);
+
+    Response updateRecommendationByPatient(String patientId);
 }

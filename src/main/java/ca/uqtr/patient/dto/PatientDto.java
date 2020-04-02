@@ -40,7 +40,7 @@ public class PatientDto {
     @Nullable
     private ContactDto contact;
     @Nullable
-    private String genre;
+    private String gender;
     @Nullable
     private List<FamilyDoctorDto> familyDoctor = new ArrayList<>();
     @Nullable

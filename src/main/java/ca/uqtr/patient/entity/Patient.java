@@ -12,7 +12,6 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.*;
 
 @Data
@@ -37,8 +36,8 @@ public class Patient extends BaseEntity{
     private Date birthday;
     @Column(name = "mother_name")
     private String motherName;
-    @Column(name = "genre")
-    private String genre;
+    @Column(name = "gender")
+    private String gender;
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "patient")
     private Contact contact;

@@ -11,6 +11,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +32,10 @@ public class Recommendation implements Serializable {
     @Version
     @Column(name = "version", nullable = false)
     private int version;
+    @Column(name = "date_recommendation")
+    private Date dateRecommendation ;
+    @Column(name = "date_response")
+    private Date dateResponse ;
     @Type(type = "jsonb")
     @Column(name = "recommendation", columnDefinition = "jsonb")
     private String recommendation;

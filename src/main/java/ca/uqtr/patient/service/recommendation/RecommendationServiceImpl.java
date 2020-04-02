@@ -13,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -47,6 +49,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             Recommendation recommendation = recommendationDto.dtoToObj(modelMapper);
             recommendation.setPatient(patient);
             recommendation.setProfessional(professionalRepository.findById(recommendationDto.getProfessional()).get());
+            recommendation.setDateRecommendation(new Date(Calendar.getInstance().getTimeInMillis()));
             recommendationRepository.save(recommendation);
             return new Response(recommendationDto, null);
         } catch (Exception e){
@@ -77,6 +80,28 @@ public class RecommendationServiceImpl implements RecommendationService {
                             messageSource.getMessage("error.patient.recommendation.message", null, Locale.US)));
         }
 
+    }
+
+    @Override
+    public Response updateRecommendationByPatient(String patientId) {
+        Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
+        if (patient == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
+        try {
+            /*Recommendation recommendation = recommendationRepository.get(modelMapper);
+            recommendation.setPatient(patient);
+            recommendation.setProfessional(professionalRepository.findById(recommendationDto.getProfessional()).get());
+            recommendation.setDateRecommendation(new Date(Calendar.getInstance().getTimeInMillis()));
+            recommendationRepository.save(recommendation);*/
+            return new Response(null, null);
+        } catch (Exception e){
+            LOGGER.log( Level.WARNING, e.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.recommendation.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.recommendation.message", null, Locale.US)));
+        }
     }
 
 

@@ -39,4 +39,10 @@ public class RecommendationController {
         return recommendationService.getRecommendationByPatient(patientId);
     }
 
+
+    @PutMapping(value = "/recommendation")
+    @ResponseBody
+    public Response responseToRecommendationByPatient(@RequestParam String patientId)  {
+        return recommendationService.updateRecommendationByPatient(patientId);
+    }
 }
