@@ -108,7 +108,8 @@ public class PatientController {
 
     @PostMapping(value = "/lipidprofile")
     @ResponseBody
-    public Response addLipidProfile(@RequestParam String patientId, @RequestBody LipidProfileDto lipidProfileDto) {
+    public Response addLipidProfile(@RequestParam String patientId, @RequestBody Request request) {
+        LipidProfileDto lipidProfileDto = mapper.convertValue(request.getObject(), LipidProfileDto.class);
         return patientService.addLipidProfile(patientId, lipidProfileDto);
     }
 
