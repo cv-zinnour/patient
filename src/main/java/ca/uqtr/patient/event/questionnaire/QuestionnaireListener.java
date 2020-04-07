@@ -54,7 +54,7 @@ public class QuestionnaireListener implements
         else
             subject = "POD iSante - JPAQ questionnaire and recommendations!";
         System.out.println(subject);
-        Email from = new Email("app159146764@heroku.com");
+        Email from = new Email("zinnour@uqtr.ca");
         Email to = new Email(recipientAddress);
         /*@Value("${mail.uri}")*/
         //String URI_HEROKU = "https://epod-zuul.herokuapp.com/api/v1/auth-service/update/password?token=";
