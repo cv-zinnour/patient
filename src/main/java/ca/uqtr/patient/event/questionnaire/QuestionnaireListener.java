@@ -50,7 +50,7 @@ public class QuestionnaireListener implements
         String recipientAddress = patient.getContact().getEmail();
         String subject;
         if (rdv == 1)
-            subject = "POD iSante - Informations personal and BREQ questionnaire!";
+            subject = "POD iSante - Personal informations and BREQ questionnaire!";
         else
             subject = "POD iSante - JPAQ questionnaire and recommendations!";
         System.out.println(subject);
