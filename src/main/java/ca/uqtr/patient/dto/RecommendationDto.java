@@ -1,5 +1,6 @@
 package ca.uqtr.patient.dto;
 
+import ca.uqtr.patient.dto.patient.ProfessionalDto;
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.entity.Questionnaire;
 import ca.uqtr.patient.entity.Recommendation;
@@ -22,8 +23,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RecommendationDto {
     private int id;
-    private String patient;
-    private String professional;
     private String recommendation;
     private String response;
     private Date dateRecommendation ;
@@ -35,18 +34,5 @@ public class RecommendationDto {
     }
 
 
-    public UUID getPatient() {
-        if (patient != null)
-            return UUID.fromString(patient);
-        else
-            return null;
-    }
-
-    public UUID getProfessional() {
-        if (professional != null)
-            return UUID.fromString(professional);
-        else
-            return null;
-    }
 
 }
