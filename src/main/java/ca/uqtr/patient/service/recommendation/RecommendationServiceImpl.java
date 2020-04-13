@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -68,12 +69,12 @@ public class RecommendationServiceImpl implements RecommendationService {
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
 
-            /*List<Recommendation> recommendations = patient.getRecommendations();
-            Type recommendationType = new TypeToken<List<RecommendationDto>>() {}.getType();
-            List<RecommendationDto> recommendationDtoList = modelMapper.map(recommendations, recommendationType);*/
-            Recommendation recommendation = recommendationRepository.getRecommendationByPatientAndResponseIsNull(patient).get(0);
-        System.out.println(recommendation.getId());
-            return new Response(modelMapper.map(recommendation, RecommendationDto.class), null);
+        /*List<Recommendation> recommendations = patient.getRecommendations();
+        Type recommendationType = new TypeToken<List<RecommendationDto>>() {}.getType();
+        List<RecommendationDto> recommendationDtoList = modelMapper.map(recommendations, recommendationType);*/
+        List<Recommendation> recommendations = recommendationRepository.getRecommendationByPatientAndResponseIsNull(patient);
+        System.out.println("---------   "+recommendations.size());
+        return new Response(modelMapper.map(recommendations.get(0), RecommendationDto.class), null);
 
 
     }
