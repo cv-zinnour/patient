@@ -41,7 +41,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public Response addRecommendation(RecommendationDto recommendationDto) {
-        Patient patient = patientRepository.getPatientById(recommendationDto.getPatient());
+        Patient patient = patientRepository.getPatientById(recommendationDto.getPatient().getId());
         if (patient == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
@@ -49,7 +49,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         try {
             Recommendation recommendation = recommendationDto.dtoToObj(modelMapper);
             recommendation.setPatient(patient);
-            recommendation.setProfessional(professionalRepository.findById(recommendationDto.getProfessional()).get());
+            recommendation.setProfessional(professionalRepository.findById(recommendationDto.getProfessional().getId()).get());
             recommendation.setDateRecommendation(new Date(Calendar.getInstance().getTimeInMillis()));
             recommendationRepository.save(recommendation);
             return new Response(recommendationDto, null);

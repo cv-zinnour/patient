@@ -23,6 +23,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RecommendationDto {
     private int id;
+    private PatientDto patient;
+    private ProfessionalDto professional;
     private String recommendation;
     private String response;
     private Date dateRecommendation ;
@@ -32,6 +34,7 @@ public class RecommendationDto {
     public Recommendation dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Recommendation.class);
     }
+
 
 
 
