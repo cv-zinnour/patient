@@ -35,8 +35,8 @@ public class RecommendationController {
 
     @GetMapping(value = "/recommendation")
     @ResponseBody
-    public Response getRecommendationByPatient(@RequestParam String patientId)  {
-        return recommendationService.getRecommendationByPatient(patientId);
+    public Response getLastRecommendationByPatient(@RequestParam String patientId)  {
+        return recommendationService.getLastRecommendationByPatient(patientId);
     }
 
 

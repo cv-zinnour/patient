@@ -61,7 +61,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     @Override
-    public Response getRecommendationByPatient(String patientId){
+    public Response getLastRecommendationByPatient(String patientId){
         Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
         if (patient == null)
             return new Response(null,
@@ -71,7 +71,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             /*List<Recommendation> recommendations = patient.getRecommendations();
             Type recommendationType = new TypeToken<List<RecommendationDto>>() {}.getType();
             List<RecommendationDto> recommendationDtoList = modelMapper.map(recommendations, recommendationType);*/
-            Recommendation recommendation = recommendationRepository.getRecommendationByPatientAndResponseIsNotNull(patient);
+            Recommendation recommendation = recommendationRepository.getRecommendationByPatientAndResponseIsNull(patient).get(0);
             return new Response(modelMapper.map(recommendation, RecommendationDto.class), null);
         } catch (Exception e){
             LOGGER.log( Level.WARNING, e.getMessage());
