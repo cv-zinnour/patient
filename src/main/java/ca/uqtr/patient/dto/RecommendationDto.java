@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
+import java.sql.Date;
 import java.util.UUID;
 
 @Data
@@ -25,6 +26,8 @@ public class RecommendationDto {
     private String professional;
     private String recommendation;
     private String response;
+    private Date dateRecommendation ;
+    private Date dateResponse ;
 
 
     public Recommendation dtoToObj(ModelMapper modelMapper) {
