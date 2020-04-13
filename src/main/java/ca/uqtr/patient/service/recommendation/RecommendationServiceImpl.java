@@ -67,18 +67,14 @@ public class RecommendationServiceImpl implements RecommendationService {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
-        try {
+
             /*List<Recommendation> recommendations = patient.getRecommendations();
             Type recommendationType = new TypeToken<List<RecommendationDto>>() {}.getType();
             List<RecommendationDto> recommendationDtoList = modelMapper.map(recommendations, recommendationType);*/
             Recommendation recommendation = recommendationRepository.getRecommendationByPatientAndResponseIsNull(patient).get(0);
+        System.out.println(recommendation.toString());
             return new Response(modelMapper.map(recommendation, RecommendationDto.class), null);
-        } catch (Exception e){
-            LOGGER.log( Level.WARNING, e.getMessage());
-            return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.recommendation.id", null, Locale.US)),
-                            messageSource.getMessage("error.patient.recommendation.message", null, Locale.US)));
-        }
+
 
     }
 
