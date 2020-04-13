@@ -72,7 +72,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             Type recommendationType = new TypeToken<List<RecommendationDto>>() {}.getType();
             List<RecommendationDto> recommendationDtoList = modelMapper.map(recommendations, recommendationType);*/
             Recommendation recommendation = recommendationRepository.getRecommendationByPatientAndResponseIsNull(patient).get(0);
-        System.out.println(recommendation.toString());
+        System.out.println(recommendation.getId());
             return new Response(modelMapper.map(recommendation, RecommendationDto.class), null);
 
 
