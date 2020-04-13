@@ -5,6 +5,7 @@ import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.entity.Questionnaire;
 import ca.uqtr.patient.entity.Recommendation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,9 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RecommendationDto {
     private int id;
+    @JsonIgnore
     private PatientDto patient;
+    @JsonIgnore
     private ProfessionalDto professional;
     private String recommendation;
     private String response;
