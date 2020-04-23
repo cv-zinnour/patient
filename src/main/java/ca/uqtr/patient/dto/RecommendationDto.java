@@ -24,8 +24,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RecommendationDto {
     private int id;
-    private String patient;
-    private String professional;
+    private PatientDto patient;
+    private ProfessionalDto professional;
     private String recommendation;
     private String response;
     private Date dateRecommendation ;
