@@ -3,6 +3,7 @@ package ca.uqtr.patient.controller;
 import ca.uqtr.patient.dto.RecommendationDto;
 import ca.uqtr.patient.dto.Request;
 import ca.uqtr.patient.dto.Response;
+import ca.uqtr.patient.dto.patient.ProfessionalDto;
 import ca.uqtr.patient.service.recommendation.RecommendationService;
 import ca.uqtr.patient.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,8 @@ public class RecommendationController {
     public Response addRecommendation(@RequestBody Request request, HttpServletRequest httpRequest){
         String token = httpRequest.getHeader("Authorization").replace("bearer ","");
         RecommendationDto recommendationDto = modelMapper.map(request.getObject(), RecommendationDto.class);
+        recommendationDto.setProfessional(new ProfessionalDto(JwtTokenUtil.getId(token)));
         System.out.println("----------  "+recommendationDto.toString());
-        recommendationDto.getProfessional().setId(JwtTokenUtil.getId(token));
         return recommendationService.addRecommendation(recommendationDto);
     }
 

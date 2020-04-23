@@ -16,6 +16,10 @@ public class ProfessionalDto {
     private String id;
     private boolean root;
 
+    public ProfessionalDto(String id) {
+        this.id = id;
+    }
+
     public Professional dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Professional.class);
     }
