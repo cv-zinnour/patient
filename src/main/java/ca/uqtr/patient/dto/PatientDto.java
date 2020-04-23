@@ -58,6 +58,9 @@ public class PatientDto {
     //private List<Questionnaire> questionnaires = new ArrayList<>();
     private boolean hasBREQ;
 
+    public PatientDto(@Nullable String id) {
+        this.id = id;
+    }
 
     public Patient dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Patient.class);
