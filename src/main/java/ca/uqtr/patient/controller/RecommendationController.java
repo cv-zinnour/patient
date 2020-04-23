@@ -35,7 +35,7 @@ public class RecommendationController {
         recommendationDto.setProfessional(new ProfessionalDto(JwtTokenUtil.getId(token)));
         recommendationDto.setPatient(new PatientDto(JwtTokenUtil.getId(token)));
 */
-        System.out.println("----------  "+recommendationDto.toString());
+        System.out.println("----------  "+JwtTokenUtil.getId(token));
         recommendationDto.setProfessional(JwtTokenUtil.getId(token));
         return recommendationService.addRecommendation(recommendationDto);
     }
