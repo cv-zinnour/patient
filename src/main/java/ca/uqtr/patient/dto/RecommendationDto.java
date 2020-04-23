@@ -24,9 +24,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RecommendationDto {
     private int id;
-    @JsonIgnore
     private PatientDto patient;
-    @JsonIgnore
     private ProfessionalDto professional;
     private String recommendation;
     private String response;
