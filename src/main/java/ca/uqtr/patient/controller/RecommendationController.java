@@ -52,4 +52,11 @@ public class RecommendationController {
     public Response responseToRecommendationByPatient(@RequestParam String patientId)  {
         return recommendationService.updateRecommendationByPatient(patientId);
     }
+
+    @GetMapping(value = "/recommendation/all")
+    @ResponseBody
+    public Response getRecommendationsByPatient(@RequestParam String patientId){
+        return recommendationService.getRecommendationsByPatient(patientId);
+    }
+
 }

@@ -1,8 +1,10 @@
 package ca.uqtr.patient.service.recommendation;
 
+import ca.uqtr.patient.dto.AppointmentDto;
 import ca.uqtr.patient.dto.Error;
 import ca.uqtr.patient.dto.RecommendationDto;
 import ca.uqtr.patient.dto.Response;
+import ca.uqtr.patient.entity.Appointment;
 import ca.uqtr.patient.entity.Patient;
 import ca.uqtr.patient.entity.Recommendation;
 import ca.uqtr.patient.repository.patient.PatientRepository;
@@ -10,14 +12,13 @@ import ca.uqtr.patient.repository.professional.ProfessionalRepository;
 import ca.uqtr.patient.repository.recommendation.RecommendationRepository;
 import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.sql.Date;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -98,6 +99,25 @@ public class RecommendationServiceImpl implements RecommendationService {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.recommendation.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.recommendation.message", null, Locale.US)));
+        }
+    }
+
+    @Override
+    public Response getRecommendationsByPatient(String patientId) {
+        Optional<Patient> patient = patientRepository.findById(UUID.fromString(patientId));
+        if (!patient.isPresent())
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
+        try{
+            Type recommendationDtoList = new TypeToken<List<RecommendationDto>>() {}.getType();
+            List<Recommendation> recommendations = patient.get().getRecommendations();
+            return new Response(modelMapper.map(recommendations, recommendationDtoList), null);
+        } catch (Exception ex){
+            LOGGER.log( Level.ALL, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
         }
     }
 
