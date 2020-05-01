@@ -39,6 +39,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 
     @Override
     public Response addAppointment(AppointmentDto appointmentDto){
+        System.out.println("---------- "+ appointmentDto.toString());
         Optional<Patient> patient = patientRepository.findById(appointmentDto.getPatientId());
         if (!patient.isPresent())
             return new Response(null,
