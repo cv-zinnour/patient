@@ -48,7 +48,8 @@ public class AppointmentServiceImpl implements AppointmentService{
         try{
             Type appointmentDtoList = new TypeToken<List<AppointmentDto>>() {}.getType();
             List<Appointment> appointments = patient.get().getAppointments();
-            appointments.add(appointmentDto.dtoToObj(modelMapper));
+            Appointment appointment = appointmentDto.dtoToObj(modelMapper);
+            appointments.add(appointment);
             patientRepository.save(patient.get());
             return new Response(modelMapper.map(appointments, appointmentDtoList), null);
         } catch (Exception ex){

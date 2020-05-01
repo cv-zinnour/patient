@@ -27,4 +27,7 @@ public class Appointment extends BaseEntity {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Patient patient;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Professional professional;
 }
