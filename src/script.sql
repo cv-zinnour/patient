@@ -1,31 +1,22 @@
-create table professional
-(
-    id         uuid    not null
-        constraint expert_pk
-            primary key,
-    first_name varchar not null,
-    last_name  varchar not null,
-    version    integer not null,
-    root       boolean
-);
-
 create table patient
 (
-    id              uuid    not null
+    id                                  uuid    not null
         constraint patient_pk
             primary key,
-    version         integer not null,
-    first_name      varchar not null,
-    last_name       varchar not null,
-    birthday        date,
-    is_active       boolean,
-    mother_name     varchar,
-    file_number     varchar,
-    family_doctor   jsonb,
-    pharmacy        jsonb,
-    professional_id uuid
-        constraint patient_professional_id_fk
-            references professional
+    version                             integer not null,
+    first_name                          varchar not null,
+    last_name                           varchar not null,
+    birthday                            date,
+    is_active                           boolean,
+    mother_name                         varchar,
+    file_number                         varchar,
+    family_doctor                       jsonb,
+    pharmacy                            jsonb,
+    questionnaire_token                 varchar,
+    questionnaire_token_expiration_date date,
+    login_code                          varchar,
+    socio_demographic_variables         jsonb,
+    gender                              varchar
 );
 
 create unique index patient_file_number_uindex
@@ -48,59 +39,143 @@ create table contact
     version       integer not null
 );
 
+create table professional
+(
+    id      uuid    not null
+        constraint expert_pk
+            primary key,
+    version integer not null,
+    root    boolean
+);
+
 create table medical_file
 (
-    id                          uuid    not null
+    id            uuid    not null
         constraint medical_file_pk
             primary key,
-    version                     integer not null,
-    creation_date               date,
-    socio_demographic_variables jsonb,
-    antecedents                 jsonb,
-    patient                     varchar
+    version       integer not null,
+    creation_date date,
+    patient       varchar
 );
 
 create table clinical_examination
 (
-    cardiovascular_heart_rate_value          integer,
-    cardiovascular_heart_rate_regularity     boolean,
-    cardiovascular_blood_pressure_right_hand integer,
-    cardiovascular_blood_pressure_left_hand  integer,
-    anthropometry_weight                     double precision,
-    anthropometry_height                     double precision,
-    anthropometry_imc                        double precision,
-    anthropometry_waist                      double precision,
-    smoking_type                             varchar,
-    smoking_number_cigarettes                integer,
-    pharmacotherapy_cardiovascular           varchar,
-    pharmacotherapy_dyslipidemia             varchar,
-    pharmacotherapy_diabetes                 varchar,
-    pharmacotherapy_other                    varchar,
-    date                                     date    not null,
-    id                                       uuid    not null
+    cardiovascular_heart_rate_value       integer,
+    cardiovascular_heart_rate_regularity  boolean,
+    blood_pressure_right_hand_diastolique integer,
+    blood_pressure_left_hand_diastolique  integer,
+    anthropometry_weight                  double precision,
+    anthropometry_height                  double precision,
+    anthropometry_imc                     double precision,
+    anthropometry_waist                   double precision,
+    smoking_type                          varchar,
+    smoking_number_cigarettes             integer,
+    pharmacotherapy_cardiovascular        varchar,
+    pharmacotherapy_dyslipidemia          varchar,
+    pharmacotherapy_diabetes              varchar,
+    pharmacotherapy_other                 varchar,
+    date                                  date,
+    id                                    uuid    not null
         constraint clinical_examination_pk
             primary key,
-    version                                  integer not null,
-    medical_file                             uuid
+    version                               integer not null,
+    medical_file_id                       uuid
         constraint clinical_examination_medical_file_id_fk
-            references medical_file
+            references medical_file,
+    blood_pressure_right_hand_systolique  integer,
+    blood_pressure_left_hand_systolique   integer
 );
 
 create unique index clinical_examination_id_uindex
     on clinical_examination (id);
 
+create table patient_professional
+(
+    patient_id      uuid
+        constraint patient_professional_patient_id_fk
+            references patient,
+    professional_id uuid
+        constraint patient_professional_professional_id_fk
+            references professional
+);
 
-CREATE VIEW birthday_gender AS
-select p.id as id,
-       cast (p.birthday as varchar) as birthday,
-       cast (p.socio_demographic_variables->>'gender' as varchar) as gender
-from patient p;
+create table medical_file_history
+(
+    id              uuid not null
+        constraint medical_file_history_pk
+            primary key,
+    version         integer,
+    date            date,
+    antecedents     jsonb,
+    medical_file_id uuid
+        constraint medical_file_history_medical_file_id_fk
+            references medical_file
+);
+
+create unique index medical_file_history_id_uindex
+    on medical_file_history (id);
+
+create table questionnaire
+(
+    id         uuid,
+    version    integer,
+    type       varchar,
+    value      jsonb,
+    patient_id uuid
+        constraint questionnaire_patient_id_fk
+            references patient,
+    date       date
+);
+
+create table lipid_profile
+(
+    id              uuid not null
+        constraint lipid_profile_pk
+            primary key,
+    version         integer,
+    ldl             double precision,
+    hdl             double precision,
+    nohdl           double precision,
+    triglyceride    double precision,
+    hba1c           double precision,
+    medical_file_id uuid
+        constraint lipid_profile_medical_file_id_fk
+            references medical_file
+);
+
+create unique index lipid_profile_id_uindex
+    on lipid_profile (id);
+
+create table appointment
+(
+    id               uuid,
+    version          integer,
+    patient_id       uuid
+        constraint appointment_patient_id_fk
+            references patient,
+    professional_id  uuid,
+    creation_date    date,
+    appointment_date date,
+    jpaq_email       boolean default false
+);
+
+create table recommendation
+(
+    id                  serial not null
+        constraint recommendation_pk
+            primary key,
+    version             integer,
+    professional_id     uuid,
+    patient_id          uuid
+        constraint recommendation_patient_id_fk
+            references patient,
+    recommendation      jsonb,
+    response            jsonb,
+    date_recommendation date,
+    date_response       date
+);
+
+create unique index recommendation_id_uindex
+    on recommendation (id);
 
 
-CREATE VIEW height_weight AS
-select mf.id as id,
-       mf.patient as patient_id,
-       cast (ce.anthropometry_height as varchar) as height,
-       cast (ce.anthropometry_weight as varchar) as weight
-from medical_file mf
-         left join clinical_examination ce on ce.medical_file_id = mf.id ;

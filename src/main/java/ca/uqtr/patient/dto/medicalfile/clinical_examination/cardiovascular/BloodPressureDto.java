@@ -4,11 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class BloodPressureDto {
 
-    private int bloodPressureRightHand;
-    private int bloodPressureLeftHand;
+    private int bloodPressureRightHandDiastolique;
+    private int bloodPressureLeftHandDiastolique;
+    private int bloodPressureRightHandSystolique;
+    private int bloodPressureLeftHandSystolique;
+
 }

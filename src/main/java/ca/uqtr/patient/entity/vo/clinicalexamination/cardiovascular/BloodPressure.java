@@ -13,8 +13,12 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class BloodPressure {
 
-    @Column(name = "cardiovascular_blood_pressure_right_hand")
-    private int bloodPressureRightHand;
-    @Column(name = "cardiovascular_blood_pressure_left_hand")
-    private int bloodPressureLeftHand;
+    @Column(name = "blood_pressure_right_hand_diastolique")
+    private int bloodPressureRightHandDiastolique;
+    @Column(name = "blood_pressure_left_hand_diastolique")
+    private int bloodPressureLeftHandDiastolique;
+    @Column(name = "blood_pressure_right_hand_systolique")
+    private int bloodPressureRightHandSystolique;
+    @Column(name = "blood_pressure_left_hand_systolique")
+    private int bloodPressureLeftHandSystolique;
 }
