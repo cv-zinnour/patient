@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import javax.persistence.Column;
+import java.sql.Date;
 import java.util.UUID;
 
 @Data
@@ -17,6 +19,7 @@ public class LipidProfileDto {
     private double nohdl;
     private double triglyceride;
     private double hba1c;
+    private Date date ;
 
     public LipidProfile dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, LipidProfile.class);

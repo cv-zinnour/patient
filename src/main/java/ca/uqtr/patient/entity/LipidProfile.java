@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.sql.Date;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +25,8 @@ public class LipidProfile extends BaseEntity{
     private double triglyceride;
     @Column(name = "hba1c")
     private double hba1c;
+    @Column(name = "date")
+    private Date date ;
 
 
 }
