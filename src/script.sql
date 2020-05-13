@@ -179,3 +179,27 @@ create unique index recommendation_id_uindex
     on recommendation (id);
 
 
+create view patient_questionnaire_recommendation
+            (row_num, patient_id, age, file_number, gender, mother_name, socio_demographic_variables, questionnaire_id,
+             questionnaire_type, questionnaire_value, questionnaire_date, recommendation_id, recommendation_value,
+             recommendation_response, date_recommendation, date_response)
+as
+SELECT row_number() OVER (ORDER BY ((SELECT 1)))                          AS row_num,
+       p.id::character varying                                            AS patient_id,
+       date_part('year'::text, age(p.birthday::timestamp with time zone)) AS age,
+       p.file_number,
+       p.gender,
+       p.mother_name,
+       p.socio_demographic_variables,
+       q.id::character varying                                            AS questionnaire_id,
+       q.type                                                             AS questionnaire_type,
+       q.value                                                            AS questionnaire_value,
+       q.date                                                             AS questionnaire_date,
+       r.id                                                               AS recommendation_id,
+       r.recommendation                                                   AS recommendation_value,
+       r.response                                                         AS recommendation_response,
+       r.date_recommendation,
+       r.date_response
+FROM patient p
+         LEFT JOIN questionnaire q ON q.patient_id = p.id
+         LEFT JOIN recommendation r ON r.patient_id = p.id;
