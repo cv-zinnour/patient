@@ -99,7 +99,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Response getPatient(String patientId) {
-        try {
+
             PatientDto patientDto = modelMapper.map(patientRepository.getPatientById(UUID.fromString(patientId)), PatientDto.class);
             if (patientDto == null){
                 return new Response(null,
@@ -120,13 +120,7 @@ public class PatientServiceImpl implements PatientService {
             if (patientRepository.isPatientDidAnswerBREQ(UUID.fromString(patientId)) != null)
                 patientDto.setHasBREQ(true);
             return new Response(patientDto, null);
-        } catch (Exception e){
-            LOGGER.log( Level.WARNING, e.getMessage());
-            LOGGER.log( Level.WARNING, e.getStackTrace().toString());
-            return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
-                            messageSource.getMessage("error.null.message", null, Locale.US)));
-        }
+
     }
 
     @Override
