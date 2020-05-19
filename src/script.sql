@@ -203,3 +203,59 @@ SELECT row_number() OVER (ORDER BY ((SELECT 1)))                          AS row
 FROM patient p
          LEFT JOIN questionnaire q ON q.patient_id = p.id
          LEFT JOIN recommendation r ON r.patient_id = p.id;
+ ----------------------------------------
+
+ create view patient_ce_mfh_lp
+as
+
+SELECT row_number() OVER (ORDER BY ((SELECT 1)))                          AS row_num,
+       mf.patient::character varying                                      AS medical_file_id,
+       ce.cardiovascular_heart_rate_value ,
+       ce.cardiovascular_heart_rate_regularity ,
+       ce.blood_pressure_right_hand_diastolique ,
+       ce.blood_pressure_left_hand_diastolique ,
+       ce.blood_pressure_right_hand_systolique ,
+       ce.blood_pressure_left_hand_systolique ,
+       ce.anthropometry_weight ,
+       ce.anthropometry_height ,
+       ce.anthropometry_imc ,
+       ce.anthropometry_waist ,
+       ce.smoking_type ,
+       ce.smoking_number_cigarettes ,
+       ce.pharmacotherapy_cardiovascular ,
+       ce.pharmacotherapy_dyslipidemia ,
+       ce.pharmacotherapy_diabetes ,
+       ce.pharmacotherapy_other ,
+       ce.date as clinical_examination_date,
+       mfh.antecedents,
+       mfh.date as antecedents_date,
+       lp.ldl,
+       lp.hdl,
+       lp.nohdl,
+       lp.triglyceride,
+       lp.hba1c,
+       lp.date as lipid_profile_date
+FROM medical_file mf
+         LEFT JOIN clinical_examination ce ON ce.medical_file_id = mf.id
+         LEFT JOIN LATERAL (SELECT *
+                            FROM medical_file_history mfh
+                            ORDER BY ce.date <-> mfh.date limit 1) as mfh ON mfh.medical_file_id = mf.id
+         LEFT JOIN LATERAL (SELECT *
+                            FROM lipid_profile lp
+                            ORDER BY ce.date <-> lp.date limit 1) as lp ON lp.medical_file_id = mf.id;
+
+--------------------------------
+
+create view recommendation_questionnaire as (SELECT row_number() OVER (ORDER BY ((SELECT 1)))                          AS row_num,
+       r.patient_id::character varying                                            AS patient_id,
+       r.date_recommendation,
+       r.date_response,
+       q.date                                                             AS questionnaire_date,
+       q.id::character varying                                            AS questionnaire_id,
+       r.id                                                               AS recommendation_id,
+       q.type                                                             AS questionnaire_type,
+       q.value                                                            AS questionnaire_value,
+       r.recommendation                                                   AS recommendation_value,
+       r.response                                                         AS recommendation_response
+FROM recommendation r
+         inner join questionnaire q ON q.patient_id = r.patient_id AND (q.date >= r.date_recommendation and q.date < r.date_response)) ;
