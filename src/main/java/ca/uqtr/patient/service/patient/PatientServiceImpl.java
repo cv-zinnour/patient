@@ -59,7 +59,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Response addPatient(PatientDto patientDto, String professionalId) {
-        try {
+
             System.out.println(patientDto);
             System.out.println(professionalId);
             if (patientRepository.getPatientByContact_Email(patientDto.getContact().getEmail()) != null)
@@ -88,13 +88,7 @@ public class PatientServiceImpl implements PatientService {
 
             return new Response(patientDto1, null);
 
-        } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
-            System.out.println(ex);
-            return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
-                            messageSource.getMessage("error.null.message", null, Locale.US)));
-        }
+
     }
 
     @Override

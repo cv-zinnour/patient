@@ -179,7 +179,7 @@ create unique index recommendation_id_uindex
     on recommendation (id);
 
 
-create view patient_questionnaire_recommendation
+/*create view patient_questionnaire_recommendation
             (row_num, patient_id, age, file_number, gender, mother_name, socio_demographic_variables, questionnaire_id,
              questionnaire_type, questionnaire_value, questionnaire_date, recommendation_id, recommendation_value,
              recommendation_response, date_recommendation, date_response)
@@ -202,10 +202,10 @@ SELECT row_number() OVER (ORDER BY ((SELECT 1)))                          AS row
        r.date_response
 FROM patient p
          LEFT JOIN questionnaire q ON q.patient_id = p.id
-         LEFT JOIN recommendation r ON r.patient_id = p.id;
+         LEFT JOIN recommendation r ON r.patient_id = p.id;*/
  ----------------------------------------
 
- create view patient_ce_mfh_lp
+/*create view patient_ce_mfh_lp
 as
 
 SELECT row_number() OVER (ORDER BY ((SELECT 1)))                          AS row_num,
@@ -244,7 +244,7 @@ FROM medical_file mf
                             FROM lipid_profile lp
                             ORDER BY ce.date <-> lp.date limit 1) as lp ON lp.medical_file_id = mf.id;
 
---------------------------------
+*/--------------------------------
 
 create view recommendation_questionnaire as (SELECT row_number() OVER (ORDER BY ((SELECT 1)))                          AS row_num,
        r.patient_id::character varying                                            AS patient_id,
@@ -259,7 +259,8 @@ create view recommendation_questionnaire as (SELECT row_number() OVER (ORDER BY 
        r.response                                                         AS recommendation_response
 FROM recommendation r
          inner join questionnaire q ON q.patient_id = r.patient_id AND (q.date >= r.date_recommendation and q.date < r.date_response)) ;
---------------------------------create view medical_file_clinical_examination as
+--------------------------------
+create view medical_file_clinical_examination as
 (
 SELECT row_number() OVER (ORDER BY ((SELECT 1))) AS row_num,
        mf.patient::character varying           AS patient_id,
