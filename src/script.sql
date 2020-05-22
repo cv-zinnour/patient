@@ -259,3 +259,50 @@ create view recommendation_questionnaire as (SELECT row_number() OVER (ORDER BY 
        r.response                                                         AS recommendation_response
 FROM recommendation r
          inner join questionnaire q ON q.patient_id = r.patient_id AND (q.date >= r.date_recommendation and q.date < r.date_response)) ;
+--------------------------------create view medical_file_clinical_examination as
+(
+SELECT row_number() OVER (ORDER BY ((SELECT 1))) AS row_num,
+       mf.patient::character varying           AS patient_id,
+       ce.cardiovascular_heart_rate_regularity,
+       ce.cardiovascular_heart_rate_value,
+       ce.blood_pressure_right_hand_diastolique,
+       ce.blood_pressure_left_hand_diastolique,
+       ce.blood_pressure_right_hand_systolique,
+       ce.blood_pressure_left_hand_systolique,
+       ce.anthropometry_weight,
+       ce.anthropometry_height,
+       ce.anthropometry_imc,
+       ce.smoking_type,
+       ce.smoking_number_cigarettes,
+       ce.pharmacotherapy_cardiovascular,
+       ce.pharmacotherapy_dyslipidemia,
+       ce.pharmacotherapy_diabetes,
+       ce.pharmacotherapy_other,
+       ce.date
+FROM medical_file mf
+         inner join clinical_examination ce
+                    ON ce.medical_file_id = mf.id);
+
+--------------------------------
+create view medical_file_medical_file_history as
+(
+SELECT row_number() OVER (ORDER BY ((SELECT 1))) AS row_num,
+       mf.patient::character varying           AS patient_id,
+       mfh.date,
+       mfh.antecedents
+FROM medical_file mf
+         inner join medical_file_history mfh
+                    ON mfh.medical_file_id = mf.id);
+------------------------------------
+create view medical_file_lipid_profile as
+(
+SELECT row_number() OVER (ORDER BY ((SELECT 1))) AS row_num,
+       mf.patient::character varying           AS patient_id,
+       lp.ldl,
+       lp.hdl,
+       lp.nohdl,
+       lp.triglyceride,
+       lp.hba1c
+FROM medical_file mf
+         inner join lipid_profile lp
+                    ON lp.medical_file_id = mf.id);
