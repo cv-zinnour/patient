@@ -250,7 +250,7 @@ create view recommendation_questionnaire as (SELECT row_number() OVER (ORDER BY 
        r.patient_id::character varying                                            AS patient_id,
        r.date_recommendation,
        r.date_response,
-       q.date                                                             AS questionnaire_date,
+       q.dat                                                AS questionnaire_date,
        q.id::character varying                                            AS questionnaire_id,
        r.id                                                               AS recommendation_id,
        q.type                                                             AS questionnaire_type,
@@ -303,7 +303,8 @@ SELECT row_number() OVER (ORDER BY ((SELECT 1))) AS row_num,
        lp.hdl,
        lp.nohdl,
        lp.triglyceride,
-       lp.hba1c
+       lp.hba1c,
+       lp.date
 FROM medical_file mf
          inner join lipid_profile lp
                     ON lp.medical_file_id = mf.id);
