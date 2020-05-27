@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
@@ -16,9 +17,9 @@ public class AppointmentDto {
     private String id;
     private String patientId;
     private String professionalId;
-    private Date creationDate;
+    private Timestamp creationDate;
     private boolean jpaqEmail;
-    private Date appointmentDate;
+    private Timestamp appointmentDate;
 
     public Appointment dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Appointment.class);

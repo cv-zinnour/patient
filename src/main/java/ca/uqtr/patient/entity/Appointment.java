@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @ToString
@@ -19,9 +20,9 @@ import java.util.UUID;
 public class Appointment extends BaseEntity {
 
     @Column(name = "creation_date")
-    private Date creationDate;
+    private Timestamp creationDate;
     @Column(name = "appointment_date")
-    private Date appointmentDate;
+    private Timestamp appointmentDate;
     @Column(name = "jpaq_email")
     private boolean jpaqEmail;
     @JsonBackReference

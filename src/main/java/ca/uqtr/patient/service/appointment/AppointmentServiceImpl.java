@@ -40,7 +40,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     @Override
     public Response addAppointment(AppointmentDto appointmentDto){
         Optional<Patient> patient = patientRepository.findById(appointmentDto.getPatientId());
-        if (!patient.isPresent())
+        if (patient.isEmpty())
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
@@ -63,7 +63,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     @Override
     public Response getAppointments(String patientId) {
         Optional<Patient> patient = patientRepository.findById(UUID.fromString(patientId));
-        if (!patient.isPresent())
+        if (patient.isEmpty())
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
@@ -82,7 +82,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     @Override
     public Response updateAppointment(AppointmentDto appointmentDto){
         Optional<Appointment> appointment = appointmentRepository.findById(appointmentDto.getId());
-        if (!appointment.isPresent())
+        if (appointment.isEmpty())
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.appointment.id", null, Locale.US)),
                             messageSource.getMessage("error.appointment.message", null, Locale.US)));

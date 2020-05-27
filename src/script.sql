@@ -154,8 +154,8 @@ create table appointment
         constraint appointment_patient_id_fk
             references patient,
     professional_id  uuid,
-    creation_date    date,
-    appointment_date date,
+    creation_date    timestamp ,
+    appointment_date timestamp,
     jpaq_email       boolean default false
 );
 
