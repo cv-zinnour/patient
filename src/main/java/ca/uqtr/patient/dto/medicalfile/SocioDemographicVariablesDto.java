@@ -12,7 +12,7 @@ public class SocioDemographicVariablesDto {
     private int age;
     private String civilStatus;
     private String gender;
-    private int familyIncome;
+    private String familyIncome;
     private String jobStatus;
     private String education;
     private LivingEnvironmentDto livingEnvironment;
