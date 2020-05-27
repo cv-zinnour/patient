@@ -29,7 +29,7 @@ public class AppointmentController {
         String token = httpRequest.getHeader("Authorization").replace("bearer ","");
         AppointmentDto appointmentDto = mapper.convertValue(request.getObject(), AppointmentDto.class);
         appointmentDto.setProfessionalId(JwtTokenUtil.getId(token));
-        appointmentDto.setCreationDate(new java.sql.Date (Calendar.getInstance().getTime().getTime()));
+        appointmentDto.setCreationDate(new java.sql.Timestamp (Calendar.getInstance().getTime().getTime()));
         return appointmentService.addAppointment(appointmentDto);
     }
 
