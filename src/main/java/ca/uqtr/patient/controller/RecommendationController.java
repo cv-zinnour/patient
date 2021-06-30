@@ -40,17 +40,17 @@ public class RecommendationController {
         return recommendationService.addRecommendation(recommendationDto);
     }
 
+    @PutMapping(value = "/recommendation")
+    @ResponseBody
+    public Response updateRecommendation(@RequestBody Request request){
+        RecommendationDto recommendationDto = modelMapper.map(request.getObject(), RecommendationDto.class);
+        return recommendationService.updateRecommendationByPatient(recommendationDto);
+    }
+
     @GetMapping(value = "/recommendation")
     @ResponseBody
     public Response getLastRecommendationByPatient(@RequestParam String patientId)  {
         return recommendationService.getLastRecommendationByPatient(patientId);
-    }
-
-
-    @PutMapping(value = "/recommendation")
-    @ResponseBody
-    public Response responseToRecommendationByPatient(@RequestParam String patientId)  {
-        return recommendationService.updateRecommendationByPatient(patientId);
     }
 
     @GetMapping(value = "/recommendation/all")

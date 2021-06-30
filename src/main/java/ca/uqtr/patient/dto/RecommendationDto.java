@@ -30,6 +30,8 @@ public class RecommendationDto {
     private String response;
     private Date dateRecommendation ;
     private Date dateResponse ;
+    private String barriersRecommendation;
+    private String barriersRecommendationSolutions;
 
 
     public Recommendation dtoToObj(ModelMapper modelMapper) {

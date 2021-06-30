@@ -14,4 +14,6 @@ import java.util.UUID;
 public interface RecommendationRepository  extends CrudRepository<Recommendation, Integer> {
     @Query("SELECT r FROM Recommendation r WHERE r.patient = :patient AND r.response IS NULL ORDER BY r.id DESC")
     List<Recommendation> getRecommendationByPatientAndResponseIsNull(Patient patient);
+
+    Recommendation findTopByPatientInOrderByIdDescPatient(Patient patient);
 }

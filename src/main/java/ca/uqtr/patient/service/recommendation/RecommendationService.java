@@ -9,7 +9,7 @@ public interface RecommendationService {
 
     Response getLastRecommendationByPatient(String patientId);
 
-    Response updateRecommendationByPatient(String patientId);
+    Response updateRecommendationByPatient(RecommendationDto recommendationDto);
 
     Response getRecommendationsByPatient(String patientId);
 

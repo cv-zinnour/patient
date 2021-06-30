@@ -81,19 +81,19 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     @Override
-    public Response updateRecommendationByPatient(String patientId) {
-        Patient patient = patientRepository.getPatientById(UUID.fromString(patientId));
+    public Response updateRecommendationByPatient(RecommendationDto recommendationDto) {
+        Patient patient = patientRepository.getPatientById(recommendationDto.getPatient().getId());
         if (patient == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
         try {
-            /*Recommendation recommendation = recommendationRepository.get(modelMapper);
-            recommendation.setPatient(patient);
-            recommendation.setProfessional(professionalRepository.findById(recommendationDto.getProfessional()).get());
-            recommendation.setDateRecommendation(new Date(Calendar.getInstance().getTimeInMillis()));
-            recommendationRepository.save(recommendation);*/
-            return new Response(null, null);
+            Recommendation recommendation = recommendationRepository.findTopByPatientInOrderByIdDescPatient(patient);
+            recommendation.setBarriersRecommendation(recommendationDto.dtoToObj(modelMapper).getBarriersRecommendation());
+            if (recommendationDto.dtoToObj(modelMapper).getBarriersRecommendationSolutions() != null)
+                recommendation.setBarriersRecommendationSolutions(recommendationDto.dtoToObj(modelMapper).getBarriersRecommendationSolutions());
+            recommendationRepository.save(recommendation);
+            return new Response(recommendationDto, null);
         } catch (Exception e){
             LOGGER.log( Level.WARNING, e.getMessage());
             return new Response(null,
