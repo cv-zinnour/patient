@@ -44,6 +44,7 @@ public class RecommendationController {
     @ResponseBody
     public Response updateRecommendation(@RequestBody Request request){
         RecommendationDto recommendationDto = modelMapper.map(request.getObject(), RecommendationDto.class);
+        System.out.println("-----------------"+recommendationDto);
         return recommendationService.updateRecommendationByPatient(recommendationDto);
     }
 
