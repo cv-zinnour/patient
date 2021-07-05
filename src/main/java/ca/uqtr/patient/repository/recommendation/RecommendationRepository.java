@@ -16,4 +16,6 @@ public interface RecommendationRepository  extends CrudRepository<Recommendation
     List<Recommendation> getRecommendationByPatientAndResponseIsNull(Patient patient);
 
     Recommendation findTopByPatientInOrderByIdDescPatient(Patient patient);
+
+    List<Recommendation> findRecommendationsByPatient(Patient patient);
 }
