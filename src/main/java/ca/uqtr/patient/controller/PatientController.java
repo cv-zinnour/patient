@@ -126,4 +126,13 @@ public class PatientController {
         return patientService.getPatientInfos(patientId);
     }
 
+
+    @PutMapping(value = "/questionnaire/individual")
+    @ResponseBody
+    public Response getPatientInfos(@RequestBody Request request){
+        System.out.println(request.getObject());
+        IndividualQuestionnaireDto individualQuestionnaireDto = mapper.convertValue(request.getObject(), IndividualQuestionnaireDto.class);
+
+        return patientService.addIndividualQuestionnaire(individualQuestionnaireDto);
+    }
 }

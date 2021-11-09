@@ -298,5 +298,32 @@ public class PatientServiceImpl implements PatientService {
         return profileDto;
     }
 
+    @Override
+    public Response addIndividualQuestionnaire(IndividualQuestionnaireDto individualQuestionnaireDto) {
+        try {
+            assert individualQuestionnaireDto.getPatientId() != null;
+            Patient patient = patientRepository.getPatientById(UUID.fromString(individualQuestionnaireDto.getPatientId()));
+            String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(individualQuestionnaireDto.getPatientId().concat(SALT));
+            MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientIdSHA);
+
+            patient.setSocioDemographicVariables(individualQuestionnaireDto.getSocioDemographicVariables());
+
+            MedicalFileHistory medicalFileHistory = new MedicalFileHistory(new java.sql.Date(Calendar.getInstance().getTimeInMillis()), individualQuestionnaireDto.getMedicalFileHistory());
+            List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
+            medicalFileHistories.add(medicalFileHistory);
+            medicalFile.setMedicalFileHistory(medicalFileHistories);
+
+            medicalFileRepository.save(medicalFile);
+
+            patientRepository.save(patient);
+            return new Response(Boolean.TRUE, null);
+        } catch (Exception ex){
+            LOGGER.log( Level.WARNING, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
+    }
+
 
 }

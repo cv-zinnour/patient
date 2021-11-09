@@ -15,6 +15,7 @@ public class SocioDemographicVariablesDto {
     private String familyIncome;
     private String jobStatus;
     private String education;
-    private LivingEnvironmentDto livingEnvironment;
+    private String livingEnvironment;
+    private String housingType;
 
 }
