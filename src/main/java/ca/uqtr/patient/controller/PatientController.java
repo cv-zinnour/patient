@@ -127,7 +127,7 @@ public class PatientController {
     }
 
 
-    @PutMapping(value = "/questionnaire/individual")
+    @PostMapping(value = "/questionnaire/individual")
     @ResponseBody
     public Response getPatientInfos(@RequestBody Request request){
         System.out.println(request.getObject());

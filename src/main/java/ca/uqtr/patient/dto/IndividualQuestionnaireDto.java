@@ -21,16 +21,9 @@ import java.util.UUID;
 @NoArgsConstructor
 public class IndividualQuestionnaireDto {
 
-    @Nullable
     private String patientId;
-    @Nullable
     private String fileNumber;
-    @Nullable
     private String initial;
-
     private String socioDemographicVariables;
-
     private String medicalFileHistory;
-
-
 }
