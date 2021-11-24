@@ -63,6 +63,8 @@ public class QuestionnaireListener implements
                 = QUESTIONNAIRE_URL + token;
         String message = "PIN : "+patient.getLoginCode()+". To fill your questionnaire click here : ";
         Content content = new Content("text/plain", message+confirmationUrl);
+        System.out.println(content.toString());
+        System.out.println(content.getValue());
         Mail mail = new Mail(from, subject, to, content);
 
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
@@ -71,6 +73,7 @@ public class QuestionnaireListener implements
             request.method = Method.POST;
             request.endpoint = "mail/send";
             request.body = mail.build();
+            System.out.println(request.toString());
             sg.api(request);
         } catch (IOException ex) {
             throw ex;
