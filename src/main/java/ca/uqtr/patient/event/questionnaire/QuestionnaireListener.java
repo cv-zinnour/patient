@@ -71,6 +71,7 @@ public class QuestionnaireListener implements
         personalization.addCustomArg("pin", patient.getLoginCode());
         personalization.addCustomArg("link", confirmationUrl);
         personalization.addTo(new Email(recipientAddress));
+        mail.addPersonalization(personalization);
 
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
         Request request = new Request();
