@@ -46,7 +46,7 @@ public class QuestionnaireListener implements
     }
 
     private void confirmQuestionnaireSendGrid(OnQuestionnaireSendEvent event) throws IOException {
-        String templateId = "d-8f0746e6371648ea8e0342f4bb6349b9";
+        String templateId;
         PatientDto patient = event.getPatient();
         int rdv = event.getRdv();
         String token = UUID.randomUUID().toString();
@@ -58,10 +58,12 @@ public class QuestionnaireListener implements
         String confirmationUrl = QUESTIONNAIRE_URL + token;
         String subject;
         if (rdv == 1){
-            subject = "POD iSante - Personal informations and BREQ questionnaire!";
+            subject = "I-POD Sante - Personal informations and BREQ questionnaire!";
+            templateId = "d-8f0746e6371648ea8e0342f4bb6349b9";
         }
         else{
-            subject = "POD iSante - JPAQ questionnaire and recommendations!";
+            subject = "I-POD Sante - GPAQ questionnaire and recommendations!";
+            templateId = "d-16639d6979c849a9b8e1e8b27c4bb4da";
         }
         System.out.println(subject);
 
@@ -78,18 +80,14 @@ public class QuestionnaireListener implements
 
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
         Request request = new Request();
-        try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-            System.out.println(request.getBody());
-            Response response = sg.api(request);
-            System.out.println(response.getStatusCode());
-            System.out.println(response.getBody());
-            System.out.println(response.getHeaders());
-        } catch (IOException ex) {
-            throw ex;
-        }
+        request.setMethod(Method.POST);
+        request.setEndpoint("mail/send");
+        request.setBody(mail.build());
+        System.out.println(request.getBody());
+        Response response = sg.api(request);
+        System.out.println(response.getStatusCode());
+        System.out.println(response.getBody());
+        System.out.println(response.getHeaders());
     }
 
     private void confirmQuestionnaireSendGmail(OnQuestionnaireSendEvent event) {
