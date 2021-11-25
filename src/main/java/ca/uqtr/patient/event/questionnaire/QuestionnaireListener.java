@@ -4,6 +4,9 @@ import ca.uqtr.patient.dto.PatientDto;
 import ca.uqtr.patient.service.patient.PatientService;
 import ca.uqtr.patient.service.questionnaire.QuestionnaireService;
 import com.sendgrid.*;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Email;
+import com.sendgrid.helpers.mail.objects.Personalization;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,23 +70,23 @@ public class QuestionnaireListener implements
         mail.setSubject(subject);
         mail.setTemplateId(templateId);
         Personalization personalization = new Personalization();
-        personalization.addSubstitution("{{name}}", patient.getFirstName());
-        personalization.addSubstitution("{{pin}}", patient.getLoginCode());
-        personalization.addSubstitution("{{link}}", confirmationUrl);
+        personalization.addDynamicTemplateData("name", patient.getFirstName());
+        personalization.addSubstitution("pin", patient.getLoginCode());
+        personalization.addSubstitution("link", confirmationUrl);
         personalization.addTo(new Email(recipientAddress));
         mail.addPersonalization(personalization);
 
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
         Request request = new Request();
         try {
-            request.method = Method.POST;
-            request.endpoint = "mail/send";
-            request.body = mail.build();
-            System.out.println(request.toString());
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            System.out.println(request.getBody());
             Response response = sg.api(request);
-            System.out.println(response.statusCode);
-            System.out.println(response.body);
-            System.out.println(response.headers);
+            System.out.println(response.getStatusCode());
+            System.out.println(response.getBody());
+            System.out.println(response.getHeaders());
         } catch (IOException ex) {
             throw ex;
         }
