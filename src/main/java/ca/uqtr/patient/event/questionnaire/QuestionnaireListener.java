@@ -67,9 +67,9 @@ public class QuestionnaireListener implements
         mail.setSubject(subject);
         mail.setTemplateId(templateId);
         Personalization personalization = new Personalization();
-        personalization.addSubstitution("name", patient.getFirstName());
-        personalization.addSubstitution("pin", patient.getLoginCode());
-        personalization.addSubstitution("link", confirmationUrl);
+        personalization.addSubstitution("{{name}}", patient.getFirstName());
+        personalization.addSubstitution("{{pin}}", patient.getLoginCode());
+        personalization.addSubstitution("{{link}}", confirmationUrl);
         personalization.addTo(new Email(recipientAddress));
         mail.addPersonalization(personalization);
 
