@@ -66,7 +66,9 @@ public class QuestionnaireListener implements
         System.out.println(content.toString());
         System.out.println(content.getValue());
         Mail mail = new Mail(from, subject, to, content);
-
+        System.out.println("-------------"+System.getenv("SENDGRID_API_KEY"));
+        System.out.println("-------------"+System.getenv("SENDGRID_USERNAME"));
+        System.out.println("-------------"+System.getenv("SENDGRID_PASSWORD"));
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
         Request request = new Request();
         try {
