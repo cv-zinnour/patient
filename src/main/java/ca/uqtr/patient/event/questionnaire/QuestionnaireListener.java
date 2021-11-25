@@ -43,32 +43,35 @@ public class QuestionnaireListener implements
     }
 
     private void confirmQuestionnaireSendGrid(OnQuestionnaireSendEvent event) throws IOException {
+        String templateId = "d-8f0746e6371648ea8e0342f4bb6349b9";
         PatientDto patient = event.getPatient();
         int rdv = event.getRdv();
         String token = UUID.randomUUID().toString();
         patientService.createQuestionnaireToken(patient.getId().toString(), token);
         String recipientAddress = patient.getContact().getEmail();
-        String subject;
-        if (rdv == 1)
-            subject = "POD iSante - Personal informations and BREQ questionnaire!";
-        else
-            subject = "POD iSante - JPAQ questionnaire and recommendations!";
-        System.out.println(subject);
-        Email from = new Email("lahcene.zinnour@uqtr.ca");
-        Email to = new Email(recipientAddress);
         /*@Value("${mail.uri}")*/
         //String URI_HEROKU = "https://epod-zuul.herokuapp.com/api/v1/auth-service/update/password?token=";
         String URI_HEROKU = "http://localhost:4200/patient/questionnaire?token=";
-        String confirmationUrl
-                = QUESTIONNAIRE_URL + token;
-        String message = "PIN : "+patient.getLoginCode()+". To fill your questionnaire click here : ";
-        Content content = new Content("text/plain", message+confirmationUrl);
-        System.out.println(content.toString());
-        System.out.println(content.getValue());
-        Mail mail = new Mail(from, subject, to, content);
-        System.out.println("-------------"+System.getenv("SENDGRID_API_KEY"));
-        System.out.println("-------------"+System.getenv("SENDGRID_USERNAME"));
-        System.out.println("-------------"+System.getenv("SENDGRID_PASSWORD"));
+        String confirmationUrl = QUESTIONNAIRE_URL + token;
+        String subject;
+        if (rdv == 1){
+            subject = "POD iSante - Personal informations and BREQ questionnaire!";
+        }
+        else{
+            subject = "POD iSante - JPAQ questionnaire and recommendations!";
+        }
+        System.out.println(subject);
+
+        Mail mail = new Mail();
+        mail.setFrom(new Email("lahcene.zinnour@uqtr.ca", "I-POD SANTE"));
+        mail.setSubject(subject);
+        mail.setTemplateId(templateId);
+        Personalization personalization = new Personalization();
+        personalization.addCustomArg("name", patient.getFirstName());
+        personalization.addCustomArg("pin", patient.getLoginCode());
+        personalization.addCustomArg("link", confirmationUrl);
+        personalization.addTo(new Email(recipientAddress));
+
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
         Request request = new Request();
         try {
@@ -76,7 +79,10 @@ public class QuestionnaireListener implements
             request.endpoint = "mail/send";
             request.body = mail.build();
             System.out.println(request.toString());
-            sg.api(request);
+            Response response = sg.api(request);
+            System.out.println(response.statusCode);
+            System.out.println(response.body);
+            System.out.println(response.headers);
         } catch (IOException ex) {
             throw ex;
         }
