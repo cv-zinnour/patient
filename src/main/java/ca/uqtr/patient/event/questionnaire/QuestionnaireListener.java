@@ -68,7 +68,7 @@ public class QuestionnaireListener implements
         System.out.println(subject);
 
         Mail mail = new Mail();
-        mail.setFrom(new Email("Sadegh.moulaye.abdallah@uqtr.ca", "I-POD SANTE"));
+        mail.setFrom(new Email("sadegh.moulaye.abdallah@uqtr.ca", "I-POD SANTE"));
         mail.setSubject(subject);
         mail.setTemplateId(templateId);
         Personalization personalization = new Personalization();
