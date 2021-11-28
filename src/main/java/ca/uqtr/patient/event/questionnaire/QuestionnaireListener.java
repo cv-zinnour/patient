@@ -58,21 +58,22 @@ public class QuestionnaireListener implements
         String confirmationUrl = QUESTIONNAIRE_URL + token;
         String subject;
         if (rdv == 1){
-            subject = "I-POD Sante - Personal informations and BREQ questionnaire!";
-            templateId = "d-8f0746e6371648ea8e0342f4bb6349b9";
+            subject = "I-POD Sante - Personal informations and BREQ questionnaire";
+            templateId = "d-6f13164e0ce04d9ebbec746cd112c147";
         }
         else{
-            subject = "I-POD Sante - GPAQ questionnaire and recommendations!";
-            templateId = "d-16639d6979c849a9b8e1e8b27c4bb4da";
+            subject = "I-POD Sante - GPAQ questionnaire and recommendations";
+            templateId = "d-308639d57bf945fa912e20b5a367db02";
         }
         System.out.println(subject);
 
         Mail mail = new Mail();
-        mail.setFrom(new Email("lahcene.zinnour@uqtr.ca", "I-POD SANTE"));
+        mail.setFrom(new Email("Sadegh.moulaye.abdallah@uqtr.ca", "I-POD SANTE"));
         mail.setSubject(subject);
         mail.setTemplateId(templateId);
         Personalization personalization = new Personalization();
         personalization.addDynamicTemplateData("name", patient.getFirstName());
+        personalization.addDynamicTemplateData("email", patient.getContact().getEmail());
         personalization.addDynamicTemplateData("pin", patient.getLoginCode());
         personalization.addDynamicTemplateData("link", confirmationUrl);
         personalization.addTo(new Email(recipientAddress));
