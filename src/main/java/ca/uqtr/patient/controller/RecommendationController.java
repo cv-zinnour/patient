@@ -1,12 +1,10 @@
 package ca.uqtr.patient.controller;
 
-import ca.uqtr.patient.dto.PatientDto;
-import ca.uqtr.patient.dto.RecommendationDto;
-import ca.uqtr.patient.dto.Request;
-import ca.uqtr.patient.dto.Response;
+import ca.uqtr.patient.dto.*;
 import ca.uqtr.patient.dto.patient.ProfessionalDto;
 import ca.uqtr.patient.service.recommendation.RecommendationService;
 import ca.uqtr.patient.utils.JwtTokenUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class RecommendationController {
 
+    private ObjectMapper mapper;
     private ModelMapper modelMapper;
     private RecommendationService recommendationService;
 
-    public RecommendationController(ModelMapper modelMapper, RecommendationService recommendationService) {
+    public RecommendationController(ModelMapper modelMapper, RecommendationService recommendationService, ObjectMapper mapper) {
         this.modelMapper = modelMapper;
         this.recommendationService = recommendationService;
+        this.mapper = mapper;
     }
 
     @PostMapping(value = "/recommendation")
@@ -44,7 +44,8 @@ public class RecommendationController {
     @ResponseBody
     public Response updateRecommendation(@RequestBody Request request){
         System.out.println("-----------------"+request.getObject().toString());
-        RecommendationDto recommendationDto = modelMapper.map(request.getObject(), RecommendationDto.class);
+        RecommendationDto recommendationDto = mapper.convertValue(request.getObject(), RecommendationDto.class);
+
         System.out.println("-----------------"+recommendationDto);
         return recommendationService.updateRecommendationByPatient(recommendationDto);
     }
