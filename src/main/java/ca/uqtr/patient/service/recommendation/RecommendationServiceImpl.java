@@ -88,9 +88,9 @@ public class RecommendationServiceImpl implements RecommendationService {
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.exist.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.exist.message", null, Locale.US)));
         try {
-            System.out.println(recommendationDto);
             Recommendation recommendation = recommendationRepository.findTopByPatientInOrderByIdDescPatient(patient);
-            recommendation.setBarriersRecommendation(recommendationDto.dtoToObj(modelMapper).getBarriersRecommendation());
+            if (recommendationDto.dtoToObj(modelMapper).getBarriersRecommendation() != null)
+                recommendation.setBarriersRecommendation(recommendationDto.dtoToObj(modelMapper).getBarriersRecommendation());
             if (recommendationDto.dtoToObj(modelMapper).getBarriersRecommendationSolutions() != null)
                 recommendation.setBarriersRecommendationSolutions(recommendationDto.dtoToObj(modelMapper).getBarriersRecommendationSolutions());
             recommendationRepository.save(recommendation);
