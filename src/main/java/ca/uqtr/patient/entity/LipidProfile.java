@@ -27,6 +27,10 @@ public class LipidProfile extends BaseEntity{
     private double hba1c;
     @Column(name = "date")
     private Date date ;
+    @Column(name = "glucose_jeun")
+    private double glucoseJeun;
+    @Column(name = "glucose_aleatoire")
+    private double glucoseAleatoire;
 
 
 }
