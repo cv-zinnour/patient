@@ -20,6 +20,8 @@ public class LipidProfileDto {
     private double triglyceride;
     private double hba1c;
     private Date date ;
+    private double glucoseJeun;
+    private double glucoseAleatoire;
 
     public LipidProfile dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, LipidProfile.class);
