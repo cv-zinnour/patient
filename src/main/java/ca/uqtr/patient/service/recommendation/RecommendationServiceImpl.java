@@ -91,8 +91,8 @@ public class RecommendationServiceImpl implements RecommendationService {
             Recommendation recommendation = recommendationRepository.findTopByPatientInOrderByIdDescPatient(patient);
             if (recommendationDto.dtoToObj(modelMapper).getBarriersRecommendation() != null)
                 recommendation.setBarriersRecommendation(recommendationDto.dtoToObj(modelMapper).getBarriersRecommendation());
-            if (recommendationDto.dtoToObj(modelMapper).getBarriersRecommendationSolutions() != null)
-                recommendation.setBarriersRecommendationSolutions(recommendationDto.dtoToObj(modelMapper).getBarriersRecommendationSolutions());
+            if (recommendationDto.dtoToObj(modelMapper).getConfiance() != null)
+                recommendation.setConfiance(recommendationDto.dtoToObj(modelMapper).getConfiance());
             recommendationRepository.save(recommendation);
             return new Response(recommendationDto, null);
         } catch (Exception e){

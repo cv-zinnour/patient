@@ -31,7 +31,7 @@ public class RecommendationDto {
     private Date dateRecommendation ;
     private Date dateResponse ;
     private String barriersRecommendation;
-    private String barriersRecommendationSolutions;
+    private Integer confiance;
 
 
     public Recommendation dtoToObj(ModelMapper modelMapper) {
