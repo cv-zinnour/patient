@@ -308,6 +308,8 @@ public class PatientServiceImpl implements PatientService {
 
             if (individualQuestionnaireDto.getSocioDemographicVariables() != "")
                 patient.setSocioDemographicVariables(individualQuestionnaireDto.getSocioDemographicVariables());
+            else
+                patient.setSocioDemographicVariables(patient.getSocioDemographicVariables());
             MedicalFileHistory medicalFileHistory = new MedicalFileHistory(new java.sql.Date(Calendar.getInstance().getTimeInMillis()), individualQuestionnaireDto.getMedicalFileHistory());
             List<MedicalFileHistory> medicalFileHistories = medicalFile.getMedicalFileHistory();
             medicalFileHistories.add(medicalFileHistory);
