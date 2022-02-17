@@ -306,7 +306,7 @@ public class PatientServiceImpl implements PatientService {
             String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(individualQuestionnaireDto.getPatientId().concat(SALT));
             MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientIdSHA);
 
-            if (individualQuestionnaireDto.getSocioDemographicVariables() != "")
+            if (!Objects.equals(individualQuestionnaireDto.getSocioDemographicVariables(), ""))
                 patient.setSocioDemographicVariables(individualQuestionnaireDto.getSocioDemographicVariables());
             else
                 patient.setSocioDemographicVariables(patient.getSocioDemographicVariables());
