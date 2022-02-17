@@ -307,11 +307,9 @@ public class PatientServiceImpl implements PatientService {
             MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientIdSHA);
 
             System.out.println("++"+individualQuestionnaireDto.getSocioDemographicVariables());
-            System.out.println(!Objects.equals(individualQuestionnaireDto.getSocioDemographicVariables(), ""));
-            patient.setSocioDemographicVariables(patient.getSocioDemographicVariables());
-            if (!Objects.equals(individualQuestionnaireDto.getSocioDemographicVariables(), "")){
+            System.out.println(individualQuestionnaireDto.getSocioDemographicVariables() != null);
+            if (individualQuestionnaireDto.getSocioDemographicVariables() != null)
                 patient.setSocioDemographicVariables(individualQuestionnaireDto.getSocioDemographicVariables());
-            }
             else
                 patient.setSocioDemographicVariables(patient.getSocioDemographicVariables());
             MedicalFileHistory medicalFileHistory = new MedicalFileHistory(new java.sql.Date(Calendar.getInstance().getTimeInMillis()), individualQuestionnaireDto.getMedicalFileHistory());
