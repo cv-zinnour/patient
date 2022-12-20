@@ -85,7 +85,7 @@ public class PatientTests {
         ClinicalExaminationDto clinicalExaminationDto = new ClinicalExaminationDto();
         clinicalExaminationDto.setSmoking(new SmokingDto("active", 6));
 
-        patientService.addClinicalExamination(patientId.getId().toString(), clinicalExaminationDto);
+        patientService.updateClinicalExamination(patientId.getId().toString(), clinicalExaminationDto);
 
     }
 
@@ -96,7 +96,7 @@ public class PatientTests {
         PatientDto patientId = (PatientDto) patientService.getPatients().getObject();
         SocioDemographicVariablesDto socioDemographicVariablesDto = new SocioDemographicVariablesDto();
         socioDemographicVariablesDto.setAge(66);
-        socioDemographicVariablesDto.setFamilyIncome(200000);
+        //socioDemographicVariablesDto.setFamilyIncome(2000);
         socioDemographicVariablesDto.setJobStatus("retired");
 
         String s = mapper.writeValueAsString(socioDemographicVariablesDto);

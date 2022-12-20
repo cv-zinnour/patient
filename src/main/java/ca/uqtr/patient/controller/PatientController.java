@@ -4,7 +4,6 @@ import ca.uqtr.patient.dto.*;
 import ca.uqtr.patient.dto.medicalfile.SocioDemographicVariablesDto;
 import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationDto;
 import ca.uqtr.patient.service.patient.PatientService;
-import ca.uqtr.patient.service.professional.ProfessionalService;
 import ca.uqtr.patient.utils.JwtTokenUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -88,9 +87,9 @@ public class PatientController {
 
     @PostMapping(value = "/clinicalexamination")
     @ResponseBody
-    public Response addClinicalExamination(@RequestParam String patientId, @RequestBody Request request) {
+    public Response updateClinicalExamination(@RequestParam String patientId, @RequestBody Request request) {
         ClinicalExaminationDto clinicalExaminationDto = mapper.convertValue(request.getObject(), ClinicalExaminationDto.class);
-        return patientService.addClinicalExamination(patientId, clinicalExaminationDto);
+        return patientService.updateClinicalExamination(patientId, clinicalExaminationDto);
     }
 
     @PutMapping(value = "/update")
@@ -129,7 +128,7 @@ public class PatientController {
 
     @PostMapping(value = "/questionnaire/individual")
     @ResponseBody
-    public Response getPatientInfos(@RequestBody Request request){
+    public Response addIndividualQuestionnaire(@RequestBody Request request){
         System.out.println(request.getObject());
         IndividualQuestionnaireDto individualQuestionnaireDto = mapper.convertValue(request.getObject(), IndividualQuestionnaireDto.class);
 

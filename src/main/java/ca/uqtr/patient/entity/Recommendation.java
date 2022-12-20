@@ -47,7 +47,7 @@ public class Recommendation implements Serializable {
     private String barriersRecommendation;
     @Type(type = "jsonb")
     @Column(name = "confiance")
-    private Integer confiance;
+    private String confiance;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Professional professional;

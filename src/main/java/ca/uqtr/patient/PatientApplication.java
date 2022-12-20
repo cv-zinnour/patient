@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.UUID;
 
-@SpringBootApplication
+@SpringBootApplication(
+
+)
 @EnableEurekaClient
 @EnableScheduling
 @EnableJpaRepositories(repositoryBaseClass = NaturalRepositoryImpl.class)

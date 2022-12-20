@@ -5,8 +5,6 @@ import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationD
 import ca.uqtr.patient.entity.Patient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.io.IOException;
-
 public interface PatientService {
 
     Response addPatient(PatientDto patientDto, String professionalId);
@@ -18,7 +16,7 @@ public interface PatientService {
     Response getPatientAntecedents(String patientId);
     Response addAntecedents(String patientId, String antecedentsDto) throws JsonProcessingException;
     Response getPatientClinicalExaminationList(String patientId);
-    Response addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto);
+    Response updateClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto);
     Response updatePatient(PatientDto patient);
 
     Response getPatientLipidProfile(String patientId);

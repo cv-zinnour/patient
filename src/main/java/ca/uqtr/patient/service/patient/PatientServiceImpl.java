@@ -7,6 +7,7 @@ import ca.uqtr.patient.dto.medicalfile.clinical_examination.ClinicalExaminationD
 import ca.uqtr.patient.entity.*;
 import ca.uqtr.patient.entity.view.Birthday_gender;
 import ca.uqtr.patient.entity.view.Height_weight;
+import ca.uqtr.patient.repository.clinicalExamination.ClinicalExaminationRepository;
 import ca.uqtr.patient.repository.professional.ProfessionalRepository;
 import ca.uqtr.patient.repository.medicalFile.MedicalFileRepository;
 import ca.uqtr.patient.repository.patient.PatientRepository;
@@ -41,12 +42,13 @@ public class PatientServiceImpl implements PatientService {
     private QuestionnaireService questionnaireService;
     private Height_weightRepository height_weightRepository;
     private Birthday_genderRepository birthday_genderRepository;
+    private ClinicalExaminationRepository clinicalExaminationRepository;
     @Value("${sha3-256.salt}")
     private String SALT;
     public static final String SHA3_256 = "SHA3-256";
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository, MessageSource messageSource, QuestionnaireService questionnaireService, Height_weightRepository height_weightRepository, Birthday_genderRepository birthday_genderRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, MedicalFileRepository medicalFileRepository, ProfessionalRepository professionalRepository, MessageSource messageSource, QuestionnaireService questionnaireService, Height_weightRepository height_weightRepository, Birthday_genderRepository birthday_genderRepository, ClinicalExaminationRepository clinicalExaminationRepository) {
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
         this.medicalFileRepository = medicalFileRepository;
@@ -55,6 +57,7 @@ public class PatientServiceImpl implements PatientService {
         this.questionnaireService = questionnaireService;
         this.height_weightRepository = height_weightRepository;
         this.birthday_genderRepository = birthday_genderRepository;
+        this.clinicalExaminationRepository = clinicalExaminationRepository;
     }
 
     @Override
@@ -191,14 +194,50 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Response addClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto) {
+    public Response updateClinicalExamination(String patientId, ClinicalExaminationDto clinicalExaminationDto) {
         String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_ClinicalExamination_FetchTypeEAGER(patientIdSHA);
-        System.out.println(medicalFile.toString());
         List<ClinicalExamination> clinicalExamination = medicalFile.getClinicalExamination();
+       /* clinicalExamination.add(clinicalExaminationDto.dtoToObj(modelMapper));
+        medicalFile.setClinicalExamination(clinicalExamination);*/
+/*
+        for (int i = 0; i < clinicalExamination.size(); i++) {
+            if (clinicalExamination.get(i).getDate().equals(clinicalExaminationDto.dtoToObj(modelMapper).getDate())){
+                System.out.println("******** true");
+            }else {
+                System.out.println("******** false");
+                System.out.println(clinicalExamination.get(i).getDate());
+                System.out.println(clinicalExaminationDto.dtoToObj(modelMapper).getDate());
+                System.out.println("******** ");
+
+            }
+        }
+        if (clinicalExamination.stream()
+                .anyMatch(obj -> obj.getDate().equals(clinicalExaminationDto.dtoToObj(modelMapper).getDate()))){
+            ClinicalExamination ce = (ClinicalExamination) clinicalExamination.stream()
+                    .filter(
+                            obj -> obj.getDate().equals(clinicalExaminationDto.dtoToObj(modelMapper).getDate())
+                    )
+                    .map(obj -> {
+                        clinicalExamination.remove(obj);
+                        clinicalExamination.add(clinicalExaminationDto.dtoToObj(modelMapper));
+                        medicalFile.setClinicalExamination(clinicalExamination);
+                        return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
+                    });
+        }else {
+            clinicalExamination.add(clinicalExaminationDto.dtoToObj(modelMapper));
+            medicalFile.setClinicalExamination(clinicalExamination);
+            return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
+        }
+        return new Response(null,
+                new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                        messageSource.getMessage("error.null.message", null, Locale.US)));*/
+
+
         clinicalExamination.add(clinicalExaminationDto.dtoToObj(modelMapper));
         medicalFile.setClinicalExamination(clinicalExamination);
         return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
+
     }
 
     @Override
@@ -219,7 +258,6 @@ public class PatientServiceImpl implements PatientService {
     public Response getPatientLipidProfile(String patientId) {
         String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientIdSHA);
-        System.out.println(medicalFile.toString());
         List<LipidProfile> lipidProfiles = medicalFile.getLipidProfiles();
         if (lipidProfiles == null)
             return new Response(null,
@@ -232,9 +270,7 @@ public class PatientServiceImpl implements PatientService {
     public Response addLipidProfile(String patientId, LipidProfileDto lipidProfileDto) {
         String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
         MedicalFile medicalFile = medicalFileRepository.getMedicalFileWith_LipidProfile_FetchTypeEAGER(patientIdSHA);
-        System.out.println(lipidProfileDto.toString());
         List<LipidProfile> lipidProfiles = medicalFile.getLipidProfiles();
-        System.out.println("------2   "+lipidProfileDto.dtoToObj(modelMapper).toString());
         lipidProfiles.add(lipidProfileDto.dtoToObj(modelMapper));
         medicalFile.setLipidProfiles(lipidProfiles);
         return  new Response(modelMapper.map(medicalFileRepository.save(medicalFile), MedicalFileDto.class), null);
