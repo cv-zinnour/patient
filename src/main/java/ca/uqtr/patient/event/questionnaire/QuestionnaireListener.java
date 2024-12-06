@@ -75,7 +75,7 @@ public class QuestionnaireListener implements
         System.out.println(subject);
 
         Mail mail = new Mail();
-        mail.setFrom(new Email("sadegh.moulaye.abdallah@uqtr.ca", "POD-iSanté"));
+        mail.setFrom(new Email("*******@uqtr.ca", "POD-iSanté"));
         mail.setSubject(subject);
         mail.setTemplateId(templateId);
         Personalization personalization = new Personalization();
@@ -146,7 +146,7 @@ public class QuestionnaireListener implements
         System.out.println(subject);
 
         Mail mail = new Mail();
-        mail.setFrom(new Email("sadegh.moulaye.abdallah@uqtr.ca", "I-POD SANTE"));
+        mail.setFrom(new Email("*******@uqtr.ca", "I-POD SANTE"));
         mail.setSubject(subject);
         mail.setTemplateId(templateId);
         Personalization personalization = new Personalization();
@@ -574,7 +574,7 @@ public class QuestionnaireListener implements
                 "</html>";
         MimeMessage email = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(email);
-        helper.setFrom("uqtrpodisante@gmail.com", "POD-iSanté");
+        helper.setFrom("*******@gmail.com", "POD-iSanté");
         helper.setTo(recipientAddress);
         helper.setSubject(subject);
         helper.setText(messageContent, true);

@@ -31,7 +31,3 @@ out/
 ### VS Code ###
 .vscode/
 
-
-config/
-src/main/java/ca/uqtr/patient/event/questionnaire/QuestionnaireListener.java
-src/main/resources/
